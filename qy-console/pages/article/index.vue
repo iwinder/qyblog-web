@@ -69,6 +69,7 @@ import Vue from 'vue'
 import { FormModel } from 'ant-design-vue'; 
 Vue.use(FormModel); 
 
+
 const columns = [
                         {
                               title: '所略图',
@@ -94,7 +95,7 @@ const columns = [
                           scopedSlots: { customRender: 'tags' },
                         },
                         {
-                          title: 'Action',
+                          title: '操作',
                           key: 'action',
                           scopedSlots: { customRender: 'action' },
                         },
@@ -121,12 +122,16 @@ export default Vue.extend({
     },
     mounted() {
       let _this = this;
-      _this.list({
-          page: 1,
-          size: _this.pagination.pageSize
-        });
+      _this.initData();
     },
     methods: {
+        initData() {
+          let _this = this;
+          _this.list({
+              page: 1,
+              size: _this.pagination.pageSize
+          });
+      },
       list(pageInfo) {
         let _this = this;
         _this.loading = true;
@@ -166,15 +171,11 @@ export default Vue.extend({
       },
       searchForm() {
         let _this = this;
-        _this.list({
-          page: 1,
-          size: _this.pagination.pageSize
-        })
+        _this.initData();
 
       },
       handleMenuClick(e) {
         let _this = this;
-        console.log('click', e);
         if(e.key === "1") {
           if( _this.selectedIds &&  _this.selectedIds.length>0) {
             _this.deleted(_this.selectedIds );
@@ -195,21 +196,15 @@ export default Vue.extend({
       },
        deleted(ids) {
         let _this = this;
-        if(!ids) {
-            console.log("deleted !ids", !ids);
-        } else {
+      if(ids) {
           this.$confirm({
               title: '确认删除?',
               onOk() {
                 console.log('OK');
                 _this.$axios.delete("articles", {data:  ids}).then(res => {
-                  console.log("deleted !res", res);
                   if(res.data.success) {
                     _this.$message.success("删除成功",5); 
-                    _this.list({
-                              page: 1,
-                              size: _this.pagination.pageSize
-                    });
+                    _this.initData();
                   }
                 });
               },

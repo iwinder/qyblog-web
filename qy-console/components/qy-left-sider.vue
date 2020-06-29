@@ -32,10 +32,14 @@
                     </nuxt-link>
                 </a-menu-item>
                 <a-menu-item key="7">
+                    <nuxt-link to="/category/"> 
                     分类管理
+                    </nuxt-link>
                 </a-menu-item>
                 <a-menu-item key="8">
-                    标签管理
+                     <nuxt-link to="/tag/"> 
+                            标签管理
+                     </nuxt-link>
                 </a-menu-item>
             </a-sub-menu> 
 

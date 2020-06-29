@@ -19,7 +19,7 @@ module.exports = {
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
     ],
     script: [
-      {src: 'js/qy-tool.js'}
+      {src: '/js/qy-tool.js' , type: 'text/javascript', charset: 'utf-8'}
     ]
   },
   /*
@@ -64,14 +64,14 @@ module.exports = {
     // baseURL: 'http://localhost:8000/api/admin',
     // or other axios configs.
     proxy: true,
-    prefix: '/api',
+    prefix: '/api/',
     withCredentials: true,
     
   },
 
   proxy: {
     '/api': {
-      target: 'http://localhost:8000/api/admin', // 代理地址
+      target: 'http://localhost:8000/api/admin/', // 代理地址
       changeOrigin: true,
       pathRewrite: {
         '^/api': '', //将 /api 替换掉
