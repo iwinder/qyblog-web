@@ -17,6 +17,9 @@ module.exports = {
     ],
     link: [
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
+    ],
+    script: [
+      {src: 'js/qy-tool.js'}
     ]
   },
   /*
@@ -33,7 +36,7 @@ module.exports = {
   ** Plugins to load before mounting the App
   */
   plugins: [
-    '@/plugins/antd-ui'
+    '@/plugins/antd-ui',
   ],
   /*
   ** Nuxt.js dev-modules
@@ -45,6 +48,7 @@ module.exports = {
   ** Nuxt.js modules
   */
   modules: [
+    '@nuxtjs/axios'
   ],
   /*
   ** Build configuration
@@ -55,5 +59,22 @@ module.exports = {
     */
     extend (config, ctx) {
     }
-  }
+  },
+  axios: {
+    // baseURL: 'http://localhost:8000/api/admin',
+    // or other axios configs.
+    proxy: true,
+    prefix: '/api',
+    withCredentials: true,
+    
+  },
+
+  proxy: {
+    '/api': {
+      target: 'http://localhost:8000/api/admin', // 代理地址
+      changeOrigin: true,
+      pathRewrite: {
+        '^/api': '', //将 /api 替换掉
+      },
+  }}
 }

@@ -1,30 +1,33 @@
 <template>
-  <a-layout id="components-layout-demo-custom-trigger">
-    <qy-left-sider :isCollapsed="collapsed" ></qy-left-sider>
-    <a-layout>
+	<a-layout id="components-layout-demo-custom-trigger"  style="min-height: 100vh">
+        <qy-left-sider :isCollapsed="collapsed" ></qy-left-sider>
 
-    <qy-header  :isCollapsed="collapsed" @on-collapsed="onCollapsed"></qy-header>
-      <a-layout-content
-        :style="{ margin: '24px 16px', padding: '24px', background: '#fff', minHeight: '280px' }"
-      >
-          <nuxt />
-      </a-layout-content>
+        <a-layout>
+            <qy-header  :isCollapsed="collapsed" @on-collapsed="onCollapsed"></qy-header>
+
+             <a-layout-content
+                    :style="{ margin: '24px 16px', padding: '24px', background: '#fff', minHeight: '280px' }">
+                <nuxt />
+            </a-layout-content>
+
+            <qy-footer></qy-footer>
+        </a-layout>
+
     </a-layout>
-  </a-layout>
 
-
-
- 
 </template>
+
 <script >
 import Vue from 'vue'
 import QyLeftSider from '~/components/qy-left-sider.vue'
 import QyHeader from '~/components/qy-header.vue'
+import QyFooter from '~/components/qy-footer.vue'
 
 export default Vue.extend({
   components: {
     QyLeftSider,
-    QyHeader
+    QyHeader,
+    QyFooter
   },
   data() {
     return {
