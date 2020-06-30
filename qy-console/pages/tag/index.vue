@@ -9,7 +9,7 @@
                         </a-input>
                     </a-form-model-item>
                     <a-form-model-item :wrapper-col="{ span: 14, offset: 4 }">
-                        <a-button type="primary"  :loading ="searchLoading"  @click="searchForm('articleForm')">
+                        <a-button type="primary"  :loading ="searchLoading"  @click="searchForm">
                             搜索
                         </a-button>
                     </a-form-model-item>
@@ -267,8 +267,12 @@
                                     this.visible = false;
                                     _this.initData();
                                 }
-                        });
+                        }).catch((response) => {
+                                _this.editLoading = false;
+                                console.log("error：", response);
+                            });;
                     } else {
+                        _this.editLoading = false;
                         return false;
                     }
                 });

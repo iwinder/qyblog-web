@@ -3,7 +3,9 @@
 
        :style="{ }">
         <div class="logo" />
-        <a-menu theme="dark" mode="inline" >
+        <a-menu theme="dark" mode="inline"  
+            :defaultSelectedKeys="[$route.path]"
+             :defaultOpenKeys="['sub1', 'sub2', 'sub3']">
             <a-menu-item key="1">
                 <a-icon type="user" />
                 <span>控制面板</span>
@@ -26,18 +28,18 @@
 
             <a-sub-menu key="sub2">
                 <span slot="title"><a-icon type="user" /><span>文章管理</span></span>
-                <a-menu-item key="6">
-                    <nuxt-link to="/article/">
+                <a-menu-item key="/article">
+                    <nuxt-link to="/article">
                         文章列表
                     </nuxt-link>
                 </a-menu-item>
-                <a-menu-item key="7">
-                    <nuxt-link to="/category/"> 
+                <a-menu-item key="/category">
+                    <nuxt-link to="/category"> 
                     分类管理
                     </nuxt-link>
                 </a-menu-item>
-                <a-menu-item key="8">
-                     <nuxt-link to="/tag/"> 
+                <a-menu-item key="/tag">
+                     <nuxt-link to="/tag"> 
                             标签管理
                      </nuxt-link>
                 </a-menu-item>
