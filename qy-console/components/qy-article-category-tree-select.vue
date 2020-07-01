@@ -6,8 +6,8 @@
             :dropdown-style="{ maxHeight: '400px', overflow: 'auto' }"
             :tree-data="treeData"
             :replaceFields="replaceTreeFields" 
-            placeholder="Please select"
-            :expandedKeys = "expandedKeys"
+            placeholder="请选择新父级分类"
+ 
             :load-data="onLoadData"
             @select	= "onSelectTree"
         />
@@ -42,7 +42,7 @@ export default {
         parentTreeObj(val) {
              console.log("parentObj", val);
             let _this = this;
-            _this.initTreeData(val);
+            // _this.initTreeData(val);
         },
         value(value) {
             console.log(value);
@@ -51,7 +51,8 @@ export default {
    mounted() {
        let _this = this;
        console.log("mounted parentTreeObj", _this.parentTreeObj)
-       _this.initTreeData(_this.parentTreeObj);
+    //    _this.initTreeData(_this.parentTreeObj);
+    _this.initList();
    },
     methods: {
         initList() {
@@ -125,7 +126,7 @@ export default {
         onSelectTree(selectedKeys, info) {
                     console.log('selected', selectedKeys, info);
                     let _this = this; 
-                    _this.afterSelect(selectedKeys,  info.dataRef);
+                    _this.afterSelect(selectedKeys,  info);
                     _this.value = undefined;
                    
                     // this.$refs.treeSelect.value = null;
