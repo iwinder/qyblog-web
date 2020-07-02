@@ -129,7 +129,6 @@ mounted() {
         },
         afterSelectTree(id, obj) {
             let _this = this;
-            console.log("afterSelectTree", obj);
             _this.editParentId = id;
             _this.editParentData = obj.dataRef;
             _this.selectedParentTreeNode = obj;

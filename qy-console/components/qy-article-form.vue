@@ -16,6 +16,24 @@
                    </a-switch>
                 </a-form-model-item>
 
+
+            <a-form-model-item has-feedback label="当前父级" prop="parent">
+                <a> 
+                    <template v-if="editParentData.id==0" >  无</template>
+                <template v-else > 
+                        <a-tooltip placement="topLeft" :title="editParentData.namePath" arrow-point-at-center>
+                    {{editParentData.name}}
+                        </a-tooltip>
+                    </template>
+                </a>
+        </a-form-model-item>
+
+        <a-form-model-item has-feedback label="选择父级" 
+                    extra="若无修改分类父级到需求，请勿选择"
+                    prop="editParentId">
+            <qy-article-category-tree-select   ref="categoryTreeSelect"   :afterSelect="afterSelectTree"></qy-article-category-tree-select>
+        </a-form-model-item>
+
                 <a-form-model-item has-feedback label="内容" prop="content">
                      <a-input v-model="articleForm.content" type="textarea" />
                 </a-form-model-item>
@@ -36,15 +54,21 @@
 
 import Vue from 'vue'
 import { FormModel } from 'ant-design-vue';
+ import  QyArticleCategoryTreeSelect from '~/components/qy-article-category-tree-select.vue';
+
 
 Vue.use(FormModel);
 export default {
+    components: {
+        QyArticleCategoryTreeSelect
+    },
     props: { 
        articleObj:null,
         afterSubmit: {
             type: Function,
             default: null
         }, 
+        
     },
     data() {
         return {
@@ -55,6 +79,7 @@ export default {
                     published: true,
                     deleted:  false
                 },
+                editParentData:{},
                 rules: {
 
                 },
@@ -62,7 +87,8 @@ export default {
                     labelCol: { span: 4 },
                     wrapperCol: { span: 14 }
                 },
-                loading: false
+                loading: false,
+                categoryId:null
         }
     },
     watch: {
@@ -73,7 +99,6 @@ export default {
     },
     mounted() {
         let _this = this;
-        console.log("_this.articleObj", _this.articleObj);
         if(_this.articleObj) {
             _this.articleForm = _this.articleObj;
         }
@@ -84,6 +109,9 @@ export default {
             _this.loading = true;
             _this.$refs[formName].validate(valid => {
                 if (valid) {
+                    if(_this.categoryId ) {
+                        _this.articleForm.categoryId = _this.categoryId ;
+                    }
                     _this.afterSubmit(_this.articleForm); 
                 } else {
                      _this.loading = false;
@@ -93,6 +121,13 @@ export default {
         },
         resetForm() {
              this.$refs.articleForm.resetFields();
+               _this.categoryId = null;
+        },
+        afterSelectTree(id, obj) {
+            let _this = this;
+            _this.categoryId = id;
+            _this.editParentData = obj.dataRef;
+            // _this.selectedParentTreeNode = obj;
         },
     }
 }
