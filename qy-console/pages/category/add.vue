@@ -36,7 +36,6 @@
         },
         mounted() {
             let _this = this;
-            console.log("   this.$route.query  ",   );
             if(this.$route.query.parent ) {
                _this.parentTreeObj =   JSON.parse(this.$route.query.parent )
              
@@ -50,25 +49,13 @@
                                 _this.editLoading = false;
                                 if(res.data.success) {
                                     this.$message.success('保存成功',5);
-                                    //  _this.categoryObj = {}; 
-                                    //  _this.$refs.categoryForm.resetFields();
                                      _this.backF() ;
-                                    // // _this.visible = false;
-                                    // _this.editParentId = null;
-                                    // _this.$refs.categoryTreeSelect.value = null;
-                                    // console.log("  _this.$refs.categoryTree",   _this.$refs.categoryTree,_this.selectedTreeNode);
-                                    // if(_this.selectedParentTreeNode) {
-                                    //         _this.$refs.categoryTree.loadData (_this.selectedParentTreeNode);
-                                    //         _this.selectedParentTreeNode = null;
-                                    //           _this.$refs.categoryTree.loadData (_this.firstTreeNode);
-                                    // } else {
-                                    //     _this.$refs.categoryTree.loadData (_this.selectedTreeNode);
-                                    // }
-                                   
+                                } else {
+                                    this.$message.error(res.data.message,5);
                                 }
                 }).catch((response) => {
                     _this.editLoading = false;
-                    console.log("error：", response);
+                     this.$message.error(response,5);
                 });
             },
             backF() {

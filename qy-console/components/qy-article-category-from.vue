@@ -1,7 +1,7 @@
 <template>
     <a-form-model ref="categoryForm" :model="categoryForm" :rules="rules" v-bind="layout">
         <a-form-model-item has-feedback label="名称" prop="name">
-            <a-input v-model.number="categoryForm.name" />
+            <a-input v-model="categoryForm.name" />
         </a-form-model-item>
 
             <a-form-model-item has-feedback label="当前父级" prop="parent">
@@ -15,7 +15,9 @@
                 </a>
         </a-form-model-item>
 
-        <a-form-model-item has-feedback label="选择父级" prop="editParentId">
+        <a-form-model-item has-feedback label="选择父级" 
+         extra="若无修改分类父级到需求，请勿选择"
+        prop="editParentId">
             <qy-article-category-tree-select   ref="categoryTreeSelect"   :afterSelect="afterSelectTree"></qy-article-category-tree-select>
         </a-form-model-item>
 
@@ -73,43 +75,38 @@ export default {
              let _this = this;
              _this.editParentData = val;
              _this.editParentId = val.id;
-             console.log("watch parentTreeObj", val,  _this.categoryForm);
-         },
-         loading(val) {
-             let _this = this;
-             _this.editLoading = val;
          },
          categoryObjForm(val) {
-             let _this = this;
-             _this.categoryForm = val;
-             console.log(" watch categoryObjFrom", val,  _this.categoryForm);
+               let _this = this;
+                 _this.categoryForm = _this.categoryObjForm;
+                _this.categoryObj.id = _this.categoryObjForm.id;
          }
      },
 mounted() {
        let _this = this;
+             console.log("categoryObjForm mounted", _this.categoryObjForm);
        if(_this.categoryObjForm) {
             _this.categoryForm = _this.categoryObjForm;
+            _this.categoryObj.id = _this.categoryObjForm.id;
                
        }
          if(_this.parentTreeObj) {
          _this.editParentData = _this.parentTreeObj;
            _this.editParentId = _this.parentTreeObj.id;
          }
-
-    //    console.log("mounted parentTreeObj", j)
-    //    _this.initTreeData(_this.parentTreeObj);
-
    },
     methods: {
         editCategory() {
                  let _this = this;
                   _this.editLoading = true;
+                  console.log("editCategory vBeafore", _this.categoryForm);
                 _this.$refs.categoryForm.validate(valid => {
                     if (valid) {
                         _this.categoryObj.name = _this.categoryForm.name;
                         if(_this.editParentId) {
                             _this.categoryObj.parentId = _this.editParentId;
                         }
+                         console.log("editCategory vBeafore", _this.categoryObj);
                           _this.afterSubmit(_this.categoryObj);
                         
                     } else {

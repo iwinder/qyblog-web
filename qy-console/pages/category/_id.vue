@@ -8,8 +8,7 @@
             />
             <!-- <h3>新增文章</h3> -->
             <qy-article-category-form    
-                ref="articleForm"
-                :loading = "editLoading"
+                ref="categoryForm"
                 :categoryObjForm= "categoryObj"
                 :parentTreeObj = "parentTreeObj"
                  :afterSubmit="afterSubmitForm"
@@ -33,7 +32,6 @@
             return /^\d+$/.test(params.id)
         },
         asyncData ({ params }) {
-            console.log("edit params", params);
             return  {categoryId:params.id,categoryObj: params.obj,parentTreeObj: params.parent };
         },
         data() {
@@ -46,31 +44,35 @@
         },
         mounted() {
             let _this = this;
-            console.log("   this.$edit .mounted  ",   );
-
+                if(_this.categoryId && !_this.categoryObj ) {
+                    _this.loadInfo();
+                }
        
         },
         methods: {
-            init(a) {
-                let _this = this;
-                _this.categoryObj = _this.$route.params.obj;
-                _this.parentTreeObj = _this.$route.params.parent;
-                console.log("edit categoryObj", _this.categoryObj,  _this.parentTreeObj);
+            loadInfo() {
+
+                    let  _this = this;
+                    _this.$axios.get("blogCategorys/" + _this.categoryId).then(res => {
+                            if(res.data.success) {
+                                _this.categoryObj =  res.data.content;
+                                  _this.parentTreeObj  = _this.categoryObj .parent;
+                            }
+                    });
             },
             afterSubmitForm(param) {
                 let _this = this;
                 _this.$axios.post('blogCategorys/save', param).then(res => {
-                                _this.editLoading = false;
+                                 _this.$refs.categoryForm.editLoading = false;
                                 if(res.data.success) {
-                                    this.$message.success('保存成功',5);
-
+                                    _this.$message.success('保存成功',5);
                                      _this.backF() ;
-
-                                   
+                                } else {
+                                      _this.$message.error(res.data.message,5);
                                 }
                 }).catch((response) => {
-                    _this.editLoading = false;
-                    console.log("error：", response);
+                    _this.$refs.categoryForm.editLoading = false;
+                     _this.$message.error('保存失败: ' + response,5);
                 });
             },
             backF() {

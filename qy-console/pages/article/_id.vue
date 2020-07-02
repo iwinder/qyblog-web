@@ -40,13 +40,12 @@ export default Vue.extend({
     },
     methods: {
         loadInfo() {
-
             let  _this = this;
-                        console.log("_this.articleId", _this.articleId);
+            console.log("_this.articleId", _this.articleId);
             _this.$axios.get("articles/" + _this.articleId).then(res => {
                    console.log("保存文章的结果：", res);
                     if(res.data.success) {
-                          _this.articleObj = res.data.content;
+                            _this.articleObj = res.data.content;
                     }
             });
         },

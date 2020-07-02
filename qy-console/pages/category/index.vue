@@ -35,6 +35,28 @@
                         @change="handleTableChange"
                 >
 
+                    <span slot="name" slot-scope="name, record">
+                           <a-tooltip placement="topLeft" :title="record.namePath" arrow-point-at-center>
+                        {{name}}
+                           </a-tooltip>
+                    </span>
+
+                    <!-- <span slot="name" slot-scope="name">
+                           <a-tooltip placement="topLeft" :title="editParentData.namePath" arrow-point-at-center>
+                        {{name}}
+                           </a-tooltip>
+                    </span> -->
+
+                    <span slot="parent"  > 
+
+                          <template v-if="selectedTreeData.id==0" >  无</template>
+                        <template v-else > 
+                                <a-tooltip placement="topLeft" :title="selectedTreeData.namePath" arrow-point-at-center>
+                            {{selectedTreeData.name}}
+                        </a-tooltip>
+                    </template>
+                    </span>
+
                     <span slot="action" slot-scope="text, record">
                         <nuxt-link :to="{name:'category-id',params:{ id: record.id,obj: record,parent: {
                             id: selectedTreeData.id,
@@ -49,18 +71,6 @@
                 </a-table>
             </a-col>
         </a-row>
-
-          <!-- <a-modal v-model="visible"  on-ok="editCategory" :footer="null" @cancel="handleCancel">
-              <template slot="title">
-                  <template v-if="categoryObj.id">
-                      修改分类
-                  </template>
-                  <template v-else>
-                      新增分类
-                  </template>
-              </template>
-                  
-         </a-modal> -->
     </div>
 </template>
 
@@ -71,65 +81,30 @@
     Vue.use(FormModel);
 
     const columns = [
-         {
-            title: 'id',
-            dataIndex: 'id',
-            key: 'id',
-        },
         {
             title: '名称',
             dataIndex: 'name',
             key: 'name',
+            scopedSlots: { customRender: 'name' },
         },
-        {
-            title: '描述',
-            dataIndex: 'description',
-            key: 'description',
-        },
-        {
-            title: '关键词',
-            dataIndex: 'keyWord',
-            key: 'keyWord',
-        },
-        {
-            title: ' id路径',
-            dataIndex: 'idPath',
-            key: 'idPath',
-        },
-        {
-            title: '名称路径',
-            dataIndex: 'namePath',
-            key: 'namePath',
-        },
-        {
-            title: '显示顺序',
-            dataIndex: 'displayOrder',
-            key: 'displayOrder',
-        },
+
         {
             title: '父级分类',
-            dataIndex: 'parentId',
-            key: 'parentId',
-        },
-        {
-            title: '创建者',
-            dataIndex: 'createdBy',
-            key: 'createdBy',
-        },
-        {
-            title: '更新者',
-            dataIndex: 'lastModifiedBy',
-            key: 'lastModifiedBy',
+            dataIndex: 'parent',
+            key: 'parent',
+             scopedSlots: { customRender: 'parent' },
         },
         {
             title: '创建时间',
             dataIndex: 'createdDate',
             key: 'createdDate',
+             ellipsis: true,
         },
         {
             title: '更新时间',
             dataIndex: 'lastModifiedDate',
             key: 'lastModifiedDate',
+             ellipsis: true,
         },
         {
             title: 'Action',
@@ -204,7 +179,7 @@
                     _this.selectedIds = [];
                 }).catch((response) => {
                     _this.loading = false;
-                    console.log("error：", response);
+                   this.$message.error(response,5);
                 });
             },
             handleTableChange(pagination, filters, sorter ) {
@@ -218,11 +193,6 @@
             },
             add() {
                let _this = this;
-            //    _this.editParentId = null;
-            //     if(obj) {
-            //         _this.categoryObj = obj[0];
-            //         _this.categoryForm.name = _this.categoryObj.name;
-            //     }
             let  parent = {
                 id: _this.selectedTreeData.id,
                 name: _this.selectedTreeData.name,
@@ -230,9 +200,7 @@
             }
                
                 _this.$router.push( {path: "/category/add", query: {parent: JSON.stringify(parent) } });
-                // console.log("add selectedTreeData", _this.selectedTreeData)
-                //  _this.visible = true;
-                //  _this.editParentData   = _this.selectedTreeData;
+
             },
             searchForm() {
                 let _this = this;
@@ -241,7 +209,6 @@
             },
             handleMenuClick(e) {
                 let _this = this;
-                console.log('click', e);
                 if(e.key === "1") {
                     if( _this.selectedIds &&  _this.selectedIds.length>0) {
                         _this.deleted(_this.selectedIds );
@@ -266,26 +233,22 @@
                     this.$confirm({
                         title: '确认删除?',
                         onOk() {
-                            console.log('OK');
                             _this.$axios.delete("blogCategorys", {data:  ids}).then(res => {
-                                console.log("deleted !res", res);
                                 if(res.data.success) {
                                     _this.$message.success("删除成功",5);
                                     _this.initData();
                                 }
                             }).catch((response) => {
-                                console.log("error：", response);
+                               this.$message.error(response,5);
                             });
                         },
                         onCancel() {
-                            console.log('Cancel');
                         },
                         class: 'test',
                     });
                 }
             },
             onLoadData(treeNode) {
-                 console.log('onLoadData info',treeNode);
                 let _this = this;
                 _this.selectedTreeNode = treeNode;
                 _this.selectedTreeData = treeNode.dataRef;
@@ -322,7 +285,6 @@
             loadCategoryData(params, callBack) {
                 let _this = this;
                 _this.$axios.get('blogCategorys',{ params: params}).then(res => {
-                        console.log("treeNode res", res);
                         let resp = res.data;
                         callBack(resp);
                 });
