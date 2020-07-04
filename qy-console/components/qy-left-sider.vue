@@ -1,6 +1,8 @@
 <template>
     <a-layout-sider v-model="collapsed"  :trigger="null" collapsible 
-
+    breakpoint="lg"
+      collapsed-width="0"
+ @breakpoint="onBreakpoint"
        :style="{ }">
         <div class="logo" />
         <a-menu theme="dark" mode="inline"  
@@ -59,7 +61,11 @@ export default {
     props: { 
         isCollapsed: {
             default:  false
-        }
+        },
+        afterBreakpoint: {
+            type: Function,
+            default: null
+        }, 
     },
     data() {
         return {
@@ -70,6 +76,12 @@ export default {
         isCollapsed(val) {
             this.collapsed = val;
         }
+    },
+    methods: {
+            onBreakpoint(broken) {
+                let _this = this;
+                _this.afterBreakpoint(broken);
+            },
     }
 }
 </script>

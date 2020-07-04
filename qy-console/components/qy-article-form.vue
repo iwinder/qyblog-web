@@ -17,9 +17,9 @@
                 </a-form-model-item>
 
 
-            <a-form-model-item has-feedback label="当前父级" prop="parent">
+            <a-form-model-item has-feedback label="所属分类" prop="parent">
                 <a> 
-                    <template v-if="editParentData.id==0" >  无</template>
+                    <template v-if="editParentData.id==0" >  未分类</template>
                 <template v-else > 
                         <a-tooltip placement="topLeft" :title="editParentData.namePath" arrow-point-at-center>
                     {{editParentData.name}}
@@ -28,8 +28,8 @@
                 </a>
         </a-form-model-item>
 
-        <a-form-model-item has-feedback label="选择父级" 
-                    extra="若无修改分类父级到需求，请勿选择"
+        <a-form-model-item has-feedback label="选择分类" 
+                    extra="若无修改分类的需求，请勿选择"
                     prop="editParentId">
             <qy-article-category-tree-select   ref="categoryTreeSelect"   :afterSelect="afterSelectTree"></qy-article-category-tree-select>
         </a-form-model-item>
@@ -95,12 +95,15 @@ export default {
         articleObj(val) {
              let _this = this;
              _this.articleForm = val;
+            _this.editParentData =  val.category ?val.category : {id:0}
         }
     },
     mounted() {
         let _this = this;
         if(_this.articleObj) {
             _this.articleForm = _this.articleObj;
+            _this.editParentData =  _this.articleObj.category ?_this.articleObjl.category : {id:0}
+            // _this.editParentData = _this.articleObj.category
         }
     },
     methods: {
@@ -110,7 +113,10 @@ export default {
             _this.$refs[formName].validate(valid => {
                 if (valid) {
                     if(_this.categoryId ) {
-                        _this.articleForm.categoryId = _this.categoryId ;
+                        _this.articleForm.category  = {
+                            id:  _this.categoryId 
+                        }
+                        
                     }
                     _this.afterSubmit(_this.articleForm); 
                 } else {

@@ -1,6 +1,6 @@
 <template>
 	<a-layout id="components-layout-demo-custom-trigger"  style="min-height: 100vh">
-        <qy-left-sider :isCollapsed="collapsed" ></qy-left-sider>
+        <qy-left-sider :isCollapsed="collapsed"  :afterBreakpoint="afterBreakpoint"></qy-left-sider>
 
         <a-layout>
             <qy-header  :isCollapsed="collapsed" @on-collapsed="onCollapsed"></qy-header>
@@ -36,6 +36,10 @@ export default Vue.extend({
   },
   methods: {
     onCollapsed(val) {
+      this.collapsed = val;
+    },
+    afterBreakpoint(val) {
+      console.log("index afterBreakpoint", val);
       this.collapsed = val;
     }
   }

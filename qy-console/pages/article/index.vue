@@ -35,6 +35,7 @@
                  :rowKey = "record => record.id"
                 :pagination="pagination"
                  :loading="loading"
+                 :scroll = "{ x:  5}"
                   :row-selection="{ selectedRowKeys: selectedIds, onChange: onSelectChange }"
                 @change="handleTableChange"
                  >
@@ -42,7 +43,10 @@
             <a slot="name" slot-scope="text">{{ text }}</a>
 
             <span slot="thumbnail" slot-scope="thumbnail"><img :src="thumbnail"></span>
-
+          <span slot="published" slot-scope="published">
+              <template v-if="published"> 已发布 </template> 
+              <template v-else> 未发布 </template> 
+          </span>
             <span slot="tags" slot-scope="tags">
                 <a-tag
                 v-for="tag in tags"
@@ -67,7 +71,10 @@
 <script  >
 import Vue from 'vue'
 import { FormModel } from 'ant-design-vue'; 
+// import VueDraggableResizable from 'vue-draggable-resizable';
 Vue.use(FormModel); 
+
+
 
 
 const columns = [
@@ -87,6 +94,12 @@ const columns = [
                           dataIndex: 'user',
                           key: 'user',
                         },
+                        {
+                          title: '发布状态',
+                          dataIndex: 'published',
+                          key: 'published',
+                          scopedSlots: { customRender: 'published' },
+                        },
 
                         {
                           title: 'Tags',
@@ -103,6 +116,9 @@ const columns = [
  
 
 export default Vue.extend({
+      components: {
+        // VueDraggableResizable,
+    },
      data() {
         return {
             columns,

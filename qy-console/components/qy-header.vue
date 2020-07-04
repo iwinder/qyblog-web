@@ -20,6 +20,11 @@ export default {
              collapsed: this.isCollapsed
          }
      },
+    watch: {
+        isCollapsed(val) {
+            this.collapsed = val;
+        }
+    },
      methods:{ 
          callChange:function() {
              this.collapsed = !this.collapsed;
