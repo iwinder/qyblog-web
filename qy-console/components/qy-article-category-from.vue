@@ -1,5 +1,6 @@
 <template>
     <a-form-model ref="categoryForm" :model="categoryForm" :rules="rules" v-bind="layout">
+
         <a-form-model-item has-feedback label="名称" prop="name">
             <a-input v-model="categoryForm.name" />
         </a-form-model-item>
@@ -20,7 +21,7 @@
         prop="editParentId">
             <qy-article-category-tree-select   ref="categoryTreeSelect"   :afterSelect="afterSelectTree"></qy-article-category-tree-select>
         </a-form-model-item>
-
+       
         <a-form-model-item :wrapper-col="{ span: 14, offset: 4 }">
             <a-button type="primary" :loading="editLoading" @click="editCategory">
                 保存
@@ -78,8 +79,9 @@ export default {
          },
          categoryObjForm(val) {
                let _this = this;
-                 _this.categoryForm = _this.categoryObjForm;
-                _this.categoryObj.id = _this.categoryObjForm.id;
+                 _this.categoryForm = val;
+                _this.categoryObj.id = val.id;
+            
          }
      },
 mounted() {

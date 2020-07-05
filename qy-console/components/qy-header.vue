@@ -1,5 +1,5 @@
 <template>
-    <a-layout-header     :style="{background: '#fff', padding: 0,  width: '100%' }" >
+    <a-layout-header     :style="{background: '#fff', padding: 0,  width: '100%' ,position: 'fixed',zIndex: 1}" >
         <a-icon
           class="trigger"
           :type="collapsed ? 'menu-unfold' : 'menu-fold'"

@@ -1,7 +1,7 @@
 <template>
     <div>
         <a-row>
-            <a-col :span="5">
+            <a-col :xs="{span:24}"  :lg="{ span: 5}" >
                   <a-directory-tree ref="categoryTree"  :load-data="onLoadData" 
                         :tree-data="treeData" 
                         :replaceFields="replaceTreeFields" 
@@ -9,10 +9,10 @@
                          :default-expanded-keys="[0]"
                         @select="onSelectTree"/>
             </a-col>
-            <a-col :span="17 " :offset="1">
+            <a-col   :xs="{span:24}"  :lg="{ span: 17, offset: 1 }"   >
                 <a-row class="table-operations">
-                     <a-col :span="7"><h3 style=" margin: 5px; ">{{selectedTreeData.namePath || selectedTreeData.name}}</h3></a-col>
-                    <a-col :span="6" :offset="11" style=" margin-top: 5px;">
+                     <a-col :xs="{span:24}"  :lg="{ span: 7}" ><h3 style=" margin: 5px; ">{{selectedTreeData.namePath || selectedTreeData.name}}</h3></a-col>
+                    <a-col    :xs="{span:24}"  :lg="{ span: 6, offset: 11 }"  style=" margin-top: 5px;">
                         <a-button  type="primary"  @click="add()">
                             新增
                         </a-button>
@@ -31,6 +31,7 @@
                         :rowKey = "record => record.id"
                         :pagination="pagination"
                         :loading="loading"
+                        :scroll = "{ x:  800}"
                         :row-selection="{ selectedRowKeys: selectedIds, onChange: onSelectChange }"
                         @change="handleTableChange"
                 >

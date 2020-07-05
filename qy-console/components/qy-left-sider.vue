@@ -16,15 +16,22 @@
         
 
             <a-sub-menu key="sub1">
-                <span slot="title"><a-icon type="user" /><span>用户</span></span>
-                <a-menu-item key="3">
-                    Tom
+                <span slot="title"><a-icon type="user" /><span>系统管理</span></span>
+                <a-menu-item key="/user">
+                      <nuxt-link to="/user">
+                        用户管理
+                    </nuxt-link>
+                    
                 </a-menu-item>
                 <a-menu-item key="4">
-                    Bill
+                     <nuxt-link to="/role">
+                        角色管理
+                     </nuxt-link>
                 </a-menu-item>
                 <a-menu-item key="5">
-                    Alex
+                    <nuxt-link to="/role">
+                        权限管理
+                     </nuxt-link>
                 </a-menu-item>
             </a-sub-menu>
 

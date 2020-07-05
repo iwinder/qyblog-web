@@ -6,7 +6,7 @@
             <qy-header  :isCollapsed="collapsed" @on-collapsed="onCollapsed"></qy-header>
 
              <a-layout-content
-                    :style="{ margin: '24px 16px', padding: '24px', background: '#fff', minHeight: '280px' }">
+                    :style="{ margin: '24px 16px', padding: '24px', background: '#fff', minHeight: '280px' , marginTop: '75px'}">
                 <nuxt />
             </a-layout-content>
 
@@ -33,6 +33,8 @@ export default Vue.extend({
     return {
       collapsed: false,
     };
+  },
+  mounted() {
   },
   methods: {
     onCollapsed(val) {

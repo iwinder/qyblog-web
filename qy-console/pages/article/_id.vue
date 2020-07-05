@@ -54,8 +54,11 @@ export default Vue.extend({
                     console.log("保存文章的结果：", res);
                     _this.$refs.articleForm.loading = false;
                     if(res.data.success) {
-                          this.$message.success('保存成功',5);
+                          this.$message.success('保存成功',15);
                     }
+            }).catch((response) => {
+                    _this.$refs.articleForm.loading = false;
+                     _this.$message.error('保存失败: ' + response,5);
             });
            
         },

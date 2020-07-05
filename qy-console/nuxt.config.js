@@ -37,6 +37,7 @@ module.exports = {
   */
   plugins: [
     '@/plugins/antd-ui',
+    { src: '@/plugins/vue-mavon-editor', ssr: false }
   ],
   /*
   ** Nuxt.js dev-modules
@@ -76,5 +77,14 @@ module.exports = {
       pathRewrite: {
         '^/api': '', //将 /api 替换掉
       },
-  }}
+  },
+  '/content':{
+    target: 'http://localhost:8000/content', // 代理地址
+    changeOrigin: true,
+    pathRewrite: {
+      '^/content': '', //将 /api 替换掉
+    },
+  },
+
+}
 }

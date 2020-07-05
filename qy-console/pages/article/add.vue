@@ -47,6 +47,9 @@ export default Vue.extend({
                     if(res.data.success) {
                           this.$message.success('保存成功',5);
                     }
+            }).catch((response) => {
+                    _this.$refs.articleForm.loading = false;
+                     _this.$message.error('保存失败: ' + response,5);
             });
            
         },

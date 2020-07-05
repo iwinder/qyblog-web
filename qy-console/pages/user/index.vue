@@ -1,7 +1,7 @@
 <template>
     <div>
         <a-row class="table-operations">
-            <a-col  :xs="{span:24}"  :lg="{ span: 12}">
+            <a-col :xs="{span:24}"  :lg="{ span: 12}">
                 <a-form-model layout="inline" :model="searchFrom"    >
                     <a-form-model-item>
                         <a-input v-model="searchFrom.searchText" placeholder="请输入标题">
@@ -16,7 +16,7 @@
                 </a-form-model>
 
             </a-col>
-            <a-col  :xs="{span:24}"  :lg="{ span: 5, offset: 7 }"  style=" margin-top: 5px;">
+            <a-col   :xs="{span:24}"  :lg="{ span: 5, offset: 7 }" style=" margin-top: 5px;">
                 <a-button  type="primary"  @click="add()">
                     新增
                 </a-button>
@@ -34,44 +34,27 @@
                  :data-source="data"
                  :rowKey = "record => record.id"
                  :pagination="pagination"
+                  :scroll = "{ x:  800}"
                  :loading="loading"
-                 :scroll = "{ x:  800}"
                  :row-selection="{ selectedRowKeys: selectedIds, onChange: onSelectChange }"
                  @change="handleTableChange"
         >
 
+
+          <span slot="disable" slot-scope="disable">
+              <template v-if="disable"> 已禁用 </template> 
+              <template v-else> 正常 </template> 
+          </span>
+
+
             <span slot="action" slot-scope="text, record">
-                <a href="javascript:void(0)"  @click="add([record])">编辑 </a >
+                <nuxt-link :to="{name:'user-id',params:{ id: record.id }}">编辑 </nuxt-link >
                 <a-divider type="vertical" />
 
-                <a  href="javascript:void(0)"  @click="deleted([record.id])" >删除</a>
+                     <a  href="javascript:void(0)"  @click="deleted([record.id])" >删除</a>
 
             </span>
         </a-table>
-
-          <a-modal v-model="visible"  on-ok="editTag" :footer="null" @cancel="handleCancel">
-              <template slot="title">
-                  <template v-if="tagObj.id">
-                      修改标签
-                  </template>
-                  <template v-else>
-                      新增标签
-                  </template>
-              </template>
-                  <a-form-model ref="tagForm" :model="tagForm" :rules="rules" v-bind="layout">
-                            <a-form-model-item has-feedback label="名称" prop="name">
-                            <a-input v-model.number="tagForm.name" />
-                            </a-form-model-item>
-                            <a-form-model-item :wrapper-col="{ span: 14, offset: 4 }">
-                            <a-button type="primary" :loading="editLoading" @click="editTag">
-                                保存
-                            </a-button>
-                            <a-button style="margin-left: 10px" @click="handleCancel">
-                                取消
-                            </a-button>
-                            </a-form-model-item>
-                        </a-form-model>
-         </a-modal>
     </div>
 </template>
 
@@ -82,9 +65,25 @@
 
     const columns = [
         {
-            title: '名称',
-            dataIndex: 'name',
-            key: 'name',
+            title: '用户名',
+            dataIndex: 'username',
+            key: 'username',
+        },
+        {
+            title: '昵称',
+            dataIndex: 'nickname',
+            key: 'nickname',
+        },
+        {
+            title: '邮箱',
+            dataIndex: 'email',
+            key: 'email',
+        },
+        {
+            title: '账户状态',
+            dataIndex: 'disable',
+            key: 'disable',
+            scopedSlots: { customRender: 'disable' },
         },
         {
             title: '创建时间',
@@ -121,18 +120,6 @@
                     current: 1,
                     total: 0
                 },
-                editLoading: false,
-                visible: false,
-                tagForm: {
-                    name:''
-                },
-                rules:  {
-                },
-                tagObj: {},
-                layout: {
-                    labelCol: { span: 4 },
-                    wrapperCol: { span: 14 },
-                },
             };
         },
         mounted() {
@@ -159,7 +146,7 @@
                 }
 
 
-                _this.$axios.get('blogTags',{ params: params
+                _this.$axios.get('user',{ params: params
 
                 }).then(res => {
                     let resp  = res.data
@@ -170,7 +157,7 @@
                     _this.loading = false;
                     _this.selectedIds = [];
                 }).catch((response) => {
-                     _this.loading = false;
+                    _this.loading = false;
                     console.log("error：", response);
                 });
             },
@@ -183,14 +170,9 @@
                     page: pagination.current,
                 })
             },
-            add(obj) {
+            add() {
                 let _this = this;
-               
-                if(obj) {
-                    _this.tagObj = obj[0];
-                    _this.tagForm.name = _this.tagObj.name;
-                }
-                 _this.visible = true;
+                _this.$router.push("/user/add");
             },
             searchForm() {
                 let _this = this;
@@ -199,6 +181,7 @@
             },
             handleMenuClick(e) {
                 let _this = this;
+                console.log('click', e);
                 if(e.key === "1") {
                     if( _this.selectedIds &&  _this.selectedIds.length>0) {
                         _this.deleted(_this.selectedIds );
@@ -219,59 +202,28 @@
             },
             deleted(ids) {
                 let _this = this;
-              if(ids) {
+                if(ids) {
                     this.$confirm({
                         title: '确认删除?',
                         onOk() {
-                            _this.$axios.delete("blogTags", {data:  ids}).then(res => {
+                            console.log('OK');
+                            _this.$axios.delete("user", {data:  ids}).then(res => {
+                                console.log("deleted !res", res);
                                 if(res.data.success) {
                                     _this.$message.success("删除成功",5);
                                     _this.initData();
                                 }
                             }).catch((response) => {
-                                 this.$message.error(response.error,5);
+                                console.log("error：", response);
                             });
                         },
                         onCancel() {
+                            console.log('Cancel');
                         },
                         class: 'test',
                     });
                 }
-            },
-            editTag() {
-                let _this = this;
-                  _this.editLoading = true;
-                _this.$refs.tagForm.validate(valid => {
-                    if (valid) {
-                        _this.tagObj.name = _this.tagForm.name;
-                        _this.$axios.post('blogTags/save', _this.tagObj).then(res => {
-                                _this.editLoading = false;
-                                if(res.data.success) {
-                                    this.$message.success('保存成功',5);
-                                     _this.tagObj = {}; 
-                                     _this.$refs.tagForm.resetFields();
-                                    this.visible = false;
-                                    _this.initData();
-                                }
-                        }).catch((response) => {
-                                _this.editLoading = false;
-                                console.log("error：", response);
-                            });;
-                    } else {
-                        _this.editLoading = false;
-                        return false;
-                    }
-                });
-            },
-            handleCancel() {
-                let _this = this;
-                 _this.tagForm= {
-                     name: ""
-                 };
-                _this.$refs.tagForm.resetFields();
-                _this.visible = false;
-                _this.tagObj = {}; 
-            },
+            }
         },
 
     })
