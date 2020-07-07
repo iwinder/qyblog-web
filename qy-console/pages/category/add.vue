@@ -21,7 +21,7 @@
 </template>
 
 <script>
-     import  QyArticleCategoryForm  from '~/components/qy-article-category-from.vue';
+     import  QyArticleCategoryForm  from '~/components/qy-article-category-form.vue';
 
     export default {
  
