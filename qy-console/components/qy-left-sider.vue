@@ -8,9 +8,9 @@
         <a-menu theme="dark" mode="inline"  
             :defaultSelectedKeys="[$route.path]"
              :defaultOpenKeys="['sub1', 'sub2', 'sub3']">
-            <a-menu-item key="1">
+            <a-menu-item key="dashboard">
                 <a-icon type="user" />
-                <span>控制面板</span>
+                <span>仪表盘</span>
             </a-menu-item>
 
         
