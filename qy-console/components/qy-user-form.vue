@@ -4,7 +4,7 @@
            <a-row>
                     <a-col :xs="24"   :lg="{ span: 15, offset: 3 }"  >
             <a-form-model-item has-feedback  label="用户名"  prop="username"> 
-                <a-input v-model="userForm.username" type="text" autocomplete="off" placeholder="用户名" />
+                <a-input v-model="userForm.username"  :disabled="usernameDisable"  type="text" autocomplete="off" placeholder="用户名" />
             </a-form-model-item>
 
             <a-form-model-item has-feedback  label="昵称"  prop="nickname"> 
@@ -17,15 +17,16 @@
 
             <a-form-model-item has-feedback  label="头像"  prop="avatar"> 
                 <a-upload
-                    name="avatar"
+                    name="file"
                     list-type="picture-card"
                     class="avatar-uploader"
-                    :show-upload-list="false"
-                    action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
+                    action = "/api/upload/file"
+                    :accept="acceptType"
+                    :show-upload-list="false" 
                     :before-upload="beforeUpload"
                     @change="handleChange"
                 >
-                <img v-if="userForm.avatar" :src="userForm.avatar" alt="avatar" />
+                <img v-if="userForm.avatar" :src="userForm.avatar" alt="avatar" style="width: 100%;" />
                 <div v-else>
                 <a-icon :type="loading ? 'loading' : 'plus'" />
                 <div class="ant-upload-text">
@@ -46,8 +47,12 @@
             <a-button  ref="saveButton"  type="primary"  :loading ="subLoading"  @click="submitForm('userForm')">
                 保存
             </a-button>
-            <a-button v-show="!userForm.id" style="margin-left: 10px" @click="resetForm">
+            <a-button v-if="!userForm || !userForm.id" style="margin-left: 10px" @click="resetForm">
                 重置
+            </a-button>
+
+            <a-button  v-else style="margin-left: 10px" @click="backForm">
+                取消
             </a-button>
         </a-form-model-item>
 
@@ -66,14 +71,28 @@ export default Vue.extend({
             type: Function,
             default: null
         }, 
+        afterBack: {
+            type: Function,
+            default: null
+        }
+    },
+    watch: {
+        userObj(val) {
+             let _this = this;
+             _this.userForm = val;
+             if(val) {
+                 _this.usernameDisable = true;
+             }
+        }
     },
     data() {
         return {
+            usernameDisable: false,
             userForm: {
                 nickname: null,
                 nickname: null,
                 avatar: '',
-                disable: false
+                disabled: false
             },
              rules: {
 
@@ -84,18 +103,57 @@ export default Vue.extend({
                 labelCol: { span: 5 },
                 wrapperCol: { span: 8 }
             },
+            acceptType: "image/*"
         }
     },
     methods: {
+        submitForm(formName) {
+            let  _this = this;
+            _this.subLoading = true;
+            _this.$refs[formName].validate(valid => {
+                if (valid) {
+                    _this.afterSubmit(_this.userForm); 
+                } else {
+                     _this.subLoading = false;
+                    return false;
+                }
+            });
+        },
         resetForm() {
-             this.$refs.articleForm.resetFields();
-               _this.categoryId = null;
+             this.$refs.userForm.resetFields(); 
         },
-        beforeUpload() {
+        backForm() {
+            this.afterBack();
+        },
+        beforeUpload(file) {
+
+            //     console.log("beforeUpload", file);
+            //  const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
+            // if (!isJpgOrPng) {
+            //     this.$message.error('You can only upload JPG file!');
+            // }
+            const isLt2M = file.size / 1024 / 1024 < 2;
+            if (!isLt2M) {
+                this.$message.error('Image must smaller than 2MB!');
+            }
+            return isJpgOrPng && isLt2M;
 
         },
-        handleChange() {
-
+        handleChange(info) {
+            console.log("handleChange", info);
+            if (info.file.status === 'uploading') {
+                    this.loading = true;
+                    return;
+                }
+                if (info.file.status === 'done') {
+                     console.log("handleChange done", info);
+                     let resp = info.file.response;
+                     if(resp.success) {
+                         this.userForm.avatar = resp.content.relativePath;
+                         
+                     }
+                      this.loading = false;
+                }
         }
     }
     

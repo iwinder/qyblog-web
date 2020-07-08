@@ -8,7 +8,8 @@
             <qy-user-form    
                 ref="userForm"
                 :userObj = "userObj"
-                 :afterSubmit="submitForm"> </qy-user-form>
+                 :afterSubmit="submitForm"
+                 :afterBack="afterBack"> </qy-user-form>
     </div>
 </template>
 
@@ -22,22 +23,50 @@ export default Vue.extend({
         // 必须是number类型
         return /^\d+$/.test(params.id)
     },
+    asyncData ({ params }) {
+        return  {userId:params.id };
+    },
     components: {
         QyUserForm
     },
     data() {
         return {
-            userObj: {}
+            userObj: {},
+            userId:null
         }
 
     },
+    mounted() {
+         let _this = this;
+        _this.loadInfo();
+    },
     methods: {
-        submitForm(val) {
-
+        loadInfo() {
+            let  _this = this;
+            _this.$axios.get("user/" + _this.userId).then(res => {
+                    if(res.data.success) {
+                            _this.userObj = res.data.content;
+                    }
+            });
+        },
+        submitForm(user) {
+            let  _this = this;
+            _this.$axios.post('user/save',user).then(res => {
+                    _this.$refs.userForm.subLoading = false;
+                    if(res.data.success) {
+                          this.$message.success('保存成功',15);
+                    }
+            }).catch((response) => {
+                    _this.$refs.userForm.subLoading = false;
+                     _this.$message.error('保存失败: ' + response,5);
+            });
         },
         backF() {
               let _this = this;
                 _this.$router.push("/user");
+        },
+        afterBack() {
+            this.backF();
         }
     }
     
