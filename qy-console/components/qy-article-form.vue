@@ -7,13 +7,6 @@
                             <a-input v-model="articleForm.title" type="text" autocomplete="off" placeholder="添加标题" />
                         </a-form-model-item>
 
-
-
-
-
-
-
-
                         <a-form-model-item has-feedback   prop="content">
                             <!-- <a-input v-model="articleForm.content" type="textarea" /> -->
                             <div class="mavonEditor">
