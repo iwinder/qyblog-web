@@ -7,7 +7,7 @@
         <div class="logo" />
         <a-menu theme="dark" mode="inline"  
             :defaultSelectedKeys="[$route.path]"
-             :defaultOpenKeys="['system', 'blog', 'sub3']">
+             :defaultOpenKeys="['blog', 'sub3']">
             <a-menu-item key="dashboard">
                 <a-icon type="user" />
                 <span>仪表盘</span>
@@ -15,25 +15,7 @@
 
         
 
-            <a-sub-menu key="system">
-                <span slot="title"><a-icon type="user" /><span>系统管理</span></span>
-                <a-menu-item key="/user">
-                      <nuxt-link to="/user">
-                        用户管理
-                    </nuxt-link>
-                    
-                </a-menu-item>
-                <a-menu-item key="4">
-                     <nuxt-link to="/role">
-                        角色管理
-                     </nuxt-link>
-                </a-menu-item>
-                <a-menu-item key="5">
-                    <nuxt-link to="/role">
-                        权限管理
-                     </nuxt-link>
-                </a-menu-item>
-            </a-sub-menu>
+            
 
             <a-sub-menu key="blog">
                 <span slot="title"><a-icon type="user" /><span>文章管理</span></span>
@@ -54,10 +36,32 @@
                 </a-menu-item>
             </a-sub-menu> 
 
-            <!-- <a-menu-item key="3">
+            <a-menu-item key="3">
                 <a-icon type="upload" />
-                <span>nav 3</span>
-            </a-menu-item> -->
+                <span>评论管理</span>
+            </a-menu-item>
+
+            <a-sub-menu key="system">
+                <span slot="title"><a-icon type="user" /><span>系统管理</span></span>
+                <a-menu-item key="/user">
+                      <nuxt-link to="/user">
+                        用户管理
+                    </nuxt-link>
+                    
+                </a-menu-item>
+                <a-menu-item key="/role">
+                     <nuxt-link to="/role">
+                        角色管理
+                     </nuxt-link>
+                </a-menu-item>
+                <a-menu-item key="/permission">
+                    <nuxt-link to="/permission">
+                        权限管理
+                     </nuxt-link>
+                </a-menu-item>
+            </a-sub-menu>
+
+
 
         </a-menu>
     </a-layout-sider>

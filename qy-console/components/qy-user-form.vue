@@ -8,12 +8,26 @@
             </a-form-model-item>
 
             <a-form-model-item has-feedback  label="昵称"  prop="nickname"> 
-                <a-input v-model="userForm.nickname" type="text" autocomplete="off" placeholder="用户名" />
+                <a-input v-model="userForm.nickname" type="text" autocomplete="off" placeholder="昵称" />
             </a-form-model-item>
 
             <a-form-model-item has-feedback  label="邮箱"  prop="email"> 
-                <a-input v-model="userForm.email" type="text" autocomplete="off" placeholder="用户名" />
+                <a-input v-model="userForm.email" type="text" autocomplete="off" placeholder="邮箱" />
             </a-form-model-item>
+
+            <template  v-if="!userForm || !userForm.id">
+                    <a-form-model-item has-feedback  label="密码"  prop="password"> 
+                    <a-input v-model="userForm.password" type="password" autocomplete="off" placeholder="密码" />
+                </a-form-model-item>
+            </template>
+
+            <a-form-model-item label="角色">
+                <a-select v-model="userForm.roleId" placeholder="用户角色">
+                            <a-select-option v-for="d in roleData" :key="d.id">
+                            {{ d.name }}
+                            </a-select-option>
+                </a-select>
+        </a-form-model-item>
 
             <a-form-model-item has-feedback  label="头像"  prop="avatar"> 
                 <a-upload
@@ -83,6 +97,7 @@ export default Vue.extend({
              if(val) {
                  _this.usernameDisable = true;
              }
+           
         }
     },
     data() {
@@ -92,7 +107,8 @@ export default Vue.extend({
                 nickname: null,
                 nickname: null,
                 avatar: '',
-                disabled: false
+                disabled: false,
+                roleId: null,
             },
              rules: {
 
@@ -103,8 +119,13 @@ export default Vue.extend({
                 labelCol: { span: 5 },
                 wrapperCol: { span: 8 }
             },
-            acceptType: "image/*"
+            acceptType: "image/*",
+            roleData:[]
         }
+    },
+    mounted() {
+        let _this = this;
+        _this.initRoleData();
     },
     methods: {
         submitForm(formName) {
@@ -126,17 +147,11 @@ export default Vue.extend({
             this.afterBack();
         },
         beforeUpload(file) {
-
-            //     console.log("beforeUpload", file);
-            //  const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
-            // if (!isJpgOrPng) {
-            //     this.$message.error('You can only upload JPG file!');
-            // }
             const isLt2M = file.size / 1024 / 1024 < 2;
             if (!isLt2M) {
                 this.$message.error('Image must smaller than 2MB!');
             }
-            return isJpgOrPng && isLt2M;
+            return  isLt2M;
 
         },
         handleChange(info) {
@@ -154,6 +169,20 @@ export default Vue.extend({
                      }
                       this.loading = false;
                 }
+        },
+        initRoleData() {
+                let _this = this;
+                _this.$axios.get('role/list').then(res => {
+                                // _this.editLoading = false;
+                                if(res.data.success) {
+                                    _this.roleData = res.data.content;
+                                } else {
+                                    this.$message.error(res.data.message,5);
+                                }
+                }).catch((response) => {
+                    _this.editLoading = false;
+                     this.$message.error(response,5);
+                });
         }
     }
     

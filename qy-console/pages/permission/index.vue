@@ -17,9 +17,9 @@
 
             </a-col>
             <a-col  :xs="{span:24}"  :lg="{ span: 5, offset: 7 }" style=" margin-top: 5px;">
-                <a-button  type="primary"  @click="add()">
+                <!-- <a-button  type="primary"  @click="add()">
                     新增
-                </a-button>
+                </a-button> -->
                 <a-dropdown>
                     <a-menu slot="overlay" @click="handleMenuClick">
                         <a-menu-item key="1">
@@ -40,14 +40,30 @@
                  @change="handleTableChange"
         >
 
-            <span slot="disable" slot-scope="disable">
-                <template v-if="disable"> 已禁用 </template> 
-                <template v-else> 正常 </template> 
+
+
+            <span slot="user" slot-scope="user">
+                <template v-if="user&&user.nickname"> 
+                    <a-tooltip placement="topLeft" :title="user.username" arrow-point-at-center>
+                          {{user.nickname}} 
+                    </a-tooltip>
+                    </template> 
+ 
             </span>
 
+            <span slot="role" slot-scope="role">
+                <template v-if="role&&role.name"> {{role.name}} </template> 
+               
+            </span>
+
+        <!-- <span slot="privilege" slot-scope="privilege">
+                <template v-if="privilege&&privilege.name"> {{privilege.name}} </template> 
+            
+            </span> -->
+
             <span slot="action" slot-scope="text, record">
-                <nuxt-link :to="{name:'user-id',params:{ id: record.id }}">编辑 </nuxt-link >
-                <a-divider type="vertical" />
+                <!-- <nuxt-link :to="{name:'permission-id',params:{ id: record.id }}">编辑 </nuxt-link >
+                <a-divider type="vertical" /> -->
 
                      <a  href="javascript:void(0)"  @click="deleted([record.id])" >删除</a>
 
@@ -62,41 +78,24 @@
     Vue.use(FormModel);
 
     const columns = [
-
         {
-            title: '用户名',
-            dataIndex: 'username',
-            key: 'username',
+            title: '用户',
+            dataIndex: 'user',
+            key: 'user',
+              scopedSlots: { customRender: 'user' },
         },
         {
-            title: '昵称',
-            dataIndex: 'nickname',
-            key: 'nickname',
+            title: '角色',
+            dataIndex: 'role',
+            key: 'role',
+              scopedSlots: { customRender: 'role' },
         },
-
-        {
-            title: '邮箱',
-            dataIndex: 'email',
-            key: 'email',
-        },
-
-        {
-            title: '账户状态',
-            dataIndex: 'disable',
-            key: 'disable',
-             scopedSlots: { customRender: 'disable' },
-        },
-
-        {
-            title: '创建时间',
-            dataIndex: 'createdDate',
-            key: 'createdDate',
-        },
-        {
-            title: '更新时间',
-            dataIndex: 'lastModifiedDate',
-            key: 'lastModifiedDate',
-        },
+        // {
+        //     title: '权限',
+        //     dataIndex: 'privilege',
+        //     key: 'privilege',
+        //       scopedSlots: { customRender: 'privilege' },
+        // },
         {
             title: '操作',
             key: 'action',
@@ -148,7 +147,7 @@
                 }
 
 
-                _this.$axios.get('user',{ params: params
+                _this.$axios.get('permission',{ params: params
 
                 }).then(res => {
                     let resp  = res.data
@@ -174,7 +173,7 @@
             },
             add() {
                 let _this = this;
-                _this.$router.push("/user/add");
+                _this.$router.push("/permission/add");
             },
             searchForm() {
                 let _this = this;
@@ -209,7 +208,7 @@
                         title: '确认删除?',
                         onOk() {
                             console.log('OK');
-                            _this.$axios.delete("user", {data:  ids}).then(res => {
+                            _this.$axios.delete("permission/deleted", {data:  ids}).then(res => {
                                 console.log("deleted !res", res);
                                 if(res.data.success) {
                                     _this.$message.success("删除成功",5);

@@ -40,20 +40,46 @@
                  @change="handleTableChange"
         >
 
-            <span slot="disable" slot-scope="disable">
-                <template v-if="disable"> 已禁用 </template> 
-                <template v-else> 正常 </template> 
-            </span>
-
             <span slot="action" slot-scope="text, record">
-                <nuxt-link :to="{name:'user-id',params:{ id: record.id }}">编辑 </nuxt-link >
+               <a href="javascript:void(0)"  @click="add(record)">编辑 </a >
+                <template v-if="record.roleType!=='SYSTEM'">
                 <a-divider type="vertical" />
 
-                     <a  href="javascript:void(0)"  @click="deleted([record.id])" >删除</a>
+              <a  href="javascript:void(0)"  @click="deleted([record.id])" >删除</a>
+                </template>
 
             </span>
         </a-table>
+
+
+        <a-modal v-model="visible"  on-ok="editRole" :footer="null" @cancel="handleCancel">
+              <template slot="title">
+                  <template v-if="roleObj.id">
+                      修改角色
+                  </template>
+                  <template v-else>
+                      新增角色
+                  </template>
+              </template>
+                  <a-form-model ref="roleForm" :model="roleForm" :rules="rules" v-bind="layout">
+                            <a-form-model-item has-feedback label="名称" prop="name">
+                            <a-input v-model.number="roleForm.name" />
+                            </a-form-model-item>
+                            <a-form-model-item :wrapper-col="{ span: 14, offset: 4 }">
+                            <a-button type="primary" :loading="editLoading" @click="editRole">
+                                保存
+                            </a-button>
+                            <a-button style="margin-left: 10px" @click="handleCancel">
+                                取消
+                            </a-button>
+                            </a-form-model-item>
+                        </a-form-model>
+         </a-modal>
     </div>
+
+
+
+    
 </template>
 
 <script  >
@@ -62,31 +88,26 @@
     Vue.use(FormModel);
 
     const columns = [
-
         {
-            title: '用户名',
-            dataIndex: 'username',
-            key: 'username',
+            title: '名称',
+            dataIndex: 'name',
+            key: 'name',
         },
         {
-            title: '昵称',
-            dataIndex: 'nickname',
-            key: 'nickname',
+            title: '角色类型',
+            dataIndex: 'roleType',
+            key: 'roleType',
         },
-
         {
-            title: '邮箱',
-            dataIndex: 'email',
-            key: 'email',
+            title: '创建者',
+            dataIndex: 'createdBy',
+            key: 'createdBy',
         },
-
         {
-            title: '账户状态',
-            dataIndex: 'disable',
-            key: 'disable',
-             scopedSlots: { customRender: 'disable' },
+            title: '更新者',
+            dataIndex: 'lastModifiedBy',
+            key: 'lastModifiedBy',
         },
-
         {
             title: '创建时间',
             dataIndex: 'createdDate',
@@ -122,6 +143,18 @@
                     current: 1,
                     total: 0
                 },
+                visible: false,
+                editLoading: false,
+                roleObj: {},
+                roleForm: {
+                    name:''
+                },
+                rules:  {
+                },
+                layout: {
+                    labelCol: { span: 4 },
+                    wrapperCol: { span: 14 },
+                },
             };
         },
         mounted() {
@@ -148,7 +181,7 @@
                 }
 
 
-                _this.$axios.get('user',{ params: params
+                _this.$axios.get('role',{ params: params
 
                 }).then(res => {
                     let resp  = res.data
@@ -172,9 +205,13 @@
                     page: pagination.current,
                 })
             },
-            add() {
+            add(obj) {
                 let _this = this;
-                _this.$router.push("/user/add");
+                if(obj) {
+                    _this.roleObj = obj;
+                    _this.roleForm.name = _this.roleObj.name;
+                }
+                 _this.visible = true;
             },
             searchForm() {
                 let _this = this;
@@ -209,7 +246,7 @@
                         title: '确认删除?',
                         onOk() {
                             console.log('OK');
-                            _this.$axios.delete("user", {data:  ids}).then(res => {
+                            _this.$axios.delete("role", {data:  ids}).then(res => {
                                 console.log("deleted !res", res);
                                 if(res.data.success) {
                                     _this.$message.success("删除成功",5);
@@ -225,7 +262,42 @@
                         class: 'test',
                     });
                 }
-            }
+            },
+            editRole() {
+                let _this = this;
+                  _this.editLoading = true;
+                _this.$refs.roleForm.validate(valid => {
+                    if (valid) {
+                        _this.roleObj.name = _this.roleForm.name;
+                        _this.$axios.post('role/save', _this.roleObj).then(res => {
+                                _this.editLoading = false;
+                                if(res.data.success) {
+                                    this.$message.success('保存成功',5);
+                                     _this.roleObj = {}; 
+                                     _this.$refs.roleForm.resetFields();
+                                    this.visible = false;
+                                    _this.initData();
+                                }
+                        }).catch((response) => {
+                                _this.editLoading = false;
+                                this.$message.error(response,5);
+                                // console.log("error：", response);
+                            });;
+                    } else {
+                        _this.editLoading = false;
+                        return false;
+                    }
+                });
+            },
+            handleCancel() {
+                let _this = this;
+                 _this.roleForm= {
+                     name: ""
+                 };
+                _this.$refs.roleForm.resetFields();
+                _this.visible = false;
+                _this.roleObj = {}; 
+            },
         },
 
     })
