@@ -7,7 +7,7 @@
         <div class="logo" />
         <a-menu theme="dark" mode="inline"  
             :defaultSelectedKeys="[$route.path]"
-             :defaultOpenKeys="['blog', 'sub3']">
+             :defaultOpenKeys="['blog']">
             <a-menu-item key="dashboard">
                 <a-icon type="user" />
                 <span>仪表盘</span>
@@ -36,9 +36,11 @@
                 </a-menu-item>
             </a-sub-menu> 
 
-            <a-menu-item key="3">
-                <a-icon type="upload" />
+            <a-menu-item key="/comment">
+               <nuxt-link to="/comment">
+                <a-icon type="uplod" />
                 <span>评论管理</span>
+                </nuxt-link>
             </a-menu-item>
 
             <a-sub-menu key="system">
