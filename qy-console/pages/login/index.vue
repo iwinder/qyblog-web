@@ -3,7 +3,7 @@
 
           <a-form-model   id="formLogin" layout="horizontal" :model="loginForm" @submit="handleSubmit" @submit.native.prevent>
           <a-form-model-item>
-            <a-input v-model="loginForm.user" placeholder="用户名">
+            <a-input v-model="loginForm.username" placeholder="用户名">
               <a-icon slot="prefix" type="user" style="color:rgba(0,0,0,.25)" />
             </a-input>
           </a-form-model-item>
@@ -60,7 +60,20 @@ export default Vue.extend({
         handleSubmit(e) {
             console.log("handleSubmit", e);
                     let _this = this;
-                  _this.$router.push("/article");
+                _this.state.loginBtn= true;
+              _this.$axios.post('login',_this.loginForm).then(res => {
+                    _this.state.loginBtn= false;
+                    if(res.data.success) {
+                          this.$message.success('登录成功',15);
+                           _this.$router.push("/article");
+                    } else {
+                        _this.$message.error('登录失败: ' + res.data.message,5);
+                    }
+            }).catch((response) => {
+                   _this.state.loginBtn= true;
+                     _this.$message.error('登录失败: ' + response,5);
+            });
+                 
         }
     }
 })
