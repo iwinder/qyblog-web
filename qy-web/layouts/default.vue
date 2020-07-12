@@ -1,9 +1,61 @@
 <template>
-  <div>
-    <nuxt />
-  </div>
+  <a-layout id="components-layout-demo-top-side-2">
+
+       <qy-header  :isCollapsed="collapsed" @on-collapsed="onCollapsed"  :afteModeChange="afteModeChange"></qy-header>
+       <a-layout>
+          <qy-left-sider   v-show="isShow"  :isCollapsed="collapsed"  :afterBreakpoint="afterBreakpoint"> </qy-left-sider>
+          <a-layout-content>
+              <nuxt />
+          </a-layout-content>
+
+       </a-layout>
+          <qy-footer></qy-footer>
+  </a-layout>
 </template>
 
+
+
+<script>
+import QyHeader from '~/components/qy-header.vue'
+import QyFooter from '~/components/qy-footer.vue'
+import QyLeftSider from '~/components/qy-left-sider.vue'
+
+export default {
+  components: {
+    QyHeader,
+    QyFooter,
+    QyLeftSider
+  },
+  data() {
+    return {
+      isShow: false,
+       collapsed: false,
+    }
+  },
+  mounted() {
+      
+  },
+  methods: {
+    onCollapsed(val) {
+      console.log("onCollapsed",val);
+      this.collapsed = val;
+    },
+    afterBreakpoint(val) {
+         console.log("afterBreakpoint",val);
+        this.collapsed = val;
+    },
+    afteModeChange(val) {
+        console.log("afteModeChange",val);
+      let _this = this;
+      _this.isShow = val;
+      if(val) {
+            _this.collapsed = true;
+      }
+    },
+  }
+
+}
+</script>
 <style>
 html {
   font-family:
