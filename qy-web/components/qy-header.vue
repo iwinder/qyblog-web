@@ -1,19 +1,19 @@
 <template>
-        <a-layout-header  style="background: #fff;padding: 0">
+        <a-layout-header   :style="{background: '#fff', padding: 0,  width: '100%' ,position: 'fixed',zIndex: 1}">
             <a-row style="margin: 0 20px;">
                 <a-col   :xs="{span:2}" :sm="{span:2}"  :md="{ span: 0}">
-            <a-icon   v-show="isInline"
+            <a-icon   
           class="trigger"
           :type="collapsed ? 'menu-unfold' : 'menu-fold'"
           @click="callChange"
         />
 </a-col>
-   <a-col  :xs="{span:6,offset: 8}"  :sm="{span:6,offset: 8}"  :md="{ span: 3, offset:2}">
-        <a class="logo nav-col" href="https://windcoder.com" title="Windcoder" :class="{'floatLeft' : !isInline, 'logoIsInline':isInline }" >
-                <img src="https://windcoder.com/wp-content/uploads/2017/02/logo_vift.png" alt="Windcoder"  :class="{'floatLeft' : !isInline}" >
+   <a-col  class="logo-col" :xs="{span:6,offset: 8}"  :sm="{span:6,offset: 8}"  :md="{ span: 3, offset:2}">
+        <a class="logo nav-col" href="https://windcoder.com" title="Windcoder"   >
+                <img src="https://windcoder.com/wp-content/uploads/2017/02/logo_vift.png" alt="Windcoder"  >
         </a>
  </a-col>
-      <a-menu  v-show="horizontalShow"
+      <a-menu  class="horizontalShow"
       
          mode="horizontal"
         :default-selected-keys="['2']"
@@ -42,11 +42,11 @@ export default {
         },
         screenWidths: {
             default:  false
-        },
-        afteModeChange: {
+        },      
+          afteModeChange: {
             type: Function,
             default: null
-        }, 
+        },  
     },
     data() {
       return {
@@ -59,52 +59,18 @@ export default {
       };
     },
     watch: {
-        screenWidth(val) {
-            console.log(val);      
-            let  _this  = this;
-            if(val < 768) {
-                _this .mode = "inline";
-                _this.isInline = true;
-                  _this.horizontalShow = false;
-                  _this.afteModeChange(true);
-            } else {
-                _this .mode = "horizontal";
-                 _this.isInline = false;
-                _this.horizontalShow = true;
-                _this.afteModeChange(false);
-            }
-        },
         isCollapsed(val) {
             this.collapsed = val;
         }
     },
     mounted() {
-        let  _this  = this;
-      this.screenWidth = document.body.clientWidth;  
-      this.screenHeight = document.body.clientHeight;
-            if( this.screenWidth < 768) {
-                _this .mode = "inline";
-                _this.isInline = true;
-                _this.horizontalShow = false;
-                      _this.afteModeChange(true);
-            } else {
-                _this .mode = "horizontal";
-                 _this.isInline = false;
-                 _this.horizontalShow = true;
-                 _this.afteModeChange(false);
-            }
-      window.onresize = () => {
-        return (() => {
-          this.screenWidth = document.body.clientWidth;
-          this.screenHeight = document.body.clientHeight;
 
-        })();
-      };
     },
     methods: {
         callChange() {
-             this.collapsed = !this.collapsed;
-              this.$emit('on-collapsed',this.collapsed);
+          let _this = this;
+          _this.collapsed = !this.collapsed;
+           _this.$emit('on-collapsed',this.collapsed);
         }
     }
 }
@@ -112,7 +78,7 @@ export default {
 
 
 <style>
-#components-layout-demo-custom-trigger .trigger {
+ .trigger {
   font-size: 18px;
   line-height: 64px;
   padding: 0 24px;
@@ -120,32 +86,48 @@ export default {
   transition: color 0.3s;
 }
 
-#components-layout-demo-custom-trigger .trigger:hover {
+.trigger:hover {
   color: #1890ff;
 }
 
  .logo {
   height: 32px;
   background: rgba(255, 255, 255, 0.2);
-  margin: 16px;
+ 
   display: inline-block;
 }
 .logo img {
     max-width:  100%;
     height: 100%;
-    display: block;
+    display: inline-block;
 }
-.floatLeft {
-    float: left;
-}
-.logoIsInline{
-        /* left: 20%; */
-    float: left;
-    /* position: relative; */
-}
+ .logo-col {
+       text-align: center;
+    vertical-align: middle;
+    line-height: 64px;
+ }
+ 
 .trigger {
     float: left;
     width: 48px;
     line-height: 64px;
 }
+
+@media (max-width: 767px) {
+  .horizontalShow {
+    display: none;
+  }
+  .trigger {
+     display: inline-block;
+  }
+}
+@media (min-width: 768px){
+  .horizontalShow {
+    display: inline-block;
+  }
+    .trigger {
+     display: none;
+  }
+}
+
 </style>

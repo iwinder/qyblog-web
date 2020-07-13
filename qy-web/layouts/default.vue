@@ -1,15 +1,15 @@
 <template>
-  <a-layout id="components-layout-demo-top-side-2">
-
-       <qy-header  :isCollapsed="collapsed" @on-collapsed="onCollapsed"  :afteModeChange="afteModeChange"></qy-header>
+  <a-layout id="components-layout-demo-top-side-2"  style="min-height: 100vh">
+    <qy-left-sider     :isCollapsed="collapsed"  :afterClose="afterClose"> </qy-left-sider>
+     
        <a-layout>
-          <qy-left-sider   v-show="isShow"  :isCollapsed="collapsed"  :afterBreakpoint="afterBreakpoint"> </qy-left-sider>
+        <qy-header  :isCollapsed="collapsed" @on-collapsed="onCollapsed"  :afteModeChange="afteModeChange"></qy-header>
           <a-layout-content>
               <nuxt />
           </a-layout-content>
-
+        <qy-footer></qy-footer>
        </a-layout>
-          <qy-footer></qy-footer>
+  
   </a-layout>
 </template>
 
@@ -40,18 +40,14 @@ export default {
       console.log("onCollapsed",val);
       this.collapsed = val;
     },
-    afterBreakpoint(val) {
-         console.log("afterBreakpoint",val);
-        this.collapsed = val;
-    },
+
     afteModeChange(val) {
-        console.log("afteModeChange",val);
-      let _this = this;
-      _this.isShow = val;
-      if(val) {
-            _this.collapsed = true;
-      }
+
     },
+    afterClose(val) {
+      let _this = this;
+       _this.collapsed = false;
+    }
   }
 
 }

@@ -1,10 +1,13 @@
 <template>
-    <a-layout-sider v-model="collapsed"  :trigger="null" collapsible 
-    breakpoint="lg"
-      collapsed-width="0"
- @breakpoint="onBreakpoint"
-       :style="{  'background': '#f0f2f5'  }">
-        <span class="logo"  style="    margin: 0;" />
+     <a-drawer
+      title="Basic Drawer"
+      placement="left"
+      :closable="false"
+      :visible="visible"
+      :after-visible-change="afterVisibleChange"
+      @close="onClose"
+    >
+
         <a-menu theme="light" mode="inline"  
             :defaultSelectedKeys="[$route.path]"
              :defaultOpenKeys="['blog']">
@@ -66,7 +69,8 @@
 
 
         </a-menu>
-    </a-layout-sider>
+            </a-drawer>
+    <!-- </a-layout-sider> -->
 </template>
 
 <script>
@@ -75,27 +79,35 @@ export default {
         isCollapsed: {
             default:  false
         },
-        afterBreakpoint: {
+         afterClose: {
             type: Function,
             default: null
         }, 
     },
     data() {
         return {
-            collapsed: this.isCollapsed
+            visible: this.isCollapsed
         }
     },
     watch: {
         isCollapsed(val) {
-                    console.log("isCollapsed sider",val);
-            this.collapsed = val;
+                  
+            this.visible = val;
         }
     },
     methods: {
-            onBreakpoint(broken) {
-                let _this = this;
-                _this.afterBreakpoint(broken);
-            },
+         afterVisibleChange(val) {
+             let _this = this;
+                console.log('visible', val);
+                // _this.visible = !val;
+                // if(val) {
+                //     _this.visible = false;
+                // }
+        },
+    onClose() {
+      this.visible = false;
+      this.afterClose(false);
+    },
     }
 }
 </script>
