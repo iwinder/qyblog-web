@@ -1,5 +1,5 @@
 <template>
-        <a-layout-header   :style="{background: '#fff', padding: 0,  width: '100%' ,position: 'fixed',zIndex: 1}">
+        <a-layout-header   :style="{background: '#fff', padding: 0,  width: '100%' ,position: 'fixed',zIndex: 2}">
             <a-row style="margin: 0 20px;">
                 <a-col   :xs="{span:2}" :sm="{span:2}"  :md="{ span: 0}">
             <a-icon   

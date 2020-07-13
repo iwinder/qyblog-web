@@ -1,40 +1,104 @@
 <template>
-  <div class="container">
-    <div>
-      <logo />
-      <h1 class="title">
-        qy-web
-      </h1>
-      <div class="links">
-        <a
-          href="https://nuxtjs.org/"
-          target="_blank"
-          rel="noopener noreferrer"
-          class="button--green"
-        >
-          Documentation
-        </a>
-        <a
-          href="https://github.com/nuxt/nuxt.js"
-          target="_blank"
-          rel="noopener noreferrer"
-          class="button--grey"
-        >
-          GitHub
-        </a>
-      </div>
-    </div>
-  </div>
+<a-row class="content">
+<a-col :xs="{span:24}"  :lg="{ span: 16}" > 
+ <a-list item-layout="vertical" size="large" :pagination="pagination" :data-source="listData">
+    <!-- <div slot="footer"><b>ant design vue</b> footer part</div> -->
+    <a-list-item slot="renderItem" key="item.title" slot-scope="item">
+        
+        <template   slot="extra" style="width:272px"> 
+                <a href="https://windcoder.com/category/java"  class="category-tag" rel="category tag">Java笔记</a>
+          <a href="https://windcoder.com/dawenjianfenpianshangchuanjavabanjiandanshixian" class="img-a">
+          <img
+        width="272px"
+        alt="logo"
+        src="https://gw.alipayobjects.com/zos/rmsportal/mqaQswcyDLcXyDKnZfES.png"
+      /></a>
+
+      </template>
+      <template v-for="{ type, text } in actions" slot="actions">
+        <span :key="type">
+          <a-icon :type="type" style="margin-right: 8px" />
+         
+            {{ text }}
+        </span>
+      </template>
+
+      <a-list-item-meta :description="item.description">
+        <a slot="title" :href="item.href">{{ item.title }}</a>
+        <!-- <a-avatar slot="avatar" :src="item.avatar" /> -->
+      </a-list-item-meta>
+
+         <a-row>
+                <a-tag color="#f50">
+                  #f50
+                </a-tag>
+                <a-tag color="#2db7f5">
+                  #2db7f5
+                </a-tag>
+                <a-tag color="#87d068">
+                  #87d068
+                </a-tag>
+                <a-tag color="#108ee9">
+                  #108ee9
+                </a-tag>
+            </a-row> 
+             <a-row>
+      {{ item.content }}    
+       </a-row>
+    </a-list-item>
+  </a-list>
+</a-col>
+
+<a-col :xs="{span:24}"  :lg="{  span: 5, offset: 7 }" > 
+
+</a-col>
+
+</a-row>
+
+
+  
 </template>
 
 <script>
 import Vue from 'vue'
 import Logo from '~/components/Logo.vue'
 
+const listData = [];
+for (let i = 0; i < 23; i++) {
+  listData.push({
+    href: 'https://www.antdv.com/',
+    title: `ant design vue part ${i}`,
+    avatar: 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
+    description:
+      '蜜汁超酸奶/2020-07-08',
+    content:
+       'Ant Design, a design language for background applications, is refined by Ant UED Team.',
+  });
+}
+
+
 export default Vue.extend({
   components: {
     Logo
-  }
+  },
+    data() {
+    return {
+      listData,
+      pagination: {
+        onChange: page => {
+          console.log(page);
+        },
+        pageSize: 3,
+        total: 23,
+        showLessItems: true,
+      },
+      actions: [
+     
+        { type: 'like-o', text: '156' },
+        { type: 'message', text: '2' },
+      ],
+    };
+  },
 })
 </script>
 
@@ -76,5 +140,41 @@ export default Vue.extend({
 
 .links {
   padding-top: 15px;
+}
+.content {
+  padding: 20px 15px;
+    width: 85%;
+    margin-right: auto;
+    margin-left: auto;
+    background: #fff;
+}
+
+.img-a{
+  display: block;
+}
+.img-a img {
+      max-height: 175px;
+}
+.category-tag {
+    display: inline-block;
+    min-width: 50px;
+    padding: 0 10px;
+    position: relative;
+    left: 10px;
+    top: 30px;
+    z-index: 1;
+    color: #fff;
+    background-color: rgba(0,0,0,.6);
+    border-radius: 2px;
+    font-size: 12px;
+    line-height: 22px;
+}
+@media screen and (max-width: 576px) {
+    .img-a {
+      width: 100%;
+    }
+  .img-a img {
+    width: 100%;
+  }
 }
 </style>

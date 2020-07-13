@@ -107,4 +107,8 @@ html {
   color: #fff;
   background-color: #35495e;
 }
+
+.ant-layout-content {
+  margin-top: 80px;
+}
 </style>
