@@ -6,12 +6,19 @@
     <a-list-item slot="renderItem" key="item.title" slot-scope="item">
         
         <template   slot="extra" style="width:272px"> 
-                <a href="https://windcoder.com/category/java"  class="category-tag" rel="category tag">Java笔记</a>
+              <template v-if="item.category!=null">
+                 
+                <a href="https://windcoder.com/category/java"  class="category-tag" rel="category tag">
+                
+                {{item.category.name}}</a>
+                </template> <template v-else>                <a href="https://windcoder.com/category/java"  class="category-tag" rel="category tag">
+                
+            未分类</a>   </template>
           <a href="https://windcoder.com/dawenjianfenpianshangchuanjavabanjiandanshixian" class="img-a">
           <img
         width="272px"
         alt="logo"
-        src="https://gw.alipayobjects.com/zos/rmsportal/mqaQswcyDLcXyDKnZfES.png"
+        :src="item.thumbnail"
       /></a>
 
       </template>
@@ -24,23 +31,16 @@
       </template>
 
       <a-list-item-meta :description="item.description">
-        <a slot="title" :href="item.href">{{ item.title }}</a>
+        <nuxt-link  slot="title"  :to="{name:'name',params:{name:item.href, aid:item.id}}"> {{ item.title }} </nuxt-link>
+        <!-- <a  :href="item.href"></a> -->
         <!-- <a-avatar slot="avatar" :src="item.avatar" /> -->
       </a-list-item-meta>
 
-         <a-row>
-                <a-tag color="#f50">
-                  #f50
+         <a-row style="margin: 5px 0;">
+                <a-tag color="#f50" v-for=" tag in item.tagStrings" :key="tag">
+                  {{tag}}
                 </a-tag>
-                <a-tag color="#2db7f5">
-                  #2db7f5
-                </a-tag>
-                <a-tag color="#87d068">
-                  #87d068
-                </a-tag>
-                <a-tag color="#108ee9">
-                  #108ee9
-                </a-tag>
+             
             </a-row> 
              <a-row>
       {{ item.content }}    
@@ -62,28 +62,77 @@
 <script>
 import Vue from 'vue'
 import Logo from '~/components/Logo.vue'
-
-const listData = [];
-for (let i = 0; i < 23; i++) {
-  listData.push({
-    href: 'https://www.antdv.com/',
-    title: `ant design vue part ${i}`,
-    avatar: 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
-    description:
-      '蜜汁超酸奶/2020-07-08',
-    content:
-       'Ant Design, a design language for background applications, is refined by Ant UED Team.',
-  });
-}
+// import axios from 'axios'
+// const listData = [];
+// for (let i = 0; i < 23; i++) {
+//   listData.push({
+//     href: 'https://www.antdv.com/',
+//     title: `ant design vue part ${i}`,
+//     avatar: 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
+//     description:
+//       '蜜汁超酸奶/2020-07-08',
+//     content:
+//        'Ant Design, a design language for background applications, is refined by Ant UED Team.',
+//   });
+// }
 
 
 export default Vue.extend({
   components: {
     Logo
   },
+ async  asyncData (context) {
+    let[res1] = await Promise.all([ 
+        context.$axios.get('articles',{ params: {
+                         page: 1,
+              size:  10
+         } }).then(res => {
+            let resp  = res.data				
+            let result = {};
+            let listData = [];
+            if(resp.success) {
+                let data = resp.content.list;
+              
+                data.forEach(e  => {
+                    listData.push({
+                      id: e.id,
+                      href:  e.permaLink,
+                      title: e.title,
+                      thumbnail: e.thumbnail,
+                      tagStrings: e.tagStrings,
+                      category: e.category,
+                      avatar: 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
+                      description:
+                        '蜜汁超酸奶/2020-07-08',
+                      content:
+                        e.summary,
+                    });
+               });
+              result = {
+                  listData:  listData,
+                  total:   resp.content.total,
+                  current:  resp.content.page,
+                 pageSize:  resp.content.size
+                };
+            }
+            console.log("result", result);
+            return result;
+
+          })
+         ])
+          return{
+              listData : res1.listData, 
+              pagination: {
+                total:  res1.total,
+                current : res1.current ,
+                pageSize : res1.pageSize, 
+              }  
+        }
+    },
     data() {
     return {
-      listData,
+      listData:[],
+      data:[],
       pagination: {
         onChange: page => {
           console.log(page);
@@ -97,12 +146,71 @@ export default Vue.extend({
         { type: 'like-o', text: '156' },
         { type: 'message', text: '2' },
       ],
-    };
+    }
   },
+    mounted() {
+      // let _this = this;
+      // _this.initData();
+    },
+  methods: {
+        initData() {
+          let _this = this;
+          _this.list({
+              page: 1,
+              size: _this.pagination.pageSize
+          });
+      },
+    list(pageInfo) {
+        let _this = this;
+        // _this.loading = true;
+        let params = {
+          // searchText:  _this.searchFrom.searchText,
+          ...pageInfo
+        }
+        // if (QyTool.isEmpty(params.searchText)) {
+        //   delete params.searchText;
+        // }
+
+       
+        _this.$axios.get('articles',{ params: params
+            
+          }).then(res => {
+            let resp  = res.data				
+
+            if(resp.success) {
+                _this.data = resp.content.list;
+
+                _this.data.forEach(e  => {
+                    _this.listData.push({
+                      href:  e.permaLink,
+                      title: e.title,
+                      thumbnail: e.thumbnail,
+                      tagStrings: e.tagStrings,
+                      category: e.category,
+                      avatar: 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
+                      description:
+                        '蜜汁超酸奶/2020-07-08',
+                      content:
+                        e.summary,
+                    });
+                });
+
+
+            }
+
+           
+            _this.pagination.total =   resp.content.total;
+            _this.pagination.current =   resp.content.page;
+            _this.pagination.pageSize =   resp.content.size;
+            // _this.loading = false;
+            //  _this.selectedIds = [];
+          });
+      },
+  }
 })
 </script>
 
-<style>
+<style scoped>
 .container {
   margin: 0 auto;
   min-height: 100vh;

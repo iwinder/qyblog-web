@@ -42,7 +42,7 @@
 
             <a slot="name" slot-scope="text">{{ text }}</a>
 
-            <span slot="thumbnail" slot-scope="thumbnail"><img :src="thumbnail"></span>
+            <span slot="thumbnail" slot-scope="thumbnail"><img :src="thumbnail" style=" height: 62px;   max-width: 100%;"></span>
           <span slot="published" slot-scope="published">
               <template v-if="published"> 已发布 </template> 
               <template v-else> 未发布 </template> 

@@ -31,9 +31,9 @@
                         </a-form-model-item>
                     </a-col>
                      <a-col :xs="24"     :lg="9"  >
-                        <!-- <a-form-model-item has-feedback label="封面" prop="thumbnail">
+                        <a-form-model-item has-feedback label="封面" prop="thumbnail">
                             <a-input v-model="articleForm.thumbnail" type="text" autocomplete="off" />
-                        </a-form-model-item> -->
+                        </a-form-model-item>
 
                         <a-form-model-item has-feedback label="标签" prop="tags">
                              <a-select show-search mode="tags" style="width: 100%" 
@@ -124,11 +124,12 @@ export default {
                 fetching: false,
                 tagsData:[],
                 selectTags:[],
-                markdownContent: "#### how to use mavonEditor in nuxt.js",
+                markdownContent: "",
                 htmlContent:" ",
                 markdownOption:{
                     toolbarsFlag: true
-                }
+                },
+                imageNum: 0
         }
     },
     watch: {
@@ -243,6 +244,10 @@ export default {
                 if (resp.success) {
                      // 第二步.将返回的url替换到文本原位置![...](0) -> ![...](url)
                     _this.$refs.md.$img2Url(pos, resp.content.relativePath);
+                    _this. imageNum ++;
+                    if ( _this.imageNum==1 && !_this.articleForm.thumbnail ) {
+
+                    }
                 }
                
             })
