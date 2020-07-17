@@ -14,8 +14,9 @@
 
                            <a-row class="header-wrap">
                                     <a-row class="header-meta">
-                                        <span class="meta-category"><a href="https://windcoder.com/category/java" rel="category tag">Java笔记</a></span>
-                                        <span class="separator" role="separator">·</span>
+                                            <template v-if="postData.category!=null">
+                                        <span class="meta-category"><a href="https://windcoder.com/category/java" rel="category tag">{{postData.category.name}}</a></span>
+                                        <span class="separator" role="separator">·</span></template>
                                         <span class="meta-date"><time class="entry-date"  :datetime="postData.publishedDateTime" :title="postData.publishedDateTime">{{postData.publishedDateMD }}</time></span>
                                          <span class="separator" role="separator">·</span>
                                          <span class="meta-user">By/蜜汁炒酸奶</span>
@@ -24,7 +25,19 @@
                             </a-row>
                             </a-card>
                   </a-row>
-                  <a-row></a-row>
+                  <a-row class="single-body">
+                       <template v-if="postData.tagStrings!=null">
+                      <a-row>
+                            <a-tag color="#f50" v-for=" tag in postData.tagStrings" :key="tag">
+                            {{tag}}
+                            </a-tag>
+                      </a-row> 
+                      </template>
+                      <a-row> 
+                          <div   v-html="postData.contentHtml"></div>
+                      </a-row>
+
+                  </a-row>
         </a-col>
 
         <a-col :xs="{span:24}"  :lg="{  span: 5, offset: 7 }" > 
@@ -69,6 +82,16 @@ export default {
         }
 
      },
+    head () {
+        return {
+            title: this.postData.title,
+            meta: [
+                                    { hid: "keywords", name: "keywords", content: this.postData. tagStrings},
+                { hid: "description", name: "description", content: this.postData. summary},
+
+            ]
+        }
+    },
      data() {
          return {
              postData: {}
@@ -133,5 +156,9 @@ height: 400px;
  .card-class /deep/  .ant-card-cover {
     height: 100%;
     overflow: hidden;
+}
+.single-body {
+    padding: 20px;
+    background: #fff;
 }
 </style>
