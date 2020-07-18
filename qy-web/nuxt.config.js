@@ -1,4 +1,4 @@
-
+const cheerio = require('cheerio');
 export default {
   server: {
     port: 4001, // default: 3000
@@ -36,7 +36,8 @@ export default {
   ** https://nuxtjs.org/guide/plugins
   */
   plugins: [
-    '@/plugins/antd-ui'
+    '@/plugins/antd-ui',
+    { src: '@/plugins/vue-highlight', ssr: false }
   ],
   /*
   ** Nuxt.js dev-modules
@@ -55,6 +56,15 @@ export default {
   ** See https://nuxtjs.org/api/configuration-build/
   */
   build: {
+  },
+  hooks: {
+    'render:route': (url, result) => {
+      this.doc = cheerio.load(result.html,{decodeEntities: false});
+      //由于window.__nuxt__总是位于body中的第一个script中，
+      //所以我移除了body中第一个脚本标签
+      this.doc(`body script`).eq(0).remove();
+      result.html = this.doc.html()
+    }
   },
   axios: {
     // baseURL: 'http://localhost:8000/api/admin',

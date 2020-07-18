@@ -1,17 +1,8 @@
 <template>
     <a-row class="content">
-        <a-col :xs="{span:24}"  :lg="{ span: 16}" > 
-                  <a-row class="card-class"  >
+        <a-col  class="single-left" :xs="{span:24}"  :lg="{ span: 16}" > 
+                  <a-row class="single-header"  >
                        <a-card    :style="{backgroundImage:'url(' + postData.thumbnail + ')'}">
-                           <!-- <template     slot="cover"> 
-                               
-                            <a-card-meta :title="postData.title">
-                                <template slot="description">
-                                    蜜汁超酸奶/2020-07-08
-                                </template>
-                                </a-card-meta>
-                           </template> -->
-
                            <a-row class="header-wrap">
                                     <a-row class="header-meta">
                                             <template v-if="postData.category!=null">
@@ -23,18 +14,19 @@
                                     </a-row>
                                     <h1 class="h2">{{postData.title}}</h1>
                             </a-row>
-                            </a-card>
+                        </a-card>
                   </a-row>
                   <a-row class="single-body">
                        <template v-if="postData.tagStrings!=null">
-                      <a-row>
+                      <a-row class="article-header">
                             <a-tag color="#f50" v-for=" tag in postData.tagStrings" :key="tag">
                             {{tag}}
                             </a-tag>
                       </a-row> 
                       </template>
-                      <a-row> 
-                          <div   v-html="postData.contentHtml"></div>
+                      <a-row class="" v-highlight> 
+                            <!-- <mavon-editor   class="markdown-body" ref=md  :value="postData.contentHtml"  :toolbarsFlag= "false"   :subfield= "false"  defaultOpen= "preview"></mavon-editor> -->
+                          <div  class="markdown-body"   v-html="postData.contentHtml"></div>
                       </a-row>
 
                   </a-row>
@@ -48,9 +40,15 @@
 
 <script>
 import moment from 'moment';
+// import hljs from 'highlight.js';
+// import 'highlight.js/styles/github.css';
+// import 'highlight.js/styles/default.css';
+
 export default {
      async  asyncData (context) { 
          console.log(context)
+        //  console.log(hljs)
+            // console.log(Hljs)
          let id = context.params.aid;
         let name = context.params.name;
          let url = "articles/";
@@ -70,9 +68,10 @@ export default {
             console.log("result", result);
              result.publishedDateMD =   moment(result.publishedDate).format('YYYY-MM-DD');
               result.publishedDateTime =   moment(result.publishedDate).format('YYYY-MM-DD HH:mm:ss');
+            //  result.contentHtmlT =  hljs.highlightAuto(result.contentHtml).value;
             //   console.log("restempTimeult", tempTime);
             // result.publishedDateMD =  context. moment(result.publishedDate, 'YYYY/MM/DD');
-          
+            
             return result;
 
           })
@@ -89,7 +88,11 @@ export default {
                                     { hid: "keywords", name: "keywords", content: this.postData. tagStrings},
                 { hid: "description", name: "description", content: this.postData. summary},
 
-            ]
+            ],
+            link: [
+                {rel:"stylesheet" ,type:"text/css", href:"/css/github-markdown.css"}
+            ],
+            
         }
     },
      data() {
@@ -97,24 +100,35 @@ export default {
              postData: {}
          }
      },
+     mounted() {
+         console.log("mounted 1 ");
+        this.$nextTick().then(() => {
+                    console.log("mounted nextTick 1 ");
+            // hljs.initHighlightingOnLoad();
+     })  
+     },
     methods: {
-    moment,
+        moment,
   },
 }
 </script>
 
+<style scoped>
+/* import from 'github-markdown.css' */
+</style>
 <style lang="scss" scoped>
+
 .content {
   padding: 20px 15px;
     width: 85%;
     margin-right: auto;
     margin-left: auto;
-    background: #fff;
-}
-.card-class {
-height: 400px;
+    
 }
 
+.single-header {
+    background: #fff;
+}
 .ant-card-bordered {
     background-size: cover;
     background-position: center;
@@ -153,12 +167,16 @@ height: 400px;
         content: '';
         background-color: rgba(0,0,0,.55);
     }
- .card-class /deep/  .ant-card-cover {
-    height: 100%;
-    overflow: hidden;
-}
+ 
 .single-body {
     padding: 20px;
     background: #fff;
+}
+ .markdown-body  /deep/ img {
+    margin: 5px 0;
+}
+.article-header {
+        margin-bottom: 30px;
+        
 }
 </style>
