@@ -1,5 +1,5 @@
 <template>
-<a-locale-provider :locale="zh_CN">
+<a-config-provider :locale="zh_CN">
   <a-layout id="components-layout-demo-top-side-2"  style="min-height: 100vh">
     <qy-left-sider     :isCollapsed="collapsed"  :afterClose="afterClose"> </qy-left-sider>
      
@@ -12,7 +12,7 @@
        </a-layout>
   
   </a-layout>
-    </a-locale-provider>
+    </a-config-provider>
 </template>
 
 
@@ -21,16 +21,18 @@
 import QyHeader from '~/components/qy-header.vue'
 import QyFooter from '~/components/qy-footer.vue'
 import QyLeftSider from '~/components/qy-left-sider.vue'
+import Vue from 'vue'
+import { ConfigProvider } from 'ant-design-vue';
  import zh_CN from 'ant-design-vue/lib/locale-provider/zh_CN';
   import moment from 'moment';
   import 'moment/locale/zh-cn';
-
+Vue.component(ConfigProvider.name, ConfigProvider);
   moment.locale('zh-cn');
 export default {
   components: {
     QyHeader,
     QyFooter,
-    QyLeftSider
+    QyLeftSider,
   },
   data() {
     return {

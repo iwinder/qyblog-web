@@ -9,14 +9,14 @@
         />
 </a-col>
    <a-col  class="logo-col" :xs="{span:6,offset: 8}"  :sm="{span:6,offset: 8}"  :md="{ span: 3, offset:2}">
-        <a class="logo nav-col" href="https://windcoder.com" title="Windcoder"   >
+        <a class="logo nav-col" href="/" title="Windcoder"   > 
                 <img src="https://windcoder.com/wp-content/uploads/2017/02/logo_vift.png" alt="Windcoder"  >
         </a>
  </a-col>
       <a-menu  class="horizontalShow"
       
          mode="horizontal"
-        :default-selected-keys="['2']"
+           :defaultSelectedKeys="[$route.path]"
         :style="{ lineHeight: '64px' }"
     
       >

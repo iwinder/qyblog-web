@@ -18,18 +18,22 @@
                   </a-row>
                   <a-row class="single-body">
                        <template v-if="postData.tagStrings!=null">
-                      <a-row class="article-header">
-                            <a-tag color="#f50" v-for=" tag in postData.tagStrings" :key="tag">
-                            {{tag}}
-                            </a-tag>
-                      </a-row> 
+                            <a-row class="article-header">
+                                    <a-tag color="#f50" v-for=" tag in postData.tagStrings" :key="tag">
+                                    {{tag}}
+                                    </a-tag>
+                            </a-row> 
                       </template>
                       <a-row class="" v-highlight> 
-                            <!-- <mavon-editor   class="markdown-body" ref=md  :value="postData.contentHtml"  :toolbarsFlag= "false"   :subfield= "false"  defaultOpen= "preview"></mavon-editor> -->
                           <div  class="markdown-body"   v-html="postData.contentHtml"></div>
                       </a-row>
-
                   </a-row>
+                    <a-row class="single-comments"> 
+
+                        
+                        <qy-comment-list :commentAgentId= "postData.commentAgentId"></qy-comment-list>
+
+                    </a-row>
         </a-col>
 
         <a-col :xs="{span:24}"  :lg="{  span: 5, offset: 7 }" > 
@@ -39,16 +43,13 @@
 </template>
 
 <script>
+import Vue from 'vue'
 import moment from 'moment';
-// import hljs from 'highlight.js';
-// import 'highlight.js/styles/github.css';
-// import 'highlight.js/styles/default.css';
-
+import { FormModel } from 'ant-design-vue';
+ import  QyCommentList from '~/components/qy-comment-list.vue'
+Vue.use(FormModel); 
 export default {
      async  asyncData (context) { 
-         console.log(context)
-        //  console.log(hljs)
-            // console.log(Hljs)
          let id = context.params.aid;
         let name = context.params.name;
          let url = "articles/";
@@ -63,7 +64,7 @@ export default {
             let resp  = res.data				
             let result = {};
             if(resp.success) { 
-              result  = resp.content;
+                result  = resp.content;
             }
             console.log("result", result);
              result.publishedDateMD =   moment(result.publishedDate).format('YYYY-MM-DD');
@@ -85,7 +86,7 @@ export default {
         return {
             title: this.postData.title,
             meta: [
-                                    { hid: "keywords", name: "keywords", content: this.postData. tagStrings},
+                { hid: "keywords", name: "keywords", content: this.postData. tagStrings},
                 { hid: "description", name: "description", content: this.postData. summary},
 
             ],
@@ -95,27 +96,78 @@ export default {
             
         }
     },
+    components: {
+        QyCommentList
+    },
      data() {
          return {
-             postData: {}
+             postData: {},
+             submitting: false,
+             value: '',
+             commentForm: {
+                content: '',
+                authorName: '',
+                authorEmail: '',
+                authorUrl: ''
+            },
+            rules: {
+                authorName :[
+                    {required: true,whitespace: true, message: "昵称不可为空"}
+                ],
+                authorEmail: [
+                    {required: true,whitespace: true, message: "邮箱不可为空"},
+                    {pattern:new RegExp(/^([a-zA-Z\d])(\w|\-)+@[a-zA-Z\d]+\.[a-zA-Z]{2,6}$/ig), message: "邮箱格式错误"}
+                          
+                ],
+                content: [
+                    {required: true,whitespace: true, message: "内容不可为空"}
+                ]
+            },
+             layout: {
+                labelCol: { span: 1 },
+                wrapperCol: { span: 23 },
+            },
          }
      },
-     mounted() {
-         console.log("mounted 1 ");
-        this.$nextTick().then(() => {
-                    console.log("mounted nextTick 1 ");
-            // hljs.initHighlightingOnLoad();
-     })  
+     mounted() { 
      },
     methods: {
         moment,
+         handleSubmit() {
+             let _this = this;
+             _this.$refs.commentForm.submitting = true;
+            _this.$refs.commentForm.validate(valid => {
+                if (valid) { 
+                    let val = _this.commentForm;
+                    _this.$axios.post('comment/'+_this.postData.commentAgentId +"/add",val).then(res => {
+                            _this.$refs.commentForm.submitting = false;
+                            console.log("res", res);
+                            if(res.data.success) {
+                                 _this.$refs.commentForm.content = null;
+                                this.$message.success('保存成功',15);
+                                // _this.backF() ;
+                            } else {
+                                  _this.$message.error('保存失败: ' + res.data.message,5);
+                            }
+                    }).catch((response) => {
+                            _this.$refs.commentForm.submitting = false;
+                            _this.$message.error('保存失败: ' + response,5);
+                    });
+                       
+                } else {
+                    console.log('error submit!!');
+                    return false;
+                }
+            });
+         },
+         handleChange(e) {
+            this.value = e.target.value;
+        },
   },
 }
 </script>
 
-<style scoped>
-/* import from 'github-markdown.css' */
-</style>
+ 
 <style lang="scss" scoped>
 
 .content {
@@ -178,5 +230,10 @@ export default {
 .article-header {
         margin-bottom: 30px;
         
+}
+.single-comments {
+        background: #fff;
+    margin-top: 30px;
+    padding: 20px;
 }
 </style>
