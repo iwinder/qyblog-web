@@ -6,7 +6,7 @@
                 v-if="comments.length"
                 :data-source="comments"
                 :pagination ="pagination" 
-                :header="`${pagination.total} 条评论`"
+                :header="`${totalSize} 条评论`"
                 item-layout="horizontal"
                 >
         <a-list-item slot="renderItem" slot-scope="item,index" class="childItem">
@@ -20,7 +20,7 @@
                     <a-row>
                     <a href="javascript:void(0)"  @click="onShow(index)">回复</a>
                     </a-row>
-                    <qy-replies-form   v-show="repliesFormChildShow[index]"   :commentAgentId="agentId"  :parentCommentId="item.id"> </qy-replies-form>
+                    <qy-replies-form   :ref="repliesChildForm[index]"  v-show="repliesFormChildShow[index]"   :commentAgentId="agentId"  :parentCommentId="item.id"   :afterSubmit="repliesFormAfterSubmit">> </qy-replies-form>
                 </span>
                 <p slot="content"> 
                     {{item.content}}
@@ -41,7 +41,10 @@ export default Vue.extend({
     props: {  
         parentId: null,
         commentAgentId: null,
-      
+        afteReplieShow: {
+            type: Function,
+            default: null
+        },  
     },
     components: {
         QyRepliesForm
@@ -50,10 +53,12 @@ export default Vue.extend({
         return {
               comments: [],
               topParentId: null,
-             agentId: null,
+              agentId: null,
               defPageSize: 3,
               pagination:  false,
-              repliesFormChildShow: [false]
+              repliesFormChildShow: [false],
+              repliesChildForm: ["repliesChildForm0"],
+              totalSize: 0
         }
     },
     watch: {
@@ -89,6 +94,7 @@ export default Vue.extend({
                         _this.comments.forEach((e,i)  => {
                             e.avatar =  'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png';
                               Vue.set(_this.repliesFormChildShow,i, false);
+                              _this.repliesChildForm[i] = "repliesChildForm"+i; 
                         });
                     }
                     if(resp.content.total  > resp.content.size ) {
@@ -110,29 +116,54 @@ export default Vue.extend({
                         _this.pagination.total = resp.content.total;
                         _this.pagination.current =   resp.content.page;
                         _this.pagination.pageSize =   resp.content.size; 
+                        _this.totalSize = resp.content.total;
                     } else {
                         _this.pagination = false;
+                          _this.totalSize = _this.comments.length;
                     }
    
           });
         },
         onShow(index) {
             let _this = this;
-            // let nowFlag =  ;
-            Vue.set(_this.repliesFormChildShow, index, !_this.repliesFormChildShow[index] );
+            let nowFlag =   !_this.repliesFormChildShow[index];
+            Vue.set(_this.repliesFormChildShow, index,nowFlag );
             // _this.repliesFormShow[index]=;
             _this.repliesFormChildShow.forEach((e,i)=>{
-                if(i!=index && _this.repliesFormChildShow[i]  == true) {
+                if(i!=index && e == true) {
+                    _this.$refs[_this.repliesChildForm[i]].resetForm();
                     Vue.set(_this.repliesFormChildShow, i, false );
+           
                 }
             })
-            console.log("e------",  _this.repliesFormChildShow[index]== true );
+            _this.afteReplieShow(nowFlag);
+       
+
+        },
+        initChildRepliesForm() {
+            let _this = this;
+            _this.repliesFormChildShow.forEach((e,i)=>{
+                if( e  == true) {
+                      _this.$refs[_this.repliesChildForm[i]].resetForm();
+                    Vue.set(_this.repliesFormChildShow, i, false );
+                  
+                }
+            })
+        },
+        repliesFormAfterSubmit(params) {
+            let _this  = this;
+            _this.initData();
 
         },
     }
 })
 </script>
-<style scoped>
+<style   lang="scss" scoped>
+
+/deep/ .ant-list-item{
+    margin: 0;
+    padding: 0;
+}
 .childItem {
           line-height: 1;
 }

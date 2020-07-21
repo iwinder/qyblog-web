@@ -1,6 +1,6 @@
 <template>
     <a-row>
-                 <qy-replies-form      :commentAgentId="agentId" > </qy-replies-form>
+                 <qy-replies-form  ref="repliesTopForm"       :commentAgentId="agentId"  :afterSubmit="repliesFormAfterSubmit"> </qy-replies-form>
         <a-list
             v-if="comments.length"
             :pagination ="pagination" 
@@ -18,12 +18,12 @@
                 <a-row>
                 <a href="javascript:void(0)"  @click="onShow(index)">回复</a>
                 </a-row>
-                <qy-replies-form  :ref="repliesForm[index]"   v-show="repliesFormShow[index]"   :commentAgentId="agentId"  :parentCommentId="item.id"> </qy-replies-form>
+                <qy-replies-form  :ref="repliesForm[index]"   v-show="repliesFormShow[index]"   :repliesIndex="repliesIndex" :afterSubmit="repliesChildFormAfterSubmit"  :commentAgentId="agentId"  :parentCommentId="item.id"> </qy-replies-form>
             </span>
             <p slot="content"> 
                 {{item.content}}
             </p>
-            <qy-comment-child-list  v-if="item.replyCount>0"  :parentId="item.id"  :commentAgentId="agentId"></qy-comment-child-list>
+            <qy-comment-child-list  v-show="item.replyCount>0"   :ref="repliesChildList[index]"   :parentId="item.id"  :commentAgentId="agentId"  :afteReplieShow="parentReplieChange"></qy-comment-child-list>
 
              </a-comment>
         </a-list-item>
@@ -56,9 +56,11 @@ export default Vue.extend({
                     })
                 },
               },
+              repliesIndex: null,
               defPageSize: 2,
               agentId: null,
               repliesFormShow: [false],
+              repliesChildList:["repliesChildList0"],
               repliesForm:["repliesForm0"]
         }
     },
@@ -94,7 +96,8 @@ export default Vue.extend({
                         _this.comments.forEach((e,i)  => { 
                             e.avatar =  'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png';
                             Vue.set(_this.repliesFormShow,i, false);
-                             _this.repliesForm[i] = "repliesForm"+i; 
+                             _this.repliesForm[i] = "repliesForm" + i; 
+                             _this.repliesChildList[i] = "repliesChildList" + i;
                         });
                     }
                     _this.pagination.total =   resp.content.total;
@@ -107,16 +110,46 @@ export default Vue.extend({
             let nowFlag =  !_this.repliesFormShow[index] ;
             Vue.set(_this.repliesFormShow, index,nowFlag ); 
             _this.repliesFormShow.forEach((e,i)=>{
-                if(i!=index && _this.repliesFormShow[i]  == true) {
+                if(i!=index && e == true) {
                     Vue.set(_this.repliesFormShow, i, false );
                      _this.$refs[_this.repliesForm[i]].resetForm();
+                }
+                if(nowFlag) {
+                    _this.$refs[_this.repliesChildList[i]].initChildRepliesForm(); 
+                    _this.repliesIndex = index;
                 }
             })
             if(!nowFlag) {
                   _this.$refs[_this.repliesForm[index]].resetForm();
+                 
             } 
 
         },
+        parentReplieChange(falg) {
+            let _this = this;
+            if(falg) {
+                _this.repliesFormShow.forEach((e,i)=>{
+                    if( e == true) {
+                        Vue.set(_this.repliesFormShow, i, false );
+                        _this.$refs[_this.repliesForm[i]].resetForm();
+                    }
+                })
+            }
+        },
+        repliesFormAfterSubmit(params) {
+            let _this  = this;
+            _this.$refs.repliesTopForm.resetForm();
+            _this.initData();
+
+        },
+        repliesChildFormAfterSubmit(index) {
+            let _this = this;
+            if(_this.comments[index].replyCount ==0) {
+                _this.comments[index].replyCount  = 1;
+            }
+              _this.$refs[_this.repliesChildList[index]].initData(); 
+              _this.onShow(index);
+        }
     }
     
 })

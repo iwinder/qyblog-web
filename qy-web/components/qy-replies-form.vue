@@ -45,6 +45,7 @@ export default Vue.extend({
         props: { 
             commentAgentId: null,
             parentCommentId: null,
+            repliesIndex: null,
             afterSubmit: {
                 type: Function,
                 default: null
@@ -54,11 +55,29 @@ export default Vue.extend({
                 default: null
             }
     },
+    watch: {
+        commentAgentId(val) {
+            let _this  = this;
+            _this.agentId = val;
+        },
+        parentCommentId (val) {
+            let  _this = this;
+            _this.parentId = val;
+
+        },
+       repliesIndex (val) {
+            let _this  = this;
+            _this.parentIndex = val;
+        }
+    },
     mounted() {
             let _this = this;
             _this.agentId = _this.commentAgentId;
             if(_this.parentCommentId) {
                  _this.parentId = _this.parentCommentId;
+            }
+            if(   _this.repliesIndex) {
+                _this.parentIndex = _this.repliesIndex;
             }
            
     },
@@ -66,6 +85,7 @@ export default Vue.extend({
          return {
              agentId: null,
              parentId: null,
+             parentIndex : null,
              submitting: false,
              commentForm: {
                 content: '',
@@ -94,25 +114,19 @@ export default Vue.extend({
      },
      methods: {
          handleSubmit() {
-             console.log("handleSubmit");
              let _this = this;
              _this.$refs.commentForm.submitting = true;
             _this.$refs.commentForm.validate(valid => {
-                  console.log("handleSubmit valid", valid);
                 if (valid) { 
                     let val = _this.commentForm;
-                     console.log("handleSubmit val", val);
                     let url = 'comment/'+_this.agentId;
-                       console.log("handleSubmit _this.parentId !==null", _this.parentId !==null);
                     url = _this.parentId !==null? url + "/" +_this.parentId+"/replies/add" :  url +"/add";
-                      console.log("handleSubmit url2", url);
                     _this.$axios.post(url,val).then(res => {
                             _this.$refs.commentForm.submitting = false;
-                            console.log("res", res);
                             if(res.data.success) {
                                  _this.$refs.commentForm.content = null;
-                                this.$message.success('保存成功',15);
-                                // _this.backF() ;
+                                _this.$message.success('保存成功',15);
+                                _this.afterSubmit( _this.parentIndex);
                             } else {
                                   _this.$message.error('保存失败: ' + res.data.message,5);
                             }
@@ -122,7 +136,7 @@ export default Vue.extend({
                     });
                        
                 } else {
-                    console.log('error submit!!');
+                    //  _this.$message.warning('校验失败，请根据提示修改',5); 
                     return false;
                 }
             });
