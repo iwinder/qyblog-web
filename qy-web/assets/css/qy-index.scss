@@ -36,21 +36,25 @@
   .links {
     padding-top: 15px;
   }
-  .content {
+  .content   /deep/   {
     padding: 20px 15px;
       width: 85%;
       margin-right: auto;
       margin-left: auto;
       background: #fff;
-  }
-  
-  .img-a{
-    display: block;
-  }
-  .img-a img {
-        max-height: 175px;
-  }
-  .category-tag {
+     .img-a{
+        display: block;
+            img {
+              max-height: 175px;
+        }
+      }
+ .post-summary {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+ }
+    .category-tag {
       display: inline-block;
       min-width: 50px;
       padding: 0 10px;
@@ -64,11 +68,16 @@
       font-size: 12px;
       line-height: 22px;
   }
-  @media screen and (max-width: 576px) {
-      .img-a {
-        width: 100%;
-      }
-    .img-a img {
-      width: 100%;
+      @media screen and (max-width: 576px) {
+       .img-a {
+          width: 100%;
+            img {
+              width: 100%;
+            }
+        }
+    
     }
   }
+  
+
+
