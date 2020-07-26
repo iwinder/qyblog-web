@@ -78,17 +78,12 @@ export default Vue.extend({
     },
     data() {
       return {
-        listData:[],
-        data:[],
+        listData:[], 
         pagination: {
           pageSize: 3,
           total: 0,
           showLessItems: true,
         },
-        actions: [
-          { type: 'like-o', text: '156' },
-          { type: 'message', text: '2' },
-        ],
     }
   },
 
