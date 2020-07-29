@@ -19,7 +19,16 @@
               <a-tab-pane key="2" tab="内容" >
                     <a-form-model-item v-for="(option) in options2"  :key="option.id" :label="option.configName" >
                           <a-col  :xs="{span:24}"  :lg="{ span: 12}">
-                               <a-input v-model="option.configValue" />
+                              <template v-if="option.configKey == 'site_comment_flag'" >
+                                            <a-switch v-model="option.configValue" >
+                                                   <a-icon slot="checkedChildren" type="check" />
+                                                    <a-icon slot="unCheckedChildren" type="close" />
+                                            </a-switch> 
+                              </template>
+                                <template v-else-if="option.configKey == 'site_head_code' || option.configKey == 'site_foot_code' " > 
+                                          <a-textarea placeholder="输入内容"  v v-model="option.configValue"   :rows="4" />
+                                </template>
+                               <a-input v-else  v-model="option.configValue" />
                         </a-col>
                          <template v-if="option.configTip" slot="extra">
                                 {{option.configTip}}
@@ -28,20 +37,27 @@
               </a-tab-pane>
               <a-tab-pane key="3" tab="社会化">
                      <a-form-model-item v-for="(option) in options3"  :key="option.id" :label="option.configName" >
-                           <a-col  :xs="{span:24}"  :lg="{ span: 12}">
-                       <a-input v-model="option.configValue" />
+                        <a-col  :xs="{span:24}"  :lg="{ span: 12}">
+                          <a-input v-model="option.configValue" />
                        </a-col>
-                                              <template v-if="option.configTip" slot="extra">
-                         {{option.configTip}}
+                         <template v-if="option.configTip" slot="extra">
+                              {{option.configTip}}
                           </template>
                      </a-form-model-item>
               </a-tab-pane>
               <a-tab-pane key="4" tab="其他">
                       <a-form-model-item v-for="(option) in options4"  :key="option.id" :label="option.configName" >
                             <a-col  :xs="{span:24}"  :lg="{ span: 12}">
-                       <a-input v-model="option.configValue" /> </a-col>
-                                              <template v-if="option.configTip" slot="extra">
-                         {{option.configTip}}
+                                  <template v-if="option.configKey == 'site_pay_flag'" >
+                                        <a-switch v-model="option.configValue" >
+                                              <a-icon slot="checkedChildren" type="check" />
+                                                <a-icon slot="unCheckedChildren" type="close" />
+                                        </a-switch> 
+                                  </template>
+                                 <a-input v-else  v-model="option.configValue" /> 
+                             </a-col>
+                             <template v-if="option.configTip" slot="extra">
+                                   {{option.configTip}}
                           </template>
                      </a-form-model-item>
               </a-tab-pane>
@@ -101,10 +117,16 @@ export default Vue.extend({
                   if(e.type == 1) {
                     _this.options1 .push(e);
                   } else if(e.type == 2) {
+                    if(e.configKey == 'site_comment_flag') {
+                          e.configValue =   (e.configValue === "true") ? true : false;
+                    }
                     _this.options2 .push(e);
                   } else if(e.type == 3){
                     _this.options3 .push(e);
                   } else {
+                     if(e.configKey == 'site_pay_flag') {
+                          e.configValue =  ( e.configValue === "true") ? true : false;
+                    }
                     _this.options4 .push(e);
                   }
               });
@@ -123,6 +145,11 @@ export default Vue.extend({
         ..._this.options3,
          ..._this.options4,
       ]
+      // param.forEach(e=>{
+      //   if(e.configKey == 'site_comment_flag' || e.configKey == 'site_pay_flag') {
+      //     e.configValue = e.configValue ? "true" : "false"
+      //   } 
+      // });
         _this.loading = true;
      _this.$axios.post('siteInfo/saveList',param).then(res => {
               _this.loading = false;
