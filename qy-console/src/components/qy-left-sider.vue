@@ -9,7 +9,7 @@
             :defaultSelectedKeys="[$route.path]"
              :defaultOpenKeys="['blog']">
             <a-menu-item key="dashboard">
-                <a-icon type="user" />
+                <a-icon type="dashboard" />
                 <span>仪表盘</span>
             </a-menu-item>
 
@@ -18,7 +18,7 @@
             
 
             <a-sub-menu key="blog">
-                <span slot="title"><a-icon type="user" /><span>文章管理</span></span>
+                <span slot="title"><a-icon type="form" /><span>文章管理</span></span>
                 <a-menu-item key="/article">
                     <router-link to="/article">
                         文章列表
@@ -38,13 +38,31 @@
 
             <a-menu-item key="/comment">
                <router-link to="/comment">
-                <a-icon type="uplod" />
+                <a-icon type="message" />
                 <span>评论管理</span>
+                </router-link>
+            </a-menu-item>
+          <a-menu-item key="/menus">
+               <router-link to="/menus">
+                <a-icon type="menu" />
+                <span>导航管理</span>
+                </router-link>
+            </a-menu-item>
+        <a-menu-item key="/link">
+               <router-link to="/link">
+                <a-icon type="share-alt" />
+                <span>友链管理</span>
+                </router-link>
+            </a-menu-item>
+           <a-menu-item key="/short-link">
+               <router-link to="/short-link">
+                <a-icon type="link" />
+                <span>短链接管理</span>
                 </router-link>
             </a-menu-item>
 
             <a-sub-menu key="system">
-                <span slot="title"><a-icon type="user" /><span>系统管理</span></span>
+                <span slot="title"><a-icon type="setting" /><span>系统管理</span></span>
                 <a-menu-item key="/user">
                       <router-link to="/user">
                         用户管理

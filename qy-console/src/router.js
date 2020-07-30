@@ -18,7 +18,9 @@ import CategoryAdd from './views/admin/category/add.vue'
 import CategoryEdit from './views/admin/category/_id.vue'
 import Comment from './views/admin/comment/index.vue'
 import Site from './views/admin/site/index.vue'
-
+import Menus from './views/admin/menus/index.vue'
+import Link from './views/admin/link/index.vue'
+import ShortLink from './views/admin/short-link/index.vue'
 import Dashboard from './views/admin/dashboard/index.vue'
 
 
@@ -144,6 +146,18 @@ const router = new Router({
             path: 'comment',
             name: 'comment',
             component: Comment,
+        },{
+            path: 'menus',
+            name: 'menus',
+            component: Menus,
+        },{
+            path: 'link',
+            name: 'link',
+            component: Link,
+        },{
+            path: 'short-link',
+            name: 'short-link',
+            component: ShortLink,
         }
     ] // admin child end
     }]
