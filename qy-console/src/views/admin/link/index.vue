@@ -17,7 +17,7 @@
 
             </a-col>
             <a-col  :xs="{span:24}"  :lg="{ span: 5, offset: 7 }" style=" margin-top: 5px;">
-                <a-button  type="primary"  @click="add()">
+                <a-button  type="primary"  @click="showDrawer(null)">
                     新增
                 </a-button>
                 <a-dropdown>
@@ -39,16 +39,61 @@
                  :row-selection="{ selectedRowKeys: selectedIds, onChange: onSelectChange }"
                  @change="handleTableChange"
         >
-
+            <span slot="showIndex" slot-scope="text,record">
+                <template v-if="record.showIndex"> 是</template>
+                <template v-else> 否  </template>
+            </span>
             <span slot="action" slot-scope="text, record">
-                <nuxt-link :to="{name:'link-id',params:{ id: record.id }}">编辑 </nuxt-link >
+                 <a  href="javascript:void(0)"  @click="showDrawer(record)" >编辑</a>
                 <a-divider type="vertical" />
 
-                     <a  href="javascript:void(0)"  @click="deleted([record.id])" >删除</a>
+                 <a  href="javascript:void(0)"  @click="deleted([record.id])" >删除</a>
 
             </span>
         </a-table>
+        <a-drawer
+                    title="Create a new account"
+                    :width="'60%'"
+                    :visible="visible"
+                    :body-style="{ paddingBottom: '80px' }"
+                    @close="onDrawerClose"
+                    >
+                    <a-row>
+                    <a-form-model  ref="linkForm"  :model="linkForm"  :rules="rules" v-bind="layout">
+                         <a-form-model-item    label="链接名称"  prop="name">
+                                <a-input   v-model="linkForm.name"   placeholder="链接名称" />
+                         </a-form-model-item>
+                        <a-form-model-item    label="链接链接"  prop="url" :extra="linkForm.url">
+                                <a-input   v-model="linkForm.url"   placeholder="链接链接" />
+                         </a-form-model-item>
+                          <a-form-model-item    label="是否首页"  prop="showIndex" help="设置非首页时，仅在内页展示">
+                                <a-switch v-model="linkForm.showIndex" >
+                                    <a-icon slot="checkedChildren" type="check" />
+                                    <a-icon slot="unCheckedChildren" type="close" />
+                                </a-switch> 
+                          </a-form-model-item>
+                          <a-form-model-item    label="站点描述"  prop="description" >
+                                <a-input   v-model="linkForm.description"   placeholder="一句话描述站点" />
+                         </a-form-model-item>
+                                 <a-form-model-item :wrapper-col="{ span: 14, offset: 4 }">
+                                        <a-button type="primary" :loading="editLoading" @click="editLink">
+                                            保存
+                                        </a-button>
+                                        <a-button  v-if="linkId !=null" style="margin-left: 10px" @click="onDrawerClose">
+                                            取消
+                                        </a-button>
+                                         <a-button  v-else  style="margin-left: 10px" @click="resetForm">
+                                            重置
+                                        </a-button>
+                                    </a-form-model-item>
+                    </a-form-model>
+                        
+                    </a-row>
+        </a-drawer>
     </div>
+
+
+
 </template>
 
 <script  >
@@ -73,9 +118,14 @@
             key: 'url',
         },
         {
-            title: '是否首页外链：0不是， 1是',
+            title: '首页外链',
             dataIndex: 'showIndex',
             key: 'showIndex',
+             scopedSlots: { customRender: 'showIndex' },
+        },{
+            title: '描述',
+             dataIndex: 'description',
+             key: 'description',
         },
         {
             title: '创建者',
@@ -121,6 +171,28 @@
                     pageSize: 10,
                     current: 1,
                     total: 0
+                },
+                 visible: false,
+                 editLoading: false,
+                 linkId:null,
+                 linkForm: {
+                     name:"",
+                     url:"",
+                     showIndex: false,
+                     description: ""
+                 },
+                rules: {
+                    name :[
+                      {required: true,whitespace: true, message: "链接名称不可为空",  trigger:"change"}
+                    ],
+                    url: [
+                        {required: true,whitespace: true, message: "链接地址不可为空",  trigger:"change"},
+                            
+                    ],
+                },
+                layout: {
+                    labelCol: { span: 5 },
+                    wrapperCol: { span: 16 },   
                 },
             };
         },
@@ -176,6 +248,32 @@
                 let _this = this;
                 _this.$router.push("/link/add");
             },
+            showDrawer(obj) {
+                  let _this = this;
+                _this.visible = true;
+                if(obj) {
+                     console.log("edit")
+                    _this.linkId  = obj.id;
+                    _this.linkForm = {
+                        name: obj.name,
+                        url: obj.url,
+                        showIndex:  obj.showIndex,
+                        description: obj.description
+                    }
+                } else {
+                    console.log("add")
+                    _this.linkId  = null;
+                }
+                
+               
+
+            },
+           onDrawerClose() {
+                        let _this = this;
+                         _this.initForm();
+                     _this.visible = false;
+                    
+              },
             searchForm() {
                 let _this = this;
                 _this.initData();
@@ -183,7 +281,6 @@
             },
             handleMenuClick(e) {
                 let _this = this;
-                console.log('click', e);
                 if(e.key === "1") {
                     if( _this.selectedIds &&  _this.selectedIds.length>0) {
                         _this.deleted(_this.selectedIds );
@@ -225,6 +322,42 @@
                         class: 'test',
                     });
                 }
+            },
+            editLink() {
+                 let _this = this;
+                _this.editLoading = true;
+                let param = {
+                   id:  _this.linkId,
+                    ..._this.linkForm,
+                }
+                _this.$axios.post('link/save', param).then(res => {
+                    _this.editLoading = false;
+                    if(res.data.success) {
+                        _this.$message.success('保存成功',5);
+                            _this.onDrawerClose() ;
+                            _this.initData();
+                    } else {
+                        _this.$message.error(res.data.message,5);
+                    }
+                }).catch((response) => {
+                    _this.editLoading = false; 
+                     _this.$message.error(response,5);
+                });
+
+            },
+            initForm() {
+                let _this = this;
+                _this.linkForm = {
+                    name:"",
+                     url:"",
+                     showIndex: false,
+                     description: ""
+                }
+                //  _this.$refs.linkForm.resetFields();
+            },
+            resetForm() {
+                 let _this = this;
+                 _this.$refs.linkForm.resetFields();
             }
         },
 
