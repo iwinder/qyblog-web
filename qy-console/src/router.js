@@ -22,6 +22,7 @@ import Menus from './views/admin/menus/index.vue'
 import Link from './views/admin/link/index.vue'
 import ShortLink from './views/admin/short-link/index.vue'
 import Dashboard from './views/admin/dashboard/index.vue'
+import NotFound  from './views/error/404.vue'
 
 
 
@@ -59,14 +60,17 @@ const router = new Router({
     base: process.env.BASE_URL,
     routes: [{
         path: '*',
-        redirect: '/login',
+        redirect: '/404',
     },{
         path: '',
-        redirect: '/login',
+        redirect: '/article',
     }, {
         path: '/login',
         component: Login
     }, {
+        path: '/404',
+        component: NotFound
+    },  {
         path: '/',
         name: 'admin', // 为每个路由增加name属性，后续做通用sidebar激活样式方法时需要用到，
         component: Admin,

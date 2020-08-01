@@ -3,7 +3,7 @@
 
 
 
- <a-layout  >
+ <a-layout   style="min-height: 100vh" >
  
       <a-layout-content class="container">
         <div class="top">
@@ -87,8 +87,12 @@ export default Vue.extend({
               // login type: 0 email, 1 username, 2 telephone
               loginType: 0,
               smsSendBtn: false
-            }
+            }, 
         }
+    },
+    mounted(){
+      let _this  =this;
+ 
     },
     methods: {
         handleSubmit(e) {
@@ -124,12 +128,7 @@ export default Vue.extend({
 
 
 
-<style lang="scss" scoped>
- body  {
-    height: 100%;
-    background: #f0f2f5;
-}
-</style>
+
 <style lang="scss" scoped>
 
     .container  {
