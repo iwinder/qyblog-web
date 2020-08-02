@@ -39,9 +39,15 @@
                  :row-selection="{ selectedRowKeys: selectedIds, onChange: onSelectChange }"
                  @change="handleTableChange"
         >
+        
+         <template slot="type" slot-scope="text, record">
+            <template v-if="record.type==1">顶部菜单</template>
+            <template v-else-if="record.type==2">页尾菜单</template>
+            <template v-else>未启用</template>
+        </template>
 
             <span slot="action" slot-scope="text, record">
-                <router-link :to="{name:'menusAgent-id',params:{ id: record.id }}">编辑 </router-link >
+                <router-link :to="{name:'menus-id',params:{ id: record.id }}">菜单 </router-link >
                 <a-divider type="vertical" />
 
                      <a  href="javascript:void(0)"  @click="deleted([record.id])" >删除</a>
@@ -58,17 +64,12 @@
 
     const columns = [
         {
-            title: 'id',
-            dataIndex: 'id',
-            key: 'id',
-        },
-        {
             title: '菜单组名称',
             dataIndex: 'name',
             key: 'name',
         },
         {
-            title: '菜单位置：0未启用， 1顶部，2页尾',
+            title: '菜单位置',
             dataIndex: 'type',
             key: 'type',
         },
@@ -81,16 +82,6 @@
             title: '更新者',
             dataIndex: 'lastModifiedBy',
             key: 'lastModifiedBy',
-        },
-        {
-            title: '创建时间',
-            dataIndex: 'createdDate',
-            key: 'createdDate',
-        },
-        {
-            title: '更新时间',
-            dataIndex: 'lastModifiedDate',
-            key: 'lastModifiedDate',
         },
         {
             title: '操作',

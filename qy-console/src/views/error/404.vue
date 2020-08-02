@@ -44,7 +44,6 @@ export default Vue.extend({
        toBack() {
            let _this  = this;
            this.$router.go(-1);
-           console.log("_this.$router", _this.$router);
        },
        toIndex() {
             let _this  = this;

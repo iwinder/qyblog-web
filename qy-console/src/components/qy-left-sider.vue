@@ -44,7 +44,7 @@
             </a-menu-item>
           <a-menu-item key="/menus">
                <router-link to="/menus">
-                <a-icon type="menu" />
+                <a-icon type="apartment" />
                 <span>导航管理</span>
                 </router-link>
             </a-menu-item>

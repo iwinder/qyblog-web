@@ -19,6 +19,7 @@ import CategoryEdit from './views/admin/category/_id.vue'
 import Comment from './views/admin/comment/index.vue'
 import Site from './views/admin/site/index.vue'
 import Menus from './views/admin/menus/index.vue'
+import MenusEdit from './views/admin/menus/_id.vue'
 import Link from './views/admin/link/index.vue'
 import ShortLink from './views/admin/short-link/index.vue'
 import Dashboard from './views/admin/dashboard/index.vue'
@@ -85,18 +86,17 @@ const router = new Router({
                     path: 'user',
                     name: 'user',
                     component: User,
-                    children: [
-                        {
-                            path: 'add',
-                            name: 'user/add',
-                            component: UserAdd,
-                        },
-                        {
-                            path: ':id',
-                            name: 'user/:id',
-                            component: UserEdit,
-                        },
-                    ]
+                   
+                },
+                {
+                    path: 'user/add',
+                    name: 'user-add',
+                    component: UserAdd,
+                },
+                {
+                    path: 'user/:id',
+                    name: 'user-id',
+                    component: UserEdit,
                 },{
                     path: 'role', 
                     name: 'role',
@@ -114,18 +114,15 @@ const router = new Router({
             path: 'article',
             name: 'article',
             component: Article,
-            children: [
-                {
-                    path: 'add',
-                    name: 'article/add',
-                    component: ArticleAdd,
-                },
-                {
-                    path: ':id',
-                    name: 'article/:id',
-                    component: ArticleEdit,
-                },
-            ] //  article child end
+        },  {
+            path: 'article/add',
+            name: 'article-add',
+            component: ArticleAdd,
+        },
+        {
+            path: 'article/:id',
+            name: 'article-id',
+            component: ArticleEdit,
         },{
             path: 'tag',
             name: 'tag',
@@ -134,18 +131,15 @@ const router = new Router({
             path: 'category',
             name: 'category',
             component: Category,
-            children: [
-                {
-                    path: 'add',
-                    name: 'category/add',
-                    component: CategoryAdd,
-                },
-                {
-                    path: ':id',
-                    name: 'category/:id',
-                    component: CategoryEdit,
-                },
-            ]
+        },{
+            path: 'category/add',
+            name: 'category-add',
+            component: CategoryAdd,
+        },
+        {
+            path: 'category/:id',
+            name: 'category-id',
+            component: CategoryEdit,
         },{
             path: 'comment',
             name: 'comment',
@@ -154,7 +148,14 @@ const router = new Router({
             path: 'menus',
             name: 'menus',
             component: Menus,
-        },{
+             
+        },
+        {
+            path: 'menus/:id',
+            name: 'menus-id',
+            component: MenusEdit,
+        }
+        ,{
             path: 'link',
             name: 'link',
             component: Link,
