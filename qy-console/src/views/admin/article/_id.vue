@@ -18,13 +18,6 @@ import   QyArticleForm  from '../../../components/qy-article-form.vue';
 
 
 export default Vue.extend({
-      validate ({ params }) {
-        // 必须是number类型
-        return /^\d+$/.test(params.id)
-    },
-    asyncData ({ params }) {
-        return  {articleId:params.id };
-    },
     components: {
         QyArticleForm,
     },
@@ -33,6 +26,10 @@ export default Vue.extend({
             articleId: null,
             articleObj: null
         }
+    },
+    created() {
+        let _this = this; 
+        _this.articleId = _this.$route.params.id;
     },
     mounted() {
          let _this = this;

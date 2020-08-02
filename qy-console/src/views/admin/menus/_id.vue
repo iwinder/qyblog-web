@@ -160,7 +160,6 @@ export default Vue.extend({
 				name: "",
                 url: "",
                 parentId: null,
-                targetId: null,
                 blanked: false
 			},
 			rules: {
@@ -293,7 +292,6 @@ export default Vue.extend({
 					name: obj.name,
                     url: obj.url,
                     parentId: obj.parentId,
-                    targetId: _this.targetId,
                     blanked: obj.blanked,
 				};
 			} else {
@@ -310,11 +308,14 @@ export default Vue.extend({
         },
         editLink() {
 			let _this = this;
-			_this.editLoading = true;
+            _this.editLoading = true;
+            console.log("editLink meus",_this.targetId );
 			let param = {
-				id: _this.linkId,
-				..._this.linkForm
-			};
+                id: _this.linkId,
+                ..._this.linkForm,
+                targetId: _this.targetId,
+            };
+                     console.log("editLink meus 2",_this.targetId );
 			_this.$axios
 				.post("menus/save", param)
 				.then(res => {
@@ -337,7 +338,6 @@ export default Vue.extend({
 			_this.linkForm = {
 				name: "",
 				url: "",
-                targetId: _this.targetId,
                 parentId: null,
                 blanked: false
 			};

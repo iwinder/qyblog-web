@@ -10,14 +10,14 @@
                         <a-form-model-item has-feedback   prop="content">
                             <!-- <a-input v-model="articleForm.content" type="textarea" /> -->
                             <div class="mavonEditor">
-                                <!-- <no-ssr> -->
+                                <no-ssr>
                                 <mavon-editor  ref="md"  v-model="markdownContent"   
                                 placeholder = "添加内容"
                                     defaultOpen="edit"
                                      @imgAdd="markImgAdd" 
                                      @save = "markSave"
                                    @change="markChange"/>
-                                <!-- </no-ssr> -->
+                                </no-ssr>
                             </div>
                         </a-form-model-item>
 
@@ -31,39 +31,6 @@
                         </a-form-model-item>
                     </a-col>
                      <a-col :xs="24"     :lg="9"  >
-                        <a-form-model-item has-feedback label="封面" prop="thumbnail">
-                            <a-input v-model="articleForm.thumbnail" type="text" autocomplete="off" />
-                        </a-form-model-item>
-
-                        <a-form-model-item has-feedback label="标签" prop="tags">
-                             <a-select show-search mode="tags" style="width: 100%" 
-                             v-model="articleForm.tagStrings"
-                             placeholder="Tags Mode" @change="handleChange"
-                      
-                                    @search="fetchTags">
-                                    <a-spin v-if="fetching" slot="notFoundContent" size="small" />
-                                    <a-select-option v-for="d in tagsData" :key="d.value">
-                                    {{ d.text }}
-                                    </a-select-option>
-
-                             </a-select>
-                        </a-form-model-item>
-                        <a-form-model-item has-feedback label="所属分类" prop="parent">
-                            <a> 
-                                <template v-if="editParentData.id==0" >  未分类</template>
-                            <template v-else > 
-                                    <a-tooltip placement="topLeft" :title="editParentData.namePath" arrow-point-at-center>
-                                {{editParentData.name}}
-                                    </a-tooltip>
-                                </template>
-                            </a>
-                         </a-form-model-item>
-                            <a-form-model-item has-feedback label="选择分类" 
-                                        extra="若无修改分类的需求，请勿选择"
-                                        prop="editParentId">
-                                <qy-article-category-tree-select   ref="categoryTreeSelect"   :afterSelect="afterSelectTree"></qy-article-category-tree-select>
-                            </a-form-model-item>
-
                         <a-form-model-item has-feedback label="发布" prop="published">
                             <a-switch v-model="articleForm.published" >
                                 <a-icon slot="checkedChildren" type="check" />
@@ -107,7 +74,7 @@ export default {
                     title: '',
                     thumbnail: '',
                     content: '',
-                    type: 1,
+                    type: 2,
                     published: true,
                     deleted:  false,
                     tags:''
@@ -179,8 +146,7 @@ export default {
             });
         },
         resetForm() {
-            let _this  = this;
-             _this.$refs.articleForm.resetFields();
+             this.$refs.articleForm.resetFields();
                _this.categoryId = null;
         },
         afterSelectTree(id, obj) {
