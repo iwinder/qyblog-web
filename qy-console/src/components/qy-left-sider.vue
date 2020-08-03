@@ -35,7 +35,12 @@
                      </router-link>
                 </a-menu-item>
             </a-sub-menu> 
-
+            <a-menu-item key="/page">
+               <router-link to="/page">
+                <a-icon type="snippets" />
+                <span>页面管理</span>
+                </router-link>
+            </a-menu-item>
             <a-menu-item key="/comment">
                <router-link to="/comment">
                 <a-icon type="message" />

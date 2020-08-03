@@ -70,6 +70,15 @@
                                     <a-icon slot="unCheckedChildren" type="close" />
                             </a-switch>
                         </a-form-model-item>
+                       <a-form-model-item has-feedback label="规范链接" prop="canonicalLink">
+                            <a-input v-model="articleForm.canonicalLink" type="text" autocomplete="off" />
+                            <template slot="help">
+                                <ul>
+                                    <li>1. 留空默认当前链接</li>
+                                    <li>2. 原创文章无需填写，转载文章可填写转载地址</li>
+                                </ul>
+                            </template>
+                        </a-form-model-item>
                     </a-col>
              </a-row>
         </a-form-model>

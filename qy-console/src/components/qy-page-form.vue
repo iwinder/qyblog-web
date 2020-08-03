@@ -2,7 +2,7 @@
     <div>
             <a-form-model ref="articleForm" :model="articleForm" :rules="rules" v-bind="layout">
                 <a-row>
-                    <a-col :xs="24"   :lg="15"  >
+                    <a-col :xs="24"   :lg="24"  >
                         <a-form-model-item has-feedback   prop="title"> 
                             <a-input v-model="articleForm.title" type="text" autocomplete="off" placeholder="添加标题" />
                         </a-form-model-item>
@@ -10,15 +10,19 @@
                         <a-form-model-item has-feedback   prop="content">
                             <!-- <a-input v-model="articleForm.content" type="textarea" /> -->
                             <div class="mavonEditor">
-                                <no-ssr>
                                 <mavon-editor  ref="md"  v-model="markdownContent"   
                                 placeholder = "添加内容"
                                     defaultOpen="edit"
                                      @imgAdd="markImgAdd" 
                                      @save = "markSave"
                                    @change="markChange"/>
-                                </no-ssr>
                             </div>
+                        </a-form-model-item>
+                      <a-form-model-item has-feedback label="发布" prop="published">
+                            <a-switch v-model="articleForm.published" >
+                                <a-icon slot="checkedChildren" type="check" />
+                                    <a-icon slot="unCheckedChildren" type="close" />
+                            </a-switch>
                         </a-form-model-item>
 
                         <a-form-model-item :wrapper-col="{ span: 14, offset: 4 }">
@@ -30,14 +34,9 @@
                             </a-button>
                         </a-form-model-item>
                     </a-col>
-                     <a-col :xs="24"     :lg="9"  >
-                        <a-form-model-item has-feedback label="发布" prop="published">
-                            <a-switch v-model="articleForm.published" >
-                                <a-icon slot="checkedChildren" type="check" />
-                                    <a-icon slot="unCheckedChildren" type="close" />
-                            </a-switch>
-                        </a-form-model-item>
-                    </a-col>
+                     <!-- <a-col :xs="24"     :lg="9"  >
+
+                    </a-col> -->
              </a-row>
         </a-form-model>
     </div>
@@ -84,7 +83,7 @@ export default {
 
                 },
                 layout:   {
-                    labelCol: { span: 5 },
+                    labelCol: { span: 1 },
                     wrapperCol: { span: 18 }
                 },
                 loading: false,

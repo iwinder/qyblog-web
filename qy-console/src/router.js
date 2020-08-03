@@ -10,6 +10,9 @@ import Permission from './views/admin/permission/index.vue'
 import Article from './views/admin/article/index.vue'
 import ArticleAdd from './views/admin/article/add.vue'
 import ArticleEdit from './views/admin/article/_id.vue'
+import Page from './views/admin/page/index.vue'
+import PageAdd from './views/admin/page/add.vue'
+import PageEdit from './views/admin/page/_id.vue'
 import Tag from './views/admin/tag/index.vue'
 // import TagAdd from './views/admin/tag/add.vue'
 // import TagEdit from './views/admin/tag/_id.vue'
@@ -78,60 +81,84 @@ const router = new Router({
         meta:{
             loginRequire: true // 属性名称可以自定义
         },
-        children: [{
-            path: 'dashboard',
-            name: 'dashboard',
-            component: Dashboard,
-        },  {
+        children: [
+            {
+                path: 'dashboard',
+                name: 'dashboard',
+                component: Dashboard,
+            }, 
+            {
                     path: 'user',
                     name: 'user',
                     component: User,
-                   
-                },
-                {
-                    path: 'user/add',
-                    name: 'user-add',
-                    component: UserAdd,
-                },
-                {
-                    path: 'user/:id',
-                    name: 'user-id',
-                    component: UserEdit,
-                },{
-                    path: 'role', 
-                    name: 'role',
-                    component: Role,
-                },{
-                    path: 'permission', 
-                    name: 'permission',
-                    component: Permission,
-                }, {
-                    path: "site",
-                    name: 'site',
-                    component: Site,
-                },
+                    
+            },
+            {
+                path: 'user/add',
+                name: 'user-add',
+                component: UserAdd,
+            },
+            {
+                path: 'user/:id',
+                name: 'user-id',
+                component: UserEdit,
+            },
+            {
+                path: 'role', 
+                name: 'role',
+                component: Role,
+            },
+            {
+                path: 'permission', 
+                name: 'permission',
+                component: Permission,
+            },
+             {
+                path: "site",
+                name: 'site',
+                component: Site,
+            },
+            {
+                path: 'article',
+                name: 'article',
+                component: Article,
+            }, 
+            {
+                path: 'article/add',
+                name: 'article-add',
+                component: ArticleAdd,
+            },
+            {
+                path: 'article/:id',
+                name: 'article-id',
+                component: ArticleEdit,
+            },
+            {
+                path: 'page',
+                name: 'page',
+                component: Page,
+            }, 
+            {
+                path: 'page/add',
+                name: 'page-add',
+                component: PageAdd,
+            },
+            {
+                path: 'page/:id',
+                name: 'page-id',
+                component: PageEdit,
+            },
+            {
+                path: 'tag',
+                name: 'tag',
+                component: Tag,
+            },
+            {
+                path: 'category',
+                name: 'category',
+                component: Category,
+            },
         {
-            path: 'article',
-            name: 'article',
-            component: Article,
-        },  {
-            path: 'article/add',
-            name: 'article-add',
-            component: ArticleAdd,
-        },
-        {
-            path: 'article/:id',
-            name: 'article-id',
-            component: ArticleEdit,
-        },{
-            path: 'tag',
-            name: 'tag',
-            component: Tag,
-        },{
-            path: 'category',
-            name: 'category',
-            component: Category,
-        },{
             path: 'category/add',
             name: 'category-add',
             component: CategoryAdd,
@@ -140,11 +167,13 @@ const router = new Router({
             path: 'category/:id',
             name: 'category-id',
             component: CategoryEdit,
-        },{
+        },
+        {
             path: 'comment',
             name: 'comment',
             component: Comment,
-        },{
+        },
+        {
             path: 'menus',
             name: 'menus',
             component: Menus,
@@ -159,7 +188,8 @@ const router = new Router({
             path: 'link',
             name: 'link',
             component: Link,
-        },{
+        },
+        {
             path: 'short-link',
             name: 'short-link',
             component: ShortLink,
