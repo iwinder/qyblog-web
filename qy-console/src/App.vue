@@ -10,6 +10,27 @@ export default {
   name: 'App',
   components: {
      
+  },
+created() {
+  let _this = this; 
+  _this.initSiteInfo();
+  },
+  data() {
+    return {
+      site:{}
+    }
+  },
+  methods:  {
+    initSiteInfo() {
+      let _this = this;
+              _this.$axios.get('/web/siteInfo/base' ).then(res => {
+            let resp  = res.data				
+            if(resp.success) {
+              _this.site =   resp.content;
+              console.log(" _this.site ",  _this.site );
+            }
+          });
+    }
   }
 }
 </script>

@@ -99,7 +99,7 @@ export default Vue.extend({
             console.log("handleSubmit", e);
                     let _this = this;
                 _this.state.loginBtn= true;
-              _this.$axios.post('login',_this.loginForm).then(res => {
+              _this.$axios.post('/admin/login',_this.loginForm).then(res => {
                 		console.log("登录成功：",res);
                     _this.state.loginBtn= false;
                     	let resp = res.data;

@@ -110,7 +110,7 @@ export default Vue.extend({
     list() {
       let _this = this;
       _this.initOptions();
-      _this.$axios.get('siteInfo').then(res => {
+      _this.$axios.get('/admin/siteInfo').then(res => {
             let resp  = res.data
             _this.data = resp.content;
               _this.data.forEach(e => {
