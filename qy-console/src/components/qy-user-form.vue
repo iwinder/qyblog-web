@@ -171,7 +171,7 @@ export default Vue.extend({
         },
         initRoleData() {
                 let _this = this;
-                _this.$axios.get('role/list').then(res => {
+                _this.$axios.get('/admin/role/list').then(res => {
                                 // _this.editLoading = false;
                                 if(res.data.success) {
                                     _this.roleData = res.data.content;

@@ -171,7 +171,7 @@
                 let _this = this;
                 _this.loading = true;
 
-                _this.$axios.get('blogCategorys',{ params: params
+                _this.$axios.get('/admin/blogCategorys',{ params: params
 
                 }).then(res => {
                     let resp  = res.data
@@ -200,7 +200,7 @@
                 namePath: _this.selectedTreeData.namePath,
             }
                
-                _this.$router.push( {path: "/category/add", query: {parent: JSON.stringify(parent) } });
+                _this.$router.push( {path: "/admin//category/add", query: {parent: JSON.stringify(parent) } });
 
             },
             searchForm() {
@@ -234,7 +234,7 @@
                     this.$confirm({
                         title: '确认删除?',
                         onOk() {
-                            _this.$axios.delete("blogCategorys", {data:  ids}).then(res => {
+                            _this.$axios.delete("/admin/blogCategorys", {data:  ids}).then(res => {
                                 if(res.data.success) {
                                     _this.$message.success("删除成功",5);
                                     _this.initData();
@@ -285,7 +285,7 @@
             },
             loadCategoryData(params, callBack) {
                 let _this = this;
-                _this.$axios.get('blogCategorys',{ params: params}).then(res => {
+                _this.$axios.get('/admin/blogCategorys',{ params: params}).then(res => {
                         let resp = res.data;
                         callBack(resp);
                 });

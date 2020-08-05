@@ -178,7 +178,7 @@
                 }
 
 
-                _this.$axios.get('comment',{ params: params
+                _this.$axios.get('/admin/comment',{ params: params
 
                 }).then(res => {
                     let resp  = res.data
@@ -204,7 +204,7 @@
             },
             add() {
                 let _this = this;
-                _this.$router.push("/comment/add");
+                _this.$router.push("/admin/comment/add");
             },
             searchForm() {
                 let _this = this;
@@ -239,7 +239,7 @@
                         title: '确认删除?',
                         onOk() {
                             console.log('OK');
-                            _this.$axios.delete("comment/deleted", {data:  ids}).then(res => {
+                            _this.$axios.delete("/admin/comment/deleted", {data:  ids}).then(res => {
                                 console.log("deleted !res", res);
                                 if(res.data.success) {
                                     _this.$message.success("删除成功",5);

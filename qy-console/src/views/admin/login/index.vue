@@ -57,11 +57,10 @@ export default Vue.extend({
         }
     },
     methods: {
-        handleSubmit(e) {
-            console.log("handleSubmit", e);
+        handleSubmit(e) { 
                     let _this = this;
                 _this.state.loginBtn= true;
-              _this.$axios.post('login',_this.loginForm).then(res => {
+              _this.$axios.post('/admin/login',_this.loginForm).then(res => {
                     _this.state.loginBtn= false;
                     if(res.data.success) {
                           this.$message.success('登录成功',15);

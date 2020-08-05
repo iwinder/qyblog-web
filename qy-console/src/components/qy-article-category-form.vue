@@ -89,7 +89,6 @@ export default {
      },
 mounted() {
        let _this = this;
-             console.log("categoryObjForm mounted", _this.categoryObjForm);
        if(_this.categoryObjForm) {
             _this.categoryForm = _this.categoryObjForm;
             _this.categoryObj.id = _this.categoryObjForm.id;
@@ -104,14 +103,12 @@ mounted() {
         editCategory() {
                  let _this = this;
                   _this.editLoading = true;
-                  console.log("editCategory vBeafore", _this.categoryForm);
                 _this.$refs.categoryForm.validate(valid => {
                     if (valid) {
                         _this.categoryObj.name = _this.categoryForm.name;
                         if(_this.editParentId) {
                             _this.categoryObj.parentId = _this.editParentId;
                         }
-                         console.log("editCategory vBeafore", _this.categoryObj);
                           _this.afterSubmit(_this.categoryObj);
                         
                     } else {

@@ -160,7 +160,7 @@ export default Vue.extend({
         }
 
        
-        _this.$axios.get('articles',{ params: params
+        _this.$axios.get('/admin/articles',{ params: params
             
           }).then(res => {
             let resp  = res.data				
@@ -217,7 +217,7 @@ export default Vue.extend({
               title: '确认删除?',
               onOk() {
                 console.log('OK');
-                _this.$axios.delete("articles", {data:  ids}).then(res => {
+                _this.$axios.delete("/admin/articles", {data:  ids}).then(res => {
                   if(res.data.success) {
                     _this.$message.success("删除成功",5); 
                     _this.initData();

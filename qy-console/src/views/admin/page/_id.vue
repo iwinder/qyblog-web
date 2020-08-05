@@ -38,8 +38,7 @@ export default Vue.extend({
     methods: {
         loadInfo() {
             let  _this = this;
-            console.log("_this.pageId", _this.pageId);
-            _this.$axios.get("pages/" + _this.pageId).then(res => {
+            _this.$axios.get("/admin/pages/" + _this.pageId).then(res => {
                     if(res.data.success) {
                             _this.pageObj = res.data.content;
                     }
@@ -47,7 +46,7 @@ export default Vue.extend({
         },
         submitForm(page) {
             let  _this = this;
-            _this.$axios.post('pages/save',page).then(res => {
+            _this.$axios.post('/admin/pages/save',page).then(res => {
                     console.log("保存文章的结果：", res);
                     _this.$refs.pageForm.loading = false;
                     if(res.data.success) {

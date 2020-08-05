@@ -211,7 +211,7 @@
                 }
 
 
-                _this.$axios.get('shortLink',{ params: params
+                _this.$axios.get('/admin/shortLink',{ params: params
 
                 }).then(res => {
                     let resp  = res.data
@@ -272,7 +272,7 @@
                         title: '确认删除?',
                         onOk() {
                             console.log('OK');
-                            _this.$axios.delete("shortLink/deleted", {data:  ids}).then(res => {
+                            _this.$axios.delete("/admin/shortLink/deleted", {data:  ids}).then(res => {
                                 console.log("deleted !res", res);
                                 if(res.data.success) {
                                     _this.$message.success("删除成功",5);
@@ -319,7 +319,7 @@
                    id:  _this.linkId,
                     ..._this.linkForm,
                 }
-                _this.$axios.post('shortLink/save', param).then(res => {
+                _this.$axios.post('/admin/shortLink/save', param).then(res => {
                     _this.editLoading = false;
                     if(res.data.success) {
                         _this.$message.success('保存成功',5);

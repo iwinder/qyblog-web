@@ -50,14 +50,13 @@ export default {
   },
    mounted() {
        let _this = this;
-       console.log("mounted parentTreeObj", _this.parentTreeObj)
     //    _this.initTreeData(_this.parentTreeObj);
     _this.initList();
    },
     methods: {
         initList() {
             let _this = this;
-            _this.$axios.get('blogCategorys',{ params: {}}).then(res => {
+            _this.$axios.get('/admin/blogCategorys',{ params: {}}).then(res => {
                     console.log("treeNode res", res);
                     let resp = res.data;
                     if(resp.success) {
@@ -117,14 +116,12 @@ export default {
         },
         loadCategoryData(params, callBack) {
             let _this = this;
-            _this.$axios.get('blogCategorys',{ params: params}).then(res => {
-                    console.log("treeNode res", res);
+            _this.$axios.get('/admin/blogCategorys',{ params: params}).then(res => {
                     let resp = res.data;
                     callBack(resp);
             });
         },
         onSelectTree(selectedKeys, info) {
-                    console.log('selected', selectedKeys, info);
                     let _this = this; 
                     _this.afterSelect(selectedKeys,  info);
                     _this.value = undefined;

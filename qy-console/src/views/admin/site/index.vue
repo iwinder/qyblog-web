@@ -151,7 +151,7 @@ export default Vue.extend({
       //   } 
       // });
         _this.loading = true;
-     _this.$axios.post('siteInfo/saveList',param).then(res => {
+     _this.$axios.post('/admin/siteInfo/saveList',param).then(res => {
               _this.loading = false;
               if(res.data.success) {
                     this.$message.success('保存成功',15);

@@ -41,7 +41,7 @@ export default Vue.extend({
     methods: {
         submitForm(article) {
             let  _this = this;
-            _this.$axios.post('articles/save',article).then(res => {
+            _this.$axios.post('/admin/articles/save',article).then(res => {
                     console.log("保存文章的结果：", res);
                     _this.$refs.articleForm.loading = false;
                     if(res.data.success) {

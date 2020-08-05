@@ -202,8 +202,7 @@ export default Vue.extend({
         }
     },
     mounted() {
-        let _this = this;
-        console.log("tmounted argetId", _this.$route.params);
+        let _this = this; 
         _this.initData();
     },
     methods: {
@@ -228,8 +227,7 @@ export default Vue.extend({
             })
         },
         handleMenuClick(e) {
-                let _this = this;
-                console.log('click', e);
+                let _this = this; 
                 if(e.key === "1") {
                     if( _this.selectedIds &&  _this.selectedIds.length>0) {
                         _this.deleted(_this.selectedIds );
@@ -249,7 +247,7 @@ export default Vue.extend({
                 }
  
 
-                _this.$axios.get('menus',{ params: params
+                _this.$axios.get('/admin/menus',{ params: params
 
                 }).then(res => {
                     let resp  = res.data
@@ -271,22 +269,20 @@ export default Vue.extend({
         },
         findTarget() {
             let _this = this;
-            _this.$axios.get('menusAgent/' +  _this.targetId   ).then(res => {
+            _this.$axios.get('/admin/menusAgent/' +  _this.targetId   ).then(res => {
                     let resp  = res.data
                     if(resp.success) {
                             _this.targetName = resp.content.name;
                     }   
                 }).catch((response) => {
-                    _this.loading = false;
-                    console.log("error：", response);
+                    _this.loading = false; 
                 });
         },
         showDrawer(obj) {
 			let _this = this;
             _this.visible = true;
             _this.  findParentList();
-			if (obj) {
-				console.log("edit");
+			if (obj) { 
 				_this.linkId = obj.id;
 				_this.linkForm = {
 					name: obj.name,
@@ -294,8 +290,7 @@ export default Vue.extend({
                     parentId: obj.parentId,
                     blanked: obj.blanked,
 				};
-			} else {
-				console.log("add");
+			} else { 
 				_this.linkId = null;
             }
             
@@ -308,16 +303,14 @@ export default Vue.extend({
         },
         editLink() {
 			let _this = this;
-            _this.editLoading = true;
-            console.log("editLink meus",_this.targetId );
+            _this.editLoading = true; 
 			let param = {
                 id: _this.linkId,
                 ..._this.linkForm,
                 targetId: _this.targetId,
-            };
-                     console.log("editLink meus 2",_this.targetId );
+            }; 
 			_this.$axios
-				.post("menus/save", param)
+				.post("/admin/menus/save", param)
 				.then(res => {
 					_this.editLoading = false;
 					if (res.data.success) {
@@ -352,7 +345,7 @@ export default Vue.extend({
             let params = { 
                     targetId: _this.targetId,
                 }
-             _this.$axios.get('menus/parent',{ params: params}).then(res => {
+             _this.$axios.get('/admin/menus/parent',{ params: params}).then(res => {
                     let resp  = res.data
                     _this.loading = false;
                     if(resp.success) {

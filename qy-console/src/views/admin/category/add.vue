@@ -45,7 +45,7 @@
         methods: {
             afterSubmitForm(param) {
                 let _this = this;
-                _this.$axios.post('blogCategorys/save', param).then(res => {
+                _this.$axios.post('/admin/blogCategorys/save', param).then(res => {
                                 _this.editLoading = false;
                                 if(res.data.success) {
                                     this.$message.success('保存成功',5);

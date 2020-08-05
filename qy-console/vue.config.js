@@ -9,7 +9,7 @@ module.exports = {
  
       proxy: {
         '/api': {
-            target: 'http://localhost:8000/api/admin/', // 代理地址
+            target: 'http://localhost:8000/api', // 代理地址
             changeOrigin: true,
             pathRewrite: {
               '^/api': '', //将 /api 替换掉

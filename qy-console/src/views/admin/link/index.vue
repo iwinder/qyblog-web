@@ -220,7 +220,7 @@
                 }
 
 
-                _this.$axios.get('link',{ params: params
+                _this.$axios.get('/admin/link',{ params: params
 
                 }).then(res => {
                     let resp  = res.data
@@ -246,7 +246,7 @@
             },
             add() {
                 let _this = this;
-                _this.$router.push("/link/add");
+                _this.$router.push("/admin/link/add");
             },
             showDrawer(obj) {
                   let _this = this;
@@ -306,7 +306,7 @@
                         title: '确认删除?',
                         onOk() {
                             console.log('OK');
-                            _this.$axios.delete("link/deleted", {data:  ids}).then(res => {
+                            _this.$axios.delete("/admin/link/deleted", {data:  ids}).then(res => {
                                 console.log("deleted !res", res);
                                 if(res.data.success) {
                                     _this.$message.success("删除成功",5);
@@ -330,7 +330,7 @@
                    id:  _this.linkId,
                     ..._this.linkForm,
                 }
-                _this.$axios.post('link/save', param).then(res => {
+                _this.$axios.post('/admin/link/save', param).then(res => {
                     _this.editLoading = false;
                     if(res.data.success) {
                         _this.$message.success('保存成功',5);

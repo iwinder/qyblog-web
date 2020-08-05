@@ -43,7 +43,7 @@ export default Vue.extend({
     methods: {
         loadInfo() {
             let  _this = this;
-            _this.$axios.get("user/" + _this.userId).then(res => {
+            _this.$axios.get("/admin/user/" + _this.userId).then(res => {
                     if(res.data.success) {
                             _this.userObj = res.data.content;
                         
@@ -53,7 +53,7 @@ export default Vue.extend({
         },
         submitForm(user) {
             let  _this = this;
-            _this.$axios.post('user/save',user).then(res => {
+            _this.$axios.post('/admin/user/save',user).then(res => {
                     _this.$refs.userForm.subLoading = false;
                     if(res.data.success) {
                           this.$message.success('保存成功',15);

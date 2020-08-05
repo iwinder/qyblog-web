@@ -53,7 +53,7 @@
             loadInfo() {
 
                     let  _this = this;
-                    _this.$axios.get("blogCategorys/" + _this.categoryId).then(res => {
+                    _this.$axios.get("/admin/blogCategorys/" + _this.categoryId).then(res => {
                             if(res.data.success) {
                                 _this.categoryObj =  res.data.content;
                                   _this.parentTreeObj  = _this.categoryObj .parent;
@@ -62,7 +62,7 @@
             },
             afterSubmitForm(param) {
                 let _this = this;
-                _this.$axios.post('blogCategorys/save', param).then(res => {
+                _this.$axios.post('/admin/blogCategorys/save', param).then(res => {
                                  _this.$refs.categoryForm.editLoading = false;
                                 if(res.data.success) {
                                     _this.$message.success('保存成功',5);

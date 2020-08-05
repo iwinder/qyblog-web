@@ -29,7 +29,7 @@ export default Vue.extend({
         },
         submitForm(val) {
             let  _this = this;
-            _this.$axios.post('user/save',val).then(res => {
+            _this.$axios.post('/admin/user/save',val).then(res => {
                     _this.$refs.userForm.subLoading = false;
                     if(res.data.success) {
                           this.$message.success('保存成功',15);

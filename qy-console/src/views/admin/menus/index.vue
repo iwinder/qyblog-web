@@ -134,7 +134,7 @@
                 }
 
 
-                _this.$axios.get('menusAgent',{ params: params
+                _this.$axios.get('/admin/menusAgent',{ params: params
 
                 }).then(res => {
                     let resp  = res.data
@@ -195,7 +195,7 @@
                         title: '确认删除?',
                         onOk() {
                             console.log('OK');
-                            _this.$axios.delete("menusAgent/deleted", {data:  ids}).then(res => {
+                            _this.$axios.delete("/admin/menusAgent/deleted", {data:  ids}).then(res => {
                                 console.log("deleted !res", res);
                                 if(res.data.success) {
                                     _this.$message.success("删除成功",5);

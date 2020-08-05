@@ -181,7 +181,7 @@
                 }
 
 
-                _this.$axios.get('role',{ params: params
+                _this.$axios.get('/admin/role',{ params: params
 
                 }).then(res => {
                     let resp  = res.data
@@ -246,7 +246,7 @@
                         title: '确认删除?',
                         onOk() {
                             console.log('OK');
-                            _this.$axios.delete("role", {data:  ids}).then(res => {
+                            _this.$axios.delete("/admin/role", {data:  ids}).then(res => {
                                 console.log("deleted !res", res);
                                 if(res.data.success) {
                                     _this.$message.success("删除成功",5);
@@ -269,7 +269,7 @@
                 _this.$refs.roleForm.validate(valid => {
                     if (valid) {
                         _this.roleObj.name = _this.roleForm.name;
-                        _this.$axios.post('role/save', _this.roleObj).then(res => {
+                        _this.$axios.post('/admin/role/save', _this.roleObj).then(res => {
                                 _this.editLoading = false;
                                 if(res.data.success) {
                                     this.$message.success('保存成功',5);

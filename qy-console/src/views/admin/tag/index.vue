@@ -159,7 +159,7 @@
                 }
 
 
-                _this.$axios.get('blogTags',{ params: params
+                _this.$axios.get('/admin/blogTags',{ params: params
 
                 }).then(res => {
                     let resp  = res.data
@@ -223,7 +223,7 @@
                     this.$confirm({
                         title: '确认删除?',
                         onOk() {
-                            _this.$axios.delete("blogTags", {data:  ids}).then(res => {
+                            _this.$axios.delete("/admin/blogTags", {data:  ids}).then(res => {
                                 if(res.data.success) {
                                     _this.$message.success("删除成功",5);
                                     _this.initData();
@@ -244,7 +244,7 @@
                 _this.$refs.tagForm.validate(valid => {
                     if (valid) {
                         _this.tagObj.name = _this.tagForm.name;
-                        _this.$axios.post('blogTags/save', _this.tagObj).then(res => {
+                        _this.$axios.post('/admin/blogTags/save', _this.tagObj).then(res => {
                                 _this.editLoading = false;
                                 if(res.data.success) {
                                     this.$message.success('保存成功',5);
