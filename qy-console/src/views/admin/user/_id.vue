@@ -19,13 +19,7 @@ import  QyUserForm  from '../../../components/qy-user-form.vue';
 
 
 export default Vue.extend({
-    validate ({ params }) {
-        // 必须是number类型
-        return /^\d+$/.test(params.id)
-    },
-    asyncData ({ params }) {
-        return  {userId:params.id };
-    },
+
     components: {
         QyUserForm
     },
@@ -35,6 +29,10 @@ export default Vue.extend({
             userId:null
         }
 
+    },
+    created() {
+        let _this = this; 
+       _this.userId = _this.$route.params.id;
     },
     mounted() {
          let _this = this;

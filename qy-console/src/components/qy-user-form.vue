@@ -34,7 +34,7 @@
                     name="file"
                     list-type="picture-card"
                     class="avatar-uploader"
-                    action = "/api/upload/file"
+                    action = "/api/admin/upload/file"
                     :accept="acceptType"
                     :show-upload-list="false" 
                     :before-upload="beforeUpload"

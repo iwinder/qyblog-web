@@ -4,7 +4,7 @@
       collapsed-width="0"
  @breakpoint="onBreakpoint"
        :style="{ }">
-        <div class="logo" />
+        <div class="logo" >       <img  :src="site.site_small_logo" alt="logo">  </div>
         <a-menu theme="dark" mode="inline"  
             :defaultSelectedKeys="[$route.path]"
              :defaultOpenKeys="['blog']">
@@ -110,7 +110,8 @@ export default {
     },
     data() {
         return {
-            collapsed: this.isCollapsed
+            collapsed: this.isCollapsed,
+            site: {}
         }
     },
     watch: {
@@ -118,6 +119,10 @@ export default {
             this.collapsed = val;
         }
     },
+    created() {
+      let _this = this; 
+      _this.site = QyTool.getSiteInfoBase();
+  },
     methods: {
             onBreakpoint(broken) {
                 let _this = this;

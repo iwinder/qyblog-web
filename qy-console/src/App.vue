@@ -14,6 +14,7 @@ export default {
 created() {
   let _this = this; 
   _this.initSiteInfo();
+   document.title = _this.site.site_name;
   },
   data() {
     return {
@@ -23,14 +24,27 @@ created() {
   methods:  {
     initSiteInfo() {
       let _this = this;
-              _this.$axios.get('/web/siteInfo/base' ).then(res => {
+     _this.site  = QyTool.getSiteInfoBase();
+      if(QyTool.isEmpty(  _this.site)) {
+        _this.$axios.get('/web/siteInfo/base' ).then(res => {
             let resp  = res.data				
             if(resp.success) {
               _this.site =   resp.content;
-              console.log(" _this.site ",  _this.site );
+              QyTool.setSiteInfoBase(resp.content);
+              _this.initIco( _this.site .site_icon);
             }
           });
-    }
+      } else {
+         _this.initIco( _this.site .site_icon);
+      }
+    },
+    initIco(url) {
+          var link = document.querySelector("link[rel*='icon']") || document.createElement('link');
+          link.type = 'image/x-icon';
+          link.rel = 'shortcut icon';
+          link.href = url;
+          document.getElementsByTagName('head')[0].appendChild(link);
+    } 
   }
 }
 </script>

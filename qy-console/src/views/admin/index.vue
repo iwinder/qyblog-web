@@ -32,7 +32,12 @@ export default Vue.extend({
   data() {
     return {
       collapsed: false,
+      site:{}
     };
+  },
+    created() {
+      let _this = this; 
+      _this.site = QyTool.getSiteInfoBase();
   },
   mounted() {
   },
@@ -109,8 +114,9 @@ html {
 }
 
 #components-layout-demo-custom-trigger .logo {
-  height: 32px;
-  background: rgba(255, 255, 255, 0.2);
-  margin: 16px;
+    height: 32px;
+    background: rgba(255, 255, 255, 0.8);
+    margin: 16px;
+    text-align: center;
 }
 </style>

@@ -81,6 +81,19 @@ QyTool = {
     } while (number);
     return arr.join('');
   },
+    /**
+   *  保存站点基本信息
+   * @param {*} loginUser 
+   */
+  setSiteInfoBase: function(siteBase) {
+    SessionStorage.set(SESSION_KEY_SITEINFO_BASE, siteBase);
+},
+/**
+ *  获取站点基本信息
+ */
+getSiteInfoBase: function() {
+    return SessionStorage.get(SESSION_KEY_SITEINFO_BASE) || {};
+},
   /**
    *  保存登录用户信息
    * @param {*} loginUser 
@@ -98,7 +111,7 @@ QyTool = {
    *  保存登录Token
    * @param {*} token 
    */
-  setLoginToken: function(token) {
+setLoginToken: function(token) {
     SessionStorage.set(SESSION_KEY_LOGIN_TOKEN, token);
 },
 /**

@@ -9,12 +9,12 @@
         <div class="top">
         <div class="header">
           <a href="/">
-            <!-- <img src="~@/assets/logo.svg" class="logo" alt="logo"> -->
-            <span class="title">WindCoder</span>
+            <img  :src="site.site_logo" class="logo" alt="logo">
+            <span class="title">{{site.site_name}}</span>
           </a>
         </div>
         <div class="desc">
-          青语
+           {{site.site_description}}
         </div>
       </div>
                   <div class="main">
@@ -88,8 +88,13 @@ export default Vue.extend({
               loginType: 0,
               smsSendBtn: false
             }, 
+            site: {}
         }
     },
+    created() {
+      let _this = this; 
+      _this.site = QyTool.getSiteInfoBase();
+  },
     mounted(){
       let _this  =this;
  
