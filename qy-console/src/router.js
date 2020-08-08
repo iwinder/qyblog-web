@@ -197,7 +197,10 @@ const router = new Router({
     ] // admin child end
     }]
 })
-
+const originalPush = Router.prototype.push
+Router.prototype.push = function push(location) {
+   return originalPush.call(this, location).catch(err => err)
+}
 
 // 路由登录拦截
 router.beforeEach((to, from, next) => {
