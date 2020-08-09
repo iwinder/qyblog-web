@@ -22,6 +22,11 @@ export default {
     ],
     link: [
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
+    ],
+    script: [
+      { src:'/js/local-storage.js'},
+      { src:'/js/session-storage.js'},
+      { src:'/js/qy-tool.js'},
     ]
   },
   /*

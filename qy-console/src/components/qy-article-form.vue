@@ -211,7 +211,7 @@ export default {
             const params = {
                 name: value
             }
-             _this.$axios.get("blogTags/search",{params: params}).then( res => {
+             _this.$axios.get("/admin/blogTags/search",{params: params}).then( res => {
                     if (fetchId !== _this.lastFetchId) {
                         return;
                     }
@@ -250,7 +250,7 @@ export default {
             let _this = this;
             var formdata = new FormData();
             formdata.append('file', files);
-             _this.$axios.post('upload/file', formdata).then((res) => {
+             _this.$axios.post('/admin/upload/file', formdata).then((res) => {
                 let resp = res.data;
                 if (resp.success) {
                      // 第二步.将返回的url替换到文本原位置![...](0) -> ![...](url)

@@ -200,7 +200,7 @@
                 namePath: _this.selectedTreeData.namePath,
             }
                
-                _this.$router.push( {path: "/admin//category/add", query: {parent: JSON.stringify(parent) } });
+                _this.$router.push( {path: "/category/add", query: {parent: JSON.stringify(parent) } });
 
             },
             searchForm() {

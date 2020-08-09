@@ -27,8 +27,10 @@ import { ConfigProvider } from 'ant-design-vue';
   import moment from 'moment';
   import 'moment/locale/zh-cn';
 Vue.component(ConfigProvider.name, ConfigProvider);
-  moment.locale('zh-cn');
-export default {
+moment.locale('zh-cn');
+import { mapState } from 'vuex'
+
+export default  {
   components: {
     QyHeader,
     QyFooter,
@@ -40,6 +42,25 @@ export default {
        collapsed: false,
        zh_CN,
     }
+  },
+      head () {
+        return {
+            title: this.siteInfo.name,
+            meta: [
+                { hid: "keywords", name: "keywords", content: this.siteInfo. site_key},
+                { hid: "description", name: "description", content: this.siteInfo. site_description},
+
+            ],
+            link: [
+                {rel:"stylesheet" ,type:"text/css", href:"/css/github-markdown.css"}
+            ],
+            
+        }
+    },
+  computed: {
+    ...mapState({
+      siteInfo: state => state.siteInfo.siteInfo
+    })
   },
   mounted() {
       

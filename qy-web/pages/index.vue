@@ -17,16 +17,18 @@
 <script>
 import Vue from 'vue'
 import QyPostList from '~/components/qy-post-list.vue'
- 
+ import { mapState } from 'vuex'
 
 
 export default Vue.extend({
   components: { 
     QyPostList
   },
+
  async  asyncData (context) {
-   let _this = context;
-    let[res1] = await Promise.all([ 
+   let _this = context; 
+    // console.log("async context siteIndo", siteIndo); 
+    let[res1,res2] = await Promise.all([ 
         _this.$axios.get('articles',{ params: {
               page: 1,
               size:  1
@@ -56,12 +58,18 @@ export default Vue.extend({
                   listData:  listData,
                   total:   resp.content.total,
                   current:  resp.content.page,
-                 pageSize:  resp.content.size
+                  pageSize:  resp.content.size
                 };
             }
             console.log("result", result);
             return result;
-
+          }), 
+          _this.$axios.get('/siteInfo/all').then(res => {
+            let resp  = res.data;	
+              if(resp.success) { 
+                // commit('setSiteBase',  resp.content);
+                 return resp.content;
+              }
           })
          ])
           return{
@@ -70,10 +78,12 @@ export default Vue.extend({
                 total:  res1.total,
                 current : res1.current ,
                 pageSize : res1.pageSize, 
-                         onChange: page => { 
-                          _this.app.router.push("/page/"+page);
+                onChange: page => { 
+                                _this.app.router.push("/page/"+page);
+                        
                     },
-              }  
+              },
+              siteInfo: res2
         }
     },
     data() {
@@ -83,16 +93,26 @@ export default Vue.extend({
           pageSize: 3,
           total: 0,
           showLessItems: true,
+           onChange: page => { }
         },
     }
   },
-
+  // computed: {
+  //   ...mapState({
+  //     siteInfo: state => state.siteInfo.siteInfo
+  //   })
+  // },
+  created() {
+    let _this  =  this;
+    console.log("_this.$store", _this.$store);
+    //  _this.$store.dispatch("siteInfo/getSiteInfo");
+  },
   head () {
         return {
-            title: "WindCoder",
+           title: this.siteInfo.site_name,
             meta: [
-                // { hid: "keywords", name: "keywords", content: this.postData. tagStrings},
-                // { hid: "description", name: "description", content: this.postData. summary},
+                { hid: "keywords", name: "keywords", content: this.siteInfo. site_key},
+                { hid: "description", name: "description", content: this.siteInfo. site_description},
 
             ],
             link: [
