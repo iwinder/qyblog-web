@@ -93,7 +93,19 @@ export default Vue.extend({
     },
     created() {
       let _this = this; 
-      _this.site = QyTool.getSiteInfoBase();
+ _this.initSiteInfo();
+      // _this.site = QyTool.getSiteInfoBase();
+      // console.log("  _this.site login",   _this.site);
+      //   if(QyTool.isEmpty( _this.site))  {
+      
+      //           _this.site =  _this.$store.getters.getSiteBase;
+      //                console.log("  _this.site2 login",   _this.site);
+      //   }
+      // console.log("  _this.site login",   _this.site);
+      // if (!_this.site) {
+      //    _this.site =  _this.$store.state.siteInfo.siteBase;
+      //         console.log("  _this.site2 login",   _this.site);
+      // }
   },
     mounted(){
       let _this  =this;
@@ -101,19 +113,16 @@ export default Vue.extend({
     },
     methods: {
         handleSubmit(e) {
-            console.log("handleSubmit", e);
                     let _this = this;
                 _this.state.loginBtn= true;
               _this.$axios.post('/admin/login',_this.loginForm).then(res => {
-                		console.log("登录成功：",res);
                     _this.state.loginBtn= false;
                     	let resp = res.data;
                     if(resp.success) {
                       			
                           let loginToken = resp.content.token;
                           QyTool.setLoginToken(loginToken);
-                          _this.$message.success('登录成功',15);
-                        console.log("add",       _this.$router);
+                          _this.$message.success('登录成功',5);
                           	_this.$router.push("/article");
                     } else {
                         _this.state.loginBtn= false;
@@ -124,7 +133,30 @@ export default Vue.extend({
                      _this.$message.error('登录失败:1 ' + response,5);
             });
                  
-        }
+        },
+        initSiteInfo() {
+              let _this = this;
+            _this.site  = QyTool.getSiteInfoBase();
+              if(QyTool.isEmpty( _this.site)) {
+                _this.$axios.get('/web/siteInfo/base' ).then(res => {
+                    let resp  = res.data				
+                    if(resp.success) {
+                      _this.site =   resp.content;
+                      //   document.title = _this.site.site_name;
+                      // // QyTool.setSiteInfoBase(resp.content);
+                      // _this.initIco( _this.site .site_icon);
+
+                      QyTool.refreshSiteInfoBase( _this.site);
+                      _this.$store.commit("setSiteBase",resp.content);
+                    }
+                  });
+              } else {
+                 QyTool.refreshSiteInfoBase( _this.site); 
+              }
+          },
+          initIco(url) {
+
+          } 
     }
 })
 </script>

@@ -4,6 +4,7 @@ import Antd from 'ant-design-vue/lib'
 import axios from 'axios'
 import router from './router'
 import mavonEditor from 'mavon-editor'
+import store from './store'
  import 'mavon-editor/dist/css/index.css'
  import 'ant-design-vue/dist/antd.css';
  
@@ -73,5 +74,6 @@ axios.interceptors.response.use((response)=>{
 new Vue({
   // 'el': '#main',
   router,
+  store,
   render: h => h(App),
 }).$mount('#app')

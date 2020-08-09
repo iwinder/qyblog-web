@@ -205,19 +205,25 @@ Router.prototype.push = function push(location) {
 // 路由登录拦截
 router.beforeEach((to, from, next) => {
     // 要不要对meta.loginRequire属性做监控拦截
-
+    console.log(to, from);
     if(to.matched.some(function(item){
+        console.log("item", item);
       return item.meta.loginRequire
     })) {
       let loginToken =  QyTool.getLoginToken();
- 
       if(QyTool.isEmpty(loginToken)) {
         next("/login");
-      } else {
+      }   else {
         next();
       }
     } else {
-      next();
+        let loginToken =  QyTool.getLoginToken();
+        if (QyTool.isNotEmpty(loginToken) && (to.path === "/login") ) {
+            next(from);
+        } else {
+            next();
+        }
+ 
     }
   });
 

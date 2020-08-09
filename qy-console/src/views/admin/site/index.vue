@@ -155,6 +155,7 @@ export default Vue.extend({
               _this.loading = false;
               if(res.data.success) {
                     this.$message.success('保存成功',15);
+                     _this.$store.dispatch("initSiteBase");
               }
       }).catch((response) => {
               _this.loading = false;

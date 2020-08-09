@@ -94,6 +94,12 @@ QyTool = {
 getSiteInfoBase: function() {
     return SessionStorage.get(SESSION_KEY_SITEINFO_BASE) || {};
 },
+/**
+ *  清除站点基本信息
+ */
+removeSiteInfoBase: function() {
+  return SessionStorage.remove(SESSION_KEY_SITEINFO_BASE) || {};
+},
   /**
    *  保存登录用户信息
    * @param {*} loginUser 
@@ -112,19 +118,19 @@ getSiteInfoBase: function() {
    * @param {*} token 
    */
 setLoginToken: function(token) {
-    SessionStorage.set(SESSION_KEY_LOGIN_TOKEN, token);
+  LocalStorage.set(LOCAL_KEY_LOGIN_TOKEN, token);
 },
 /**
  *  获取登录Token
  */
 getLoginToken: function() {
-    return SessionStorage.get(SESSION_KEY_LOGIN_TOKEN) || {};
+    return LocalStorage.get(LOCAL_KEY_LOGIN_TOKEN) || {};
 },
 /**
  * 清除登录Token
  */
 removeLoginToken: function() {
-    SessionStorage.remove(SESSION_KEY_LOGIN_TOKEN);
+  LocalStorage.remove(LOCAL_KEY_LOGIN_TOKEN);
 },
   /**
    *  设置【记住我】的用户信息
@@ -170,6 +176,14 @@ removeLoginToken: function() {
       }
     }
     return false;
+  },
+  refreshSiteInfoBase(siteObj) {
+    document.title = siteObj.site_name;
+    var link = document.querySelector("link[rel*='icon']") || document.createElement('link');
+    link.type = 'image/x-icon';
+    link.rel = 'shortcut icon';
+    link.href = siteObj.site_icon;
+    document.getElementsByTagName('head')[0].appendChild(link);
   }
 
 }

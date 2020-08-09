@@ -30,4 +30,5 @@ npm install ant-design-vue --save
 npm install axios --save
 npm install node-sass sass-loader --save-dev
 npm isntall mavon-editor --save
+npm install vuex --save
 ```

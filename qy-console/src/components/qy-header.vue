@@ -1,5 +1,5 @@
 <template>
-    <a-layout-header     :style="{background: '#fff', padding: 0,  width: '100%' ,position: 'fixed',zIndex: 1}" >
+    <a-layout-header     :style="{background: '#fff', padding: 0,  width: '100%' ,position: 'fixed',zIndex: 2}" >
           <a-row class="table-operations">
                 <a-col :xs="{span:6}"  :lg="{ span: 12}">
         <a-icon
@@ -12,15 +12,9 @@
             <a class="ant-dropdown-link" @click="e => e.preventDefault()">
                          <a-avatar  icon="user"  :src="user.avatar"/>
             </a>
-            <a-menu slot="overlay" >
-            <a-menu-item key="1">
-                1st menu item
-            </a-menu-item>
-            <a-menu-item key="2">
-                2nd menu item
-            </a-menu-item>
-            <a-menu-item key="3">
-                3rd menu item
+            <a-menu slot="overlay"  @click="onClick">
+            <a-menu-item key="logout">
+               退出
             </a-menu-item>
             </a-menu>
         </a-dropdown> </a-col>
@@ -66,6 +60,20 @@ export default {
                 }
           });
 
+         },
+         onClick({ key }) {
+            let _this  = this;
+            if(key ==  'logout')  {
+                _this.logoutFun();
+            }
+            
+         },
+         logoutFun() {
+             let _this  = this;
+            _this.$axios.get('/admin/logout' ).then(res => {
+                 QyTool.removeLoginToken();
+                 	_this.$router.push("/login");
+          });
          }
      }
 }
