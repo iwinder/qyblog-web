@@ -8,7 +8,7 @@ export const state = () => ({
   export const mutations = {
     setSiteBase(state, siteBase) {
       state.siteInfo =  siteBase;
-      QyTool.setSiteInfoBase( state.siteBase);
+      // QyTool.setSiteInfoBase( state.siteBase);
     //   state.list.push({
     //     siteBase: {},
     //     done: false

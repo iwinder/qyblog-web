@@ -27,7 +27,7 @@ export default Vue.extend({
 
  async  asyncData (context) {
    let _this = context; 
-    // console.log("async context siteIndo", siteIndo); 
+    console.log("async context siteIndo", context); 
     let[res1,res2] = await Promise.all([ 
         _this.$axios.get('articles',{ params: {
               page: 1,
@@ -67,7 +67,7 @@ export default Vue.extend({
           _this.$axios.get('/siteInfo/all').then(res => {
             let resp  = res.data;	
               if(resp.success) { 
-                // commit('setSiteBase',  resp.content);
+                _this.store. commit('siteInfo/setSiteBase',  resp.content);
                  return resp.content;
               }
           })
@@ -81,7 +81,7 @@ export default Vue.extend({
                 onChange: page => { 
                                 _this.app.router.push("/page/"+page);
                         
-                    },
+                },
               },
               siteInfo: res2
         }

@@ -48,6 +48,7 @@ import moment from 'moment';
 import { FormModel } from 'ant-design-vue';
  import  QyCommentList from '~/components/qy-comment-list.vue'
 Vue.use(FormModel); 
+ import { mapState } from 'vuex'
 export default {
      async  asyncData (context) { 
          let id = context.params.aid;
@@ -84,7 +85,7 @@ export default {
      },
     head () {
         return {
-            title: this.postData.title,
+            title: this.postData.title + "-" + this.siteInfo.site_name,
             meta: [
                 { hid: "keywords", name: "keywords", content: this.postData. tagStrings},
                 { hid: "description", name: "description", content: this.postData. summary},
@@ -99,6 +100,11 @@ export default {
     components: {
         QyCommentList
     },
+      computed: {
+    ...mapState({
+      siteInfo: state => state.siteInfo.siteInfo
+    })
+  },
      data() {
          return {
              postData: {},
