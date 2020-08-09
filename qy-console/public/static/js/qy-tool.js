@@ -114,6 +114,12 @@ removeSiteInfoBase: function() {
       return SessionStorage.get(SESSION_KEY_LOGIN_USER) || {};
   },
     /**
+   *  清除登录用户信息
+   */
+  removeLoginUser: function() {
+    return SessionStorage.remove(SESSION_KEY_LOGIN_USER) || {};
+},
+    /**
    *  保存登录Token
    * @param {*} token 
    */

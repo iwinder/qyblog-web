@@ -138,7 +138,7 @@ export default Vue.extend({
               let _this = this;
             _this.site  = QyTool.getSiteInfoBase();
               if(QyTool.isEmpty( _this.site)) {
-                _this.$axios.get('/web/siteInfo/base' ).then(res => {
+                _this.$axios.get('/web/siteInfo/all' ).then(res => {
                     let resp  = res.data				
                     if(resp.success) {
                       _this.site =   resp.content;

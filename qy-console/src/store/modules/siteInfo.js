@@ -27,7 +27,7 @@ const state = () => ({
     initSiteBase({ commit, state  }) {
       let _this = this;
 
-          axios.get('/web/siteInfo/base' ).then(res => {
+          axios.get('/web/siteInfo/all' ).then(res => {
              let resp  = res.data				
              if(resp.success) {
               QyTool.refreshSiteInfoBase(resp.content);

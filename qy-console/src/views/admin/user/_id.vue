@@ -55,6 +55,12 @@ export default Vue.extend({
                     _this.$refs.userForm.subLoading = false;
                     if(res.data.success) {
                           this.$message.success('保存成功',15);
+                          let logUser = QyTool.getLoginUser();
+                          if(logUser.id == user.id) {
+                              QyTool.removeLoginUser();
+
+                          }
+
                     }
             }).catch((response) => {
                     _this.$refs.userForm.subLoading = false;

@@ -142,6 +142,7 @@ export default Vue.extend({
         return {
             targetId: null,
             targetName:"",
+             targetType:  null,
             columns,
             loading: false,
             selectedIds:[],
@@ -199,6 +200,7 @@ export default Vue.extend({
             _this. findTarget();
         } else {
             _this.targetName = _this.$route.params.name;
+             _this.targetType = _this.$route.params.type;
         }
     },
     mounted() {
@@ -273,6 +275,7 @@ export default Vue.extend({
                     let resp  = res.data
                     if(resp.success) {
                             _this.targetName = resp.content.name;
+                            _this.targetType =  resp.content.type;
                     }   
                 }).catch((response) => {
                     _this.loading = false; 
@@ -308,6 +311,7 @@ export default Vue.extend({
                 id: _this.linkId,
                 ..._this.linkForm,
                 targetId: _this.targetId,
+                targetType: _this.targetType
             }; 
 			_this.$axios
 				.post("/admin/menus/save", param)

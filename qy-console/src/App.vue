@@ -13,7 +13,10 @@ export default {
   },
 created() {
   let _this = this; 
-  // _this.initSiteInfo();
+  _this.site  = QyTool.getSiteInfoBase();
+  if(QyTool.isNotEmpty( _this.site)) {
+    QyTool.refreshSiteInfoBase( _this.site);
+  }
 
   },
   data() {

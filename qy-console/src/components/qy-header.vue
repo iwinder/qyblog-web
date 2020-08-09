@@ -8,11 +8,18 @@
           @click="callChange"
         /> </a-col>
   <a-col  :xs="{span:8, offset: 10 }"  :lg="{ span: 3, offset: 5 }" style="    text-align: center;  " >
-        <a-dropdown>
+        <a-dropdown class="right-dropdown"  placement="bottomCenter">
             <a class="ant-dropdown-link" @click="e => e.preventDefault()">
                          <a-avatar  icon="user"  :src="user.avatar"/>
             </a>
             <a-menu slot="overlay"  @click="onClick">
+             <a-menu-divider />
+             <a-menu-item key="userIndo" disabled>
+                    <a-row class="user-ul">
+                        <a-row> {{user.nickname}} </a-row>
+                        <a-row> {{user.roleName}} </a-row>
+                     </a-row>
+                </a-menu-item>
             <a-menu-item key="logout">
                退出
             </a-menu-item>
@@ -52,13 +59,17 @@ export default {
          },
          initUser() {
              let _this  = this;
-             _this.$axios.get('/admin/currentUser' ).then(res => {
-                let resp  = res.data				
-                if(resp.success) {
-                    _this.user =   resp.content;  
-                    QyTool.setLoginUser(_this.user);
-                }
-          });
+             _this.user =  QyTool.getLoginUser();
+             if (QyTool.isEmpty( _this.user)) {
+                    _this.$axios.get('/admin/currentUser' ).then(res => {
+                        let resp  = res.data				
+                        if(resp.success) {
+                            _this.user =   resp.content;  
+                            QyTool.setLoginUser(_this.user);
+                        }
+                });
+             }
+
 
          },
          onClick({ key }) {
@@ -78,3 +89,17 @@ export default {
      }
 }
 </script>
+
+<style lang="scss" scoped>
+// .ant-dropdown  /deep/  {
+//   .menuitem  .user-ul {
+//       background: #000;
+//       li {
+//               list-style-type: none;
+//       }
+
+//     }
+
+// }
+
+</style>
