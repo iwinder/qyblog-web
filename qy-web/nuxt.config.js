@@ -42,7 +42,8 @@ export default {
   */
   plugins: [
     '@/plugins/antd-ui',
-    { src: '@/plugins/vue-highlight', ssr: false }
+    '@/plugins/lru-cache',
+    { src: '@/plugins/vue-highlight', ssr: false }, 
   ],
   /*
   ** Nuxt.js dev-modules

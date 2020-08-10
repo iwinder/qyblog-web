@@ -20,9 +20,21 @@
         :style="{ lineHeight: '64px' }"
     
       >
-        <a-menu-item key="1">
-          nav 1
-        </a-menu-item>
+      <span  v-for="(menu) in  siteInfo.header"  :key="menu.url">  
+              <a-sub-menu  v-if="menu.children">
+                      <span slot="title" class="submenu-title-wrapper"
+                        >   {{menu.name}} </span >
+                      
+            </a-sub-menu>
+         
+          <a-menu-item :key="menu.url"  v-else>
+            {{menu.name}} 
+          </a-menu-item>
+
+   
+      </span>
+
+
         <a-menu-item key="2">
           nav 2
         </a-menu-item>
@@ -48,6 +60,30 @@ export default {
             default: null
         },  
     },
+     async  asyncData (context) {
+   let _this = context;  
+         console.log("hrader LruCache siteInfo",  _this.$LruCache());
+         let siteInfo = _this.$LruCache().get("qy_siteInfo");
+          console.log("hrader LruCache siteInfo", siteInfo);
+         if (!siteInfo) {
+           console.log("hrader !siteInfo", siteInfo);
+             siteInfo  =  await     _this.$axios.get('/siteInfo/all').then(res => {
+              let resp  = res.data;	
+                if(resp.success) { 
+                  _this.store. commit('siteInfo/setSiteBase',  resp.content);
+                  return resp.content;
+                }
+            })
+            console.log("!siteInfo2", siteInfo);
+          _this.$LruCache().set("qy_siteInfo",siteInfo);    
+         }
+
+
+
+        return{ 
+              siteInfo: siteInfo
+        }
+    },
     data() {
       return {
         mode: "horizontal",
@@ -55,7 +91,8 @@ export default {
         horizontalShow: false,
         collapsed: false,
         screenWidth: '',
-        screenHeight: ''
+        screenHeight: '',
+        siteInfo:{}
       };
     },
     watch: {
