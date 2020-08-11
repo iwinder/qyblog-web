@@ -20,19 +20,20 @@
         :style="{ lineHeight: '64px' }"
     
       >
-      <span  v-for="(menu) in  siteInfo.header"  :key="menu.url">  
-              <a-sub-menu  v-if="menu.children">
+           <!-- {{  siteInfo.header}} -->
+      <template  v-for="(menu) in  siteInfo.header"  v-show="siteInfo.header">  
+        <a-sub-menu  v-if="menu.children" :key="menu.url">
                       <span slot="title" class="submenu-title-wrapper"
                         >   {{menu.name}} </span >
                       
-            </a-sub-menu>
+            </a-sub-menu>  
          
-          <a-menu-item :key="menu.url"  v-else>
+          <a-menu-item :key="menu.url"   v-else>
             {{menu.name}} 
           </a-menu-item>
 
    
-      </span>
+      </template>
 
 
         <a-menu-item key="2">
@@ -47,6 +48,7 @@
 </template>
 
 <script>
+ import { mapState } from 'vuex'
 export default {
     props: { 
         isCollapsed: {
@@ -59,31 +61,7 @@ export default {
             type: Function,
             default: null
         },  
-    },
-     async  asyncData (context) {
-   let _this = context;  
-         console.log("hrader LruCache siteInfo",  _this.$LruCache());
-         let siteInfo = _this.$LruCache().get("qy_siteInfo");
-          console.log("hrader LruCache siteInfo", siteInfo);
-         if (!siteInfo) {
-           console.log("hrader !siteInfo", siteInfo);
-             siteInfo  =  await     _this.$axios.get('/siteInfo/all').then(res => {
-              let resp  = res.data;	
-                if(resp.success) { 
-                  _this.store. commit('siteInfo/setSiteBase',  resp.content);
-                  return resp.content;
-                }
-            })
-            console.log("!siteInfo2", siteInfo);
-          _this.$LruCache().set("qy_siteInfo",siteInfo);    
-         }
-
-
-
-        return{ 
-              siteInfo: siteInfo
-        }
-    },
+    }, 
     data() {
       return {
         mode: "horizontal",
@@ -92,7 +70,6 @@ export default {
         collapsed: false,
         screenWidth: '',
         screenHeight: '',
-        siteInfo:{}
       };
     },
     watch: {
@@ -100,6 +77,11 @@ export default {
             this.collapsed = val;
         }
     },
+    computed: {
+    ...mapState({
+      siteInfo: state => state.siteInfo.siteInfo
+    })
+  },
     mounted() {
 
     },

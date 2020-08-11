@@ -65,24 +65,24 @@ export default Vue.extend({
             return result;
           }), 
          ]);
-         console.log("LruCache siteInfo",  _this.$LruCache());
-         let siteInfo = _this.$LruCache().get("qy_siteInfo");
-          console.log("LruCache siteInfo", siteInfo);
-         if (!siteInfo) {
-           console.log("!siteInfo", siteInfo);
-             siteInfo  =  await     _this.$axios.get('/siteInfo/all').then(res => {
-              let resp  = res.data;	
-                if(resp.success) { 
-                  _this.store. commit('siteInfo/setSiteBase',  resp.content);
-                  return resp.content;
-                }
-            })
-            console.log("!siteInfo2", siteInfo);
-          _this.$LruCache().set("qy_siteInfo",siteInfo);    
-         }
+        //  console.log("LruCache siteInfo",  _this.$LruCache());
+        //  let siteInfo = _this.$LruCache().get("qy_siteInfo");
+        //   console.log("LruCache siteInfo", siteInfo);
+        //  if (!siteInfo) {
+        //    console.log("!siteInfo", siteInfo);
+        //      siteInfo  =  await     _this.$axios.get('/siteInfo/all').then(res => {
+        //       let resp  = res.data;	
+        //         if(resp.success) { 
+        //           _this.store. commit('siteInfo/setSiteBase',  resp.content);
+        //           return resp.content;
+        //         }
+        //     })
+        //     console.log("!siteInfo2", siteInfo);
+        //   _this.$LruCache().set("qy_siteInfo",siteInfo);    
+        //  }
 
-
-
+       await _this.store. dispatch('siteInfo/getSiteInfo');
+        console.log("init  !siteInfo2 ", _this.store.state.siteInfo);
           return{
               listData : res1.listData, 
               pagination: {
@@ -94,7 +94,7 @@ export default Vue.extend({
                         
                 },
               },
-              siteInfo: siteInfo
+      
         }
     },
     data() {
@@ -108,11 +108,15 @@ export default Vue.extend({
         },
     }
   },
-
+computed: {
+  ...mapState({
+    siteInfo: state => state.siteInfo.siteInfo
+  })
+},
   created() {
     let _this  =  this;
-    console.log("_this.$store", _this.$store);
-        console.log("_this.$LruCache" , this.$LruCache());
+    console.log("_this.$siteInfo", _this.siteInfo);
+    //     console.log("_this.$LruCache" , this.$LruCache());
     //  _this.$store.dispatch("siteInfo/getSiteInfo");
   },
   head () {

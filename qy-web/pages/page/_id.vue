@@ -14,7 +14,8 @@
 <script  >
 import Vue from 'vue'
 import QyPostList from '~/components/qy-post-list.vue'
- 
+  import { mapState } from 'vuex'
+
 export default Vue.extend({
       components: { 
     QyPostList
@@ -51,18 +52,19 @@ export default Vue.extend({
                             e.summary,
                         });
                 });
+              
                 result = {
                     listData:  listData,
                     total:   resp.content.total,
                     current:  resp.content.page,
                     pageSize:  resp.content.size
                     };
-                }
-                console.log("result", result);
+                } 
                 return result;
 
             })
             ])
+              await _this.store. dispatch('siteInfo/getSiteInfo');
             return{
                 listData : res1.listData, 
                 pagination: {
@@ -82,10 +84,10 @@ export default Vue.extend({
     },
     head () {
         return {
-            title: "WindCoder--第" +this.pagination.current+"页" ,
+            title: this.siteInfo.site_name  +" --第" +this.pagination.current+"页" ,
             meta: [
-                // { hid: "keywords", name: "keywords", content: this.postData. tagStrings},
-                // { hid: "description", name: "description", content: this.postData. summary},
+               { hid: "keywords", name: "keywords", content: this.siteInfo. site_key},
+                { hid: "description", name: "description", content: this.siteInfo. site_description},
 
             ],
             link: [
@@ -94,6 +96,11 @@ export default Vue.extend({
             
         }
     },
+    computed: {
+    ...mapState({
+      siteInfo: state => state.siteInfo.siteInfo
+    })
+  },
     data() {
       return {
         listData:[],

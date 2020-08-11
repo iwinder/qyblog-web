@@ -66,8 +66,7 @@ export default {
             let result = {};
             if(resp.success) { 
                 result  = resp.content;
-            }
-            console.log("result", result);
+            } 
              result.publishedDateMD =   moment(result.publishedDate).format('YYYY-MM-DD');
               result.publishedDateTime =   moment(result.publishedDate).format('YYYY-MM-DD HH:mm:ss');
             //  result.contentHtmlT =  hljs.highlightAuto(result.contentHtml).value;
@@ -77,7 +76,8 @@ export default {
             return result;
 
           })
-         ])
+         ]);
+          await  context.store. dispatch('siteInfo/getSiteInfo');
           return{
               postData : res1,  
         }
