@@ -14,7 +14,7 @@ export const state = () => ({
     async nuxtServerInit({ dispatch }) {
       // logger.log("dispatch", dispatch);
       // console.log("dispatch", dispatch);
-      // await dispatch('siteInfo/getSiteInfo')
+      await dispatch('siteInfo/getSiteInfo')
     }
   }
 

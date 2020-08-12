@@ -29,7 +29,8 @@
             </a-sub-menu>  
          
           <a-menu-item :key="menu.url"   v-else>
-            {{menu.name}} 
+             <nuxt-link  :to="menu.url" v-if="menu.blanked">      {{menu.name}} </nuxt-link>
+              <nuxt-link  :to="menu.url"  v-else>      {{menu.name}} </nuxt-link>
           </a-menu-item>
 
    

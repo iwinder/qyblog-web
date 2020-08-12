@@ -24,7 +24,9 @@ export default Vue.extend({
   components: { 
     QyPostList
   },
-
+async fetch({ store, params }) {
+  await store. dispatch('siteInfo/getSiteInfo');
+},
  async  asyncData (context) {
    let _this = context; 
     console.log("async context siteIndo", context); 
@@ -81,7 +83,7 @@ export default Vue.extend({
         //   _this.$LruCache().set("qy_siteInfo",siteInfo);    
         //  }
 
-       await _this.store. dispatch('siteInfo/getSiteInfo');
+      //  await _this.store. dispatch('siteInfo/getSiteInfo');
         console.log("init  !siteInfo2 ", _this.store.state.siteInfo);
           return{
               listData : res1.listData, 

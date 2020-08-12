@@ -7,6 +7,7 @@ const lcache = new LRU({
     // 缓存有效期
     maxAge: 60000
   })
+  let num = 1;
 const LruCache = { 
     get: function (key) {
         let result = lcache.get(key)
@@ -34,6 +35,8 @@ const LruCache = {
   export default ({ app }, inject) => {
     // Set the function directly on the context.app object
     inject("LruCache",    ()=> {
+      num++;
+      console.log("~~~~~~num", num);
         return LruCache;
     }  )
 

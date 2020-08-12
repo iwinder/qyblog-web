@@ -50,6 +50,9 @@ import { FormModel } from 'ant-design-vue';
 Vue.use(FormModel); 
  import { mapState } from 'vuex'
 export default {
+    async fetch({ store, params }) {
+  await store. dispatch('siteInfo/getSiteInfo');
+},
      async  asyncData (context) { 
          let id = context.params.aid;
         let name = context.params.name;
@@ -77,7 +80,7 @@ export default {
 
           })
          ]);
-          await  context.store. dispatch('siteInfo/getSiteInfo');
+        //   await  context.store. dispatch('siteInfo/getSiteInfo');
           return{
               postData : res1,  
         }

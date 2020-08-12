@@ -29,7 +29,7 @@ export const state = () => ({
 
   export const actions = {
     async getSiteInfo({state, commit}, val) {
-      console.log("siteInfo/",state);
+      console.log("siteInfo/",state.siteInfo);
       let _this  =  this;
       if (  _this.$QyServeTool().isEmpty(state.siteInfo) ) {
         let  siteInfo =   _this.$LruCache().get("qy_siteInfo");
