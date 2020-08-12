@@ -3,7 +3,7 @@ import LRU from 'lru-cache'
 
 const lcache = new LRU({
     // 缓存队列长度
-    max: 2000,
+    max: 0,
     // 缓存有效期
     maxAge: 60000
   })
@@ -39,4 +39,4 @@ const LruCache = {
 
   }
   
-Vue.use(LruCache)
+// Vue.use(LruCache)

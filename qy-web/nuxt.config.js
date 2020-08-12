@@ -43,6 +43,7 @@ export default {
   plugins: [
     '@/plugins/antd-ui',
     '@/plugins/lru-cache',
+    '@/plugins/qy-serve-tool',
     { src: '@/plugins/vue-highlight', ssr: false }, 
   ],
   /*

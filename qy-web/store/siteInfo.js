@@ -11,6 +11,8 @@ export const state = () => ({
       let _this  = this;
       console.log("state.siteInfo ", state.siteInfo );
       _this.$LruCache().set("qy_siteInfo",state.siteInfo );    
+      console.log("state.    _this.$LruCache().get(y_siteInfo) ",      _this.$LruCache().get("qy_siteInfo") );
+ 
       // QyTool.setSiteInfoBase( state.siteBase);
     //   state.list.push({
     //     siteBase: {},
@@ -29,9 +31,10 @@ export const state = () => ({
     async getSiteInfo({state, commit}, val) {
       console.log("siteInfo/",state);
       let _this  =  this;
-      // _this.$LruCache().set("qy_siteInfo", null);
-      let  siteInfo =   _this.$LruCache().get("qy_siteInfo");
-      if (!siteInfo) {
+      if (  _this.$QyServeTool().isEmpty(state.siteInfo) ) {
+        let  siteInfo =   _this.$LruCache().get("qy_siteInfo");
+      console.log("fdfdgetUrl" ,_this.$LruCache().get("qy_siteInfo"));
+      if ( _this.$QyServeTool().isEmpty(siteInfo)) {
         console.log("!siteInfo", siteInfo);
           siteInfo  =  await     _this.$axios.get('/siteInfo/all').then(res => {
            let resp  = res.data;	
@@ -60,8 +63,12 @@ export const state = () => ({
          }
 
          console.log("resp. new  siteInfo", siteInfo);
+         commit('setSiteBase',  siteInfo);
       }
-      commit('setSiteBase',  siteInfo);
+
+      }
+      
+   
       // if(QyTool.isEmpty(oldSiteInfo)) {
         // let newSiteInfo =    await   new Promise((resolve, reject) => {
         //   axios.get('/siteInfo/all').then(res => {

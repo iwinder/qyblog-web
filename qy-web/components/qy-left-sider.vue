@@ -11,61 +11,30 @@
         <a-menu theme="light" mode="inline"  
             :defaultSelectedKeys="[$route.path]"
              :defaultOpenKeys="['blog']">
-            <a-menu-item key="dashboard">
-                <a-icon type="user" />
-                <span>仪表盘</span>
-            </a-menu-item>
-
-        
-
             
 
-            <a-sub-menu key="blog">
-                <span slot="title"><a-icon type="user" /><span>文章管理</span></span>
-                <a-menu-item key="/article">
-                    <nuxt-link to="/article">
-                        文章列表
-                    </nuxt-link>
-                </a-menu-item>
-                <a-menu-item key="/category">
-                    <nuxt-link to="/category"> 
-                    分类管理
-                    </nuxt-link>
-                </a-menu-item>
-                <a-menu-item key="/tag">
-                     <nuxt-link to="/tag"> 
-                            标签管理
-                     </nuxt-link>
-                </a-menu-item>
-            </a-sub-menu> 
+<template  v-for="(menu) in  siteInfo.header"  v-show="siteInfo.header">  
+        <a-sub-menu  v-if="menu.children" :key="menu.url">
+                      <span slot="title" class="submenu-title-wrapper"
+                        >   {{menu.name}} </span >
+                      
+            </a-sub-menu>  
+         
+          <a-menu-item :key="menu.url"   v-else>
+            {{menu.name}} 
+          </a-menu-item>
 
-            <a-menu-item key="/comment">
-               <nuxt-link to="/comment">
-                <a-icon type="uplod" />
-                <span>评论管理</span>
-                </nuxt-link>
-            </a-menu-item>
+   
+      </template>
 
-            <a-sub-menu key="system">
-                <span slot="title"><a-icon type="user" /><span>系统管理</span></span>
-                <a-menu-item key="/user">
-                      <nuxt-link to="/user">
-                        用户管理
-                    </nuxt-link>
-                    
-                </a-menu-item>
-                <a-menu-item key="/role">
-                     <nuxt-link to="/role">
-                        角色管理
-                     </nuxt-link>
-                </a-menu-item>
-                <a-menu-item key="/permission">
-                    <nuxt-link to="/permission">
-                        权限管理
-                     </nuxt-link>
-                </a-menu-item>
-            </a-sub-menu>
 
+        <a-menu-item key="2">
+          nav 2
+        </a-menu-item>
+        <a-menu-item key="3">
+          nav 3
+        </a-menu-item>
+ 
 
 
         </a-menu>
@@ -74,6 +43,8 @@
 </template>
 
 <script>
+
+ import { mapState } from 'vuex'
 export default {
     props: { 
         isCollapsed: {
@@ -95,6 +66,11 @@ export default {
             this.visible = val;
         }
     },
+    computed: {
+    ...mapState({
+      siteInfo: state => state.siteInfo.siteInfo
+    })
+  },
     methods: {
          afterVisibleChange(val) {
              let _this = this;
