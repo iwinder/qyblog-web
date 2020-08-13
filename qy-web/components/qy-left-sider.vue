@@ -17,6 +17,12 @@
         <a-sub-menu  v-if="menu.children" :key="menu.url">
                       <span slot="title" class="submenu-title-wrapper"
                         >   {{menu.name}} </span >
+                                                <template v-for="(children) in menu.children">    
+                                  <a-menu-item :key="children.url"     >
+                                  <nuxt-link  :to="children.url" v-if="children.blanked" target="_blank">      {{children.name}} </nuxt-link>
+                                    <nuxt-link  :to="children.url"  v-else>      {{children.name}} </nuxt-link>
+                                </a-menu-item>
+                        </template>
                       
             </a-sub-menu>  
          
@@ -27,13 +33,6 @@
    
       </template>
 
-
-        <a-menu-item key="2">
-          nav 2
-        </a-menu-item>
-        <a-menu-item key="3">
-          nav 3
-        </a-menu-item>
  
 
 

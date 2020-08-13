@@ -9,9 +9,9 @@
         />
 </a-col>
    <a-col  class="logo-col" :xs="{span:6,offset: 8}"  :sm="{span:6,offset: 8}"  :md="{ span: 3, offset:2}">
-        <a class="logo nav-col" href="/" title="Windcoder"   > 
+        <nuxt-link class="logo nav-col" to="/" title="Windcoder"   > 
                 <img src="https://windcoder.com/wp-content/uploads/2017/02/logo_vift.png" alt="Windcoder"  >
-        </a>
+        </nuxt-link>
  </a-col>
       <a-menu  class="horizontalShow"
       
@@ -22,14 +22,21 @@
       >
            <!-- {{  siteInfo.header}} -->
       <template  v-for="(menu) in  siteInfo.header"  v-show="siteInfo.header">  
-        <a-sub-menu  v-if="menu.children" :key="menu.url">
+        <a-sub-menu  v-if="menu.children" :key="menu.url" @titleClick="titleClick">
                       <span slot="title" class="submenu-title-wrapper"
                         >   {{menu.name}} </span >
+                        <template v-for="(children) in menu.children">    
+                                  <a-menu-item :key="children.url"     >
+                                  <nuxt-link  :to="children.url" v-if="children.blanked" target="_blank">      {{children.name}} </nuxt-link>
+                                    <nuxt-link  :to="children.url"  v-else>      {{children.name}} </nuxt-link>
+                                </a-menu-item>
+                        </template>
+
                       
             </a-sub-menu>  
          
           <a-menu-item :key="menu.url"   v-else>
-             <nuxt-link  :to="menu.url" v-if="menu.blanked">      {{menu.name}} </nuxt-link>
+             <nuxt-link  :to="menu.url" v-if="menu.blanked" target="_blank">      {{menu.name}} </nuxt-link>
               <nuxt-link  :to="menu.url"  v-else>      {{menu.name}} </nuxt-link>
           </a-menu-item>
 
@@ -91,7 +98,10 @@ export default {
           let _this = this;
           _this.collapsed = !this.collapsed;
            _this.$emit('on-collapsed',this.collapsed);
-        }
+        },
+            titleClick(e) {
+      console.log('titleClick', e);
+    },
     }
 }
 </script>
