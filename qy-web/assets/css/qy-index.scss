@@ -1,11 +1,13 @@
+
+
 .container {
-    margin: 0 auto;
-    min-height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-  }
+  margin: 0 auto;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
   
   .title {
     font-family:
@@ -37,10 +39,18 @@
     padding-top: 15px;
   }
   .content   /deep/   {
-    padding: 20px 15px;
+    @media (max-width: 767px) {
+      width: 100%;
+      margin: 0;
+    }
+    @media (min-width: 768px){ 
       width: 85%;
       margin-right: auto;
       margin-left: auto;
+    }
+    padding: 20px 15px;
+      
+ 
       background: #fff;
      .img-a{
         display: block;

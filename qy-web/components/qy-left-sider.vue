@@ -7,11 +7,11 @@
       @close="onClose"
     >
     <template slot="title">
-      <nuxt-link to="/">{{siteInfo.site_name}} </nuxt-link>
+      <nuxt-link to="/"  @click.native="toIndex">  <img  :src="siteInfo.site_small_logo" :alt="siteInfo.site_name"  class="small_logo"  > </nuxt-link>
     </template>
 
 
-        <a-menu theme="light" mode="inline"  
+        <a-menu theme="light" mode="inline"   ref="leftSiderMenus"
             :defaultSelectedKeys="[$route.path]"
               :selectedKeys= "selectedKey"
              :defaultOpenKeys="['/']"
@@ -108,11 +108,16 @@ export default {
         handleSelectKeys(e) {
           console.log('click ', e);
            let _this = this;
-          this.current = e.key;
+          // this.current = e.key;
           _this.selectedKey = [e.key];
           _this.afterMenuSelect(_this.selectedKey );
           _this.onClose();
       },
+      toIndex(obj) {
+          console.log("obj", obj);
+          let _this =  this;
+          _this.$refs.leftSiderMenus.handleSelect({key: "/" });
+        }
     }
 }
 </script>
@@ -120,5 +125,10 @@ export default {
 <style scoped>
 .ant-layout-sider  {
     position: absolute;
+}
+.small_logo {
+  max-width: 100%;
+    height: 32px;
+    line-height: 32px;
 }
 </style> 

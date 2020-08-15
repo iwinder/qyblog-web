@@ -8,7 +8,7 @@
           @click="callChange"
         />
 </a-col>
-   <a-col  class="logo-col" :xs="{span:6,offset: 8}"  :sm="{span:6,offset: 8}"  :md="{ span: 3, offset:2}">
+   <a-col  class="logo-col" :xs="{span:6,offset: 8}"  :sm="{span:6,offset: 7}"  :md="{ span: 3, offset:1}">
         <nuxt-link class="logo nav-col" to="/"  :title="siteInfo.site_name"   @click.native="toIndex"> 
                 <img  :src="siteInfo.site_logo" :alt="siteInfo.site_name"  >
         </nuxt-link>
@@ -96,7 +96,6 @@ export default {
           this.selectedKey = val;
         },
         screenWidth(val) {
-            console.log(val);      
             let  _this  = this;
             if(val >= 768 && _this.collapsed ) { 
                     _this.callChange(false);
@@ -119,7 +118,6 @@ export default {
            _this.$emit('on-collapsed',this.collapsed);
         },
         handleSelectKeys(e) {
-          console.log('click ', e);
            let _this = this;
           this.current = e.key;
           _this.selectedKey = [e.key];
@@ -149,11 +147,13 @@ export default {
 
 <style>
  .trigger {
-  font-size: 18px;
-  line-height: 64px;
-  padding: 0 24px;
-  cursor: pointer;
-  transition: color 0.3s;
+    float: left;
+    width: 48px;
+    line-height: 64px;
+    height: 64px; 
+    font-size: 18px;
+    padding: 0 24px 0 0; 
+    transition: color 0.3s;
 }
 
 .trigger:hover {
@@ -178,11 +178,7 @@ export default {
     height: 64px; 
  }
  
-.trigger {
-    float: left;
-    width: 48px;
-    line-height: 64px;
-}
+
 
 @media (max-width: 767px) {
   .horizontalShow {
