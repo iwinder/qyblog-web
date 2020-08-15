@@ -4,11 +4,12 @@
         
         <template   slot="extra" style="width:272px"> 
             <template v-if="item.category!=null">
-                  <a href="https://windcoder.com/category/java"  class="category-tag" rel="category tag"> {{item.category.name}}</a>
+                <nuxt-link :to=" {name:'category-name',  params:{name:item.category.identifier, aid:item.category.id} }"     class="category-tag"> {{item.category.name}} </nuxt-link>
+                  <!-- <a href="https://windcoder.com/category/java"  class="category-tag" rel="category tag"> {{item.category.name}}</a> -->
             </template>
-            <template v-else>                
+            <!-- <template v-else>                
                     <a href="https://windcoder.com/category/java"  class="category-tag" rel="category tag"> 未分类</a>   
-            </template>
+            </template> -->
             <!-- <a href="https://windcoder.com/dawenjianfenpianshangchuanjavabanjiandanshixian" > -->
             <nuxt-link  slot="title"  :to="{name:'name',params:{name:item.href, aid:item.id}}" class="img-a">
                             <img
@@ -22,18 +23,21 @@
         <template v-for="{ type, text } in actions" slot="actions">
             <span :key="type">
             <a-icon :type="type" style="margin-right: 8px" />
-            
+              
                 {{ text }}
             </span>
         </template>
 
-        <a-list-item-meta :description="item.description">
+        <a-list-item-meta >
+            <template slot="description">
+                {{item.author.nickname}} {{item.publishedDateMD}}
+            </template>
             <nuxt-link  slot="title"  :to="{name:'name',params:{name:item.href, aid:item.id}}"> {{ item.title }} </nuxt-link>
         </a-list-item-meta>
 
          <a-row style="margin: 5px 0;">
-                <a-tag color="#f50" v-for=" tag in item.tagStrings" :key="tag">
-                  {{tag}}
+                <a-tag color="#f50" v-for=" tag in item.tags" :key="tag.id">
+                  <nuxt-link :to=" {name:'tag-name',  params:{name:tag.identifier, aid:tag.id} }"> {{tag.name}} </nuxt-link>
                 </a-tag>
              
         </a-row> 

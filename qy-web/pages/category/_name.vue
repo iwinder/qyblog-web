@@ -35,9 +35,9 @@ export default {
          }
          let url = "articles/tag";
             if  (id) {
-                   params.tagId = id;
+                   params.categoryId = id;
               } else {
-                   params.tagName = name;
+                   params.categoryName = name;
               }
           let[res1] = await Promise.all([ 
            

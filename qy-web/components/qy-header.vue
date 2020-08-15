@@ -9,47 +9,38 @@
         />
 </a-col>
    <a-col  class="logo-col" :xs="{span:6,offset: 8}"  :sm="{span:6,offset: 8}"  :md="{ span: 3, offset:2}">
-        <nuxt-link class="logo nav-col" to="/" title="Windcoder"   > 
-                <img src="https://windcoder.com/wp-content/uploads/2017/02/logo_vift.png" alt="Windcoder"  >
+        <nuxt-link class="logo nav-col" to="/"  :title="siteInfo.site_name"   @click.native="toIndex"> 
+                <img  :src="siteInfo.site_logo" :alt="siteInfo.site_name"  >
         </nuxt-link>
  </a-col>
-      <a-menu  class="horizontalShow"
-      
+      <a-menu  class="horizontalShow"  ref="headerMenus"
          mode="horizontal"
            :defaultSelectedKeys="[$route.path]"
-        :style="{ lineHeight: '64px' }"
-    
+           :selectedKeys= "selectedKey"
+        :style="{ lineHeight: '64px' }" 
+          @select="handleSelectKeys"
       >
+            <a-menu-item key="/"  style="display:none"  >
+             首页
+          </a-menu-item>
            <!-- {{  siteInfo.header}} -->
       <template  v-for="(menu) in  siteInfo.header"  v-show="siteInfo.header">  
-        <a-sub-menu  v-if="menu.children" :key="menu.url" @titleClick="titleClick">
+        <!-- <qy-header-menus :menu="menu"  :key="menu.url" > </qy-header-menus>
+         -->
+              <a-sub-menu  v-if="menu.children && menu.children.length>0 " :key="menu.url" @titleClick="titleClick">
                       <span slot="title" class="submenu-title-wrapper"
                         >   {{menu.name}} </span >
                         <template v-for="(children) in menu.children">    
-                                  <a-menu-item :key="children.url"     >
-                                  <nuxt-link  :to="children.url" v-if="children.blanked" target="_blank">      {{children.name}} </nuxt-link>
-                                    <nuxt-link  :to="children.url"  v-else>      {{children.name}} </nuxt-link>
+                                  <a-menu-item :key="children.url" >
+                                        <qy-to-url :targetObj="children"> </qy-to-url> 
                                 </a-menu-item>
                         </template>
-
-                      
             </a-sub-menu>  
          
           <a-menu-item :key="menu.url"   v-else>
-             <nuxt-link  :to="menu.url" v-if="menu.blanked" target="_blank">      {{menu.name}} </nuxt-link>
-              <nuxt-link  :to="menu.url"  v-else>      {{menu.name}} </nuxt-link>
+                <qy-to-url :targetObj="menu"> </qy-to-url> 
           </a-menu-item>
-
-   
       </template>
-
-
-        <a-menu-item key="2">
-          nav 2
-        </a-menu-item>
-        <a-menu-item key="3">
-          nav 3
-        </a-menu-item>
       </a-menu>
       </a-row>
     </a-layout-header>
@@ -57,19 +48,35 @@
 
 <script>
  import { mapState } from 'vuex'
+import  QyToUrl from '~/components/qy-to-url.vue'
+
 export default {
     props: { 
         isCollapsed: {
             default:  false
         },
+        headMenuSelect: {
+          default: []
+        },
         screenWidths: {
             default:  false
         },      
-          afteModeChange: {
+          afterMenuSelect: {
             type: Function,
             default: null
         },  
     }, 
+    components: {
+        QyToUrl
+    },
+      head () {
+        return { 
+            link: [
+                {rel:"icon" , type:'image/x-icon', href: this.siteInfo.site_icon}
+            ],
+            
+        }
+    },
     data() {
       return {
         mode: "horizontal",
@@ -78,12 +85,23 @@ export default {
         collapsed: false,
         screenWidth: '',
         screenHeight: '',
+        selectedKey:["/"]
       };
     },
     watch: {
         isCollapsed(val) {
             this.collapsed = val;
-        }
+        },
+        headMenuSelect(val) {
+          this.selectedKey = val;
+        },
+        screenWidth(val) {
+            console.log(val);      
+            let  _this  = this;
+            if(val >= 768 && _this.collapsed ) { 
+                    _this.callChange(false);
+            }  
+        },
     },
     computed: {
     ...mapState({
@@ -91,7 +109,8 @@ export default {
     })
   },
     mounted() {
-
+      let _this = this;
+      _this.initScreenWidth();
     },
     methods: {
         callChange() {
@@ -99,10 +118,31 @@ export default {
           _this.collapsed = !this.collapsed;
            _this.$emit('on-collapsed',this.collapsed);
         },
-            titleClick(e) {
-      console.log('titleClick', e);
-    },
-    }
+        handleSelectKeys(e) {
+          console.log('click ', e);
+           let _this = this;
+          this.current = e.key;
+          _this.selectedKey = [e.key];
+          _this.afterMenuSelect(_this.selectedKey );
+      },
+        titleClick(e) {
+            console.log('titleClick', e);
+        },
+        initScreenWidth() {
+            this.screenWidth = document.body.clientWidth;   
+            window.onresize = () => {
+                return (() => {
+                  this.screenWidth = document.body.clientWidth; 
+                })();
+          };
+        },
+        toIndex(obj) {
+          console.log("obj", obj);
+          let _this =  this;
+          console.log("obj", _this.$refs.headerMenus);
+          _this.$refs.headerMenus.handleSelect({key: "/" });
+        }
+  }
 }
 </script>
 
@@ -121,7 +161,7 @@ export default {
 }
 
  .logo {
-  height: 32px;
+  height: 80%;
   background: rgba(255, 255, 255, 0.2);
  
   display: inline-block;
@@ -135,6 +175,7 @@ export default {
        text-align: center;
     vertical-align: middle;
     line-height: 64px;
+    height: 64px; 
  }
  
 .trigger {

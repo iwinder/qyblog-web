@@ -15,7 +15,7 @@
 import Vue from 'vue'
 import QyPostList from '~/components/qy-post-list.vue'
   import { mapState } from 'vuex'
-
+import moment from 'moment';
 export default Vue.extend({
       components: { 
     QyPostList
@@ -46,6 +46,8 @@ export default Vue.extend({
                         tagStrings: e.tagStrings,
                         category: e.category,
                         avatar: 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
+                        author: e.author,
+                       publishedDateMD:   moment(e.publishedDate).format('YYYY-MM-DD'),
                         description:
                             '蜜汁超酸奶/2020-07-08',
                         content:
@@ -120,6 +122,9 @@ export default Vue.extend({
         ],
     }
   },
+  methods: {
+     moment,
+  }
 })
 </script>
 

@@ -44,6 +44,7 @@ export default {
     '@/plugins/antd-ui',
     '@/plugins/lru-cache',
     '@/plugins/qy-serve-tool',
+    "@/plugins/vue-update-url",
     { src: '@/plugins/vue-highlight', ssr: false }, 
   ],
   /*

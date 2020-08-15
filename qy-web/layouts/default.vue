@@ -1,10 +1,10 @@
 <template>
 <a-config-provider :locale="zh_CN">
   <a-layout id="components-layout-demo-top-side-2"  style="min-height: 100vh">
-    <qy-left-sider     :isCollapsed="collapsed"  :afterClose="afterClose"> </qy-left-sider>
+    <qy-left-sider     :isCollapsed="collapsed"  :headMenuSelect="headMenuSelect" :afterClose="afterClose" :afterMenuSelect="afterMenuSelect"> </qy-left-sider>
      
        <a-layout>
-        <qy-header  :isCollapsed="collapsed" @on-collapsed="onCollapsed"  :afteModeChange="afteModeChange"></qy-header>
+        <qy-header  :isCollapsed="collapsed"  :headMenuSelect="headMenuSelect" @on-collapsed="onCollapsed"  :afterMenuSelect="afterMenuSelect"></qy-header>
           <a-layout-content>
               <nuxt />
           </a-layout-content>
@@ -41,9 +41,10 @@ export default  {
       isShow: false,
        collapsed: false,
        zh_CN,
+       headMenuSelect:[]
     }
   },
-      head () {
+  head () {
         return {
             title: this.siteInfo.name,
             meta: [
@@ -56,23 +57,22 @@ export default  {
             ],
             
         }
-    },
+},
   computed: {
     ...mapState({
       siteInfo: state => state.siteInfo.siteInfo
     })
   },
   mounted() {
-      
+    this.headMenuSelect = [$nuxt.$route.path];
   },
   methods: {
     onCollapsed(val) {
       console.log("onCollapsed",val);
       this.collapsed = val;
     },
-
-    afteModeChange(val) {
-
+    afterMenuSelect(val) {
+      this.headMenuSelect = val;
     },
     afterClose(val) {
       let _this = this;
@@ -82,6 +82,7 @@ export default  {
 
 }
 </script>
+
 <style>
 html {
   font-family:

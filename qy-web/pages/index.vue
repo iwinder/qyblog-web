@@ -18,7 +18,7 @@
 import Vue from 'vue'
 import QyPostList from '~/components/qy-post-list.vue'
  import { mapState } from 'vuex'
-
+import moment from 'moment';
 
 export default Vue.extend({
   components: { 
@@ -48,10 +48,11 @@ async fetch({ store, params }) {
                       title: e.title,
                       thumbnail: e.thumbnail,
                       tagStrings: e.tagStrings,
+                      tags: e.tags,
                       category: e.category,
-                      avatar: 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
-                      description:
-                        '蜜汁超酸奶/2020-07-08',
+                      avatar: e.author.avatar,
+                      author: e.author,
+                      publishedDateMD:   moment(e.publishedDate).format('YYYY-MM-DD'),
                       content:
                         e.summary,
                     });
@@ -63,7 +64,6 @@ async fetch({ store, params }) {
                   pageSize:  resp.content.size
                 };
             }
-            console.log("result", result);
             return result;
           }), 
          ]);
@@ -136,7 +136,7 @@ computed: {
         }
     },
   methods: {
-
+    moment,
   }
 })
 </script>
