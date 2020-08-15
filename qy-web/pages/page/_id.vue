@@ -1,10 +1,10 @@
 <template>
     <a-row class="content">
-        <a-col :xs="{span:24}"  :lg="{ span: 16}" > 
+        <a-col :xs="{span:24}"  :lg="{ span: 16}"  class="content-left"> 
            <qy-post-list  :pagination="pagination" :listData="listData"></qy-post-list>
         </a-col>
 
-        <a-col :xs="{span:24}"  :lg="{  span: 5, offset: 7 }" > 
+        <a-col :xs="{span:24}"  :lg="{  span: 5, offset: 1 }"  class="content-right" > 
 
         </a-col>
 

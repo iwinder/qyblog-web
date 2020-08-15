@@ -79,13 +79,13 @@ export default {
     },
     data() {
       return {
-        mode: "horizontal",
-        isInline: false,
-        horizontalShow: false,
-        collapsed: false,
-        screenWidth: '',
-        screenHeight: '',
-        selectedKey:["/"]
+          mode: "horizontal",
+          isInline: false,
+          horizontalShow: false,
+          collapsed: false,
+          screenWidth: '',
+          screenHeight: '',
+          selectedKey:["/"]
       };
     },
     watch: {
@@ -137,7 +137,6 @@ export default {
         toIndex(obj) {
           console.log("obj", obj);
           let _this =  this;
-          console.log("obj", _this.$refs.headerMenus);
           _this.$refs.headerMenus.handleSelect({key: "/" });
         }
   }
@@ -145,7 +144,7 @@ export default {
 </script>
 
 
-<style>
+<style scoped>
  .trigger {
     float: left;
     width: 48px;

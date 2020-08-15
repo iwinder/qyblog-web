@@ -51,13 +51,17 @@
     padding: 20px 15px;
       
  
-      background: #fff;
-     .img-a{
-        display: block;
-            img {
-              max-height: 175px;
-        }
-      }
+      // background: #fff;
+  .img-a{
+    display: block;
+        img {
+          max-height: 175px;
+    }
+  }
+  .content-left, .content-right {
+    background: #fff;
+    padding: 20px 15px;
+  }
  .post-summary {
   overflow: hidden;
   display: -webkit-box;

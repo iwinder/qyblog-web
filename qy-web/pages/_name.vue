@@ -1,12 +1,15 @@
 <template>
     <a-row class="content">
         <a-col  class="single-left" :xs="{span:24}"  :lg="{ span: 16}" > 
-                  <a-row class="single-header"  >
+            <qy-post-info :postData="postData"> </qy-post-info>
+                  <!-- <a-row class="single-header"  >
                        <a-card    :style="{backgroundImage:'url(' + postData.thumbnail + ')'}">
                            <a-row class="header-wrap">
                                     <a-row class="header-meta">
                                             <template v-if="postData.category!=null">
-                                        <span class="meta-category"><a href="https://windcoder.com/category/java" rel="category tag">{{postData.category.name}}</a></span>
+                                        <span class="meta-category">
+                                            <nuxt-link :to=" {name:'category-name',  params:{name:postData.category.identifier, aid:postData.category.id} }" rel="category tag"> {{postData.category.name}}</nuxt-link>
+                                         </span>
                                         <span class="separator" role="separator">·</span></template>
                                         <span class="meta-date"><time class="entry-date"  :datetime="postData.publishedDateTime" :title="postData.publishedDateTime">{{postData.publishedDateMD }}</time></span>
                                          <span class="separator" role="separator">·</span>
@@ -17,13 +20,25 @@
                         </a-card>
                   </a-row>
                   <a-row class="single-body">
-                       <template v-if="postData.tagStrings!=null">
+
+                  
                             <a-row class="article-header">
-                                    <a-tag color="#f50" v-for=" tag in postData.tagStrings" :key="tag">
-                                    {{tag}}
-                                    </a-tag>
+                                     <template v-if="postData.tags!=null">
+                                         <a-col> 
+                                                    <a-tag color="#f50" v-for=" tag in postData.tags" :key="tag.id">
+                                                        
+                                                                        <nuxt-link :to=" {name:'tag-name',  params:{name:tag.identifier, aid:tag.id} }"> {{tag.name}} </nuxt-link>
+                                                                        
+                                                    </a-tag>
+                                    </a-col>
+                                       </template>
+                                       <a-col>
+                                           <span key="post-meta-views">
+                                            <a-icon type="eye" />   <span class="num">254</span>   </span>
+                                        </a-col>
+                                    
                             </a-row> 
-                      </template>
+                   
                       <a-row class="" v-highlight> 
                           <div  class="markdown-body"   v-html="postData.contentHtml"></div>
                       </a-row>
@@ -33,7 +48,7 @@
                         
                         <qy-comment-list :commentAgentId= "postData.commentAgentId"></qy-comment-list>
 
-                    </a-row>
+                    </a-row> -->
         </a-col>
 
         <a-col :xs="{span:24}"  :lg="{  span: 5, offset: 7 }" > 
@@ -46,7 +61,9 @@
 import Vue from 'vue'
 import moment from 'moment';
 import { FormModel } from 'ant-design-vue';
- import  QyCommentList from '~/components/qy-comment-list.vue'
+//  import  QyCommentList from '~/components/qy-comment-list.vue'
+ import  QyPostInfo from '~/components/qy-post-info.vue'
+
 Vue.use(FormModel); 
  import { mapState } from 'vuex'
 export default {
@@ -101,7 +118,7 @@ export default {
         }
     },
     components: {
-        QyCommentList
+        QyPostInfo
     },
       computed: {
     ...mapState({
