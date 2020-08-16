@@ -79,6 +79,7 @@ export default {
              width: 100%;
              .footerMenus {
                     background: rgba(0, 0, 0, 0);
+                
                     li {
                         padding: 0 5px;
                         a{ color: #fff;  }
@@ -103,6 +104,7 @@ export default {
                             }
                   
                 }
+                .ant-menu-item-selected {background: rgba(0, 0, 0, 0.15);}
              }
             margin-bottom: 15px;
            

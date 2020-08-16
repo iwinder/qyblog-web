@@ -22,6 +22,7 @@ import Vue from 'vue'
 import QyLeftSider from '../../components/qy-left-sider.vue'
 import QyHeader from '../../components/qy-header.vue'
 import QyFooter from '../../components/qy-footer.vue'
+ import { mapState } from 'vuex'
 
 export default Vue.extend({
   components: {
@@ -32,12 +33,21 @@ export default Vue.extend({
   data() {
     return {
       collapsed: false,
-      site:{}
+   
     };
   },
+      computed: {
+        ...mapState({
+        site: state => state.siteInfo.siteInfo
+        })
+    },
     created() {
       let _this = this; 
-      _this.site = QyTool.getSiteInfoBase();
+      if(QyTool.isEmpty(_this.site)) {
+        console.log("_this.site", _this.site);
+            _this.$store.dispatch("initSiteBase");
+      }
+      // _this.site = QyTool.getSiteInfoBase();
   },
   mounted() {
   },

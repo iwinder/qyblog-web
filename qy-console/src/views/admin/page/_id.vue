@@ -6,7 +6,7 @@
                 @back="backF()"
             />
             <qy-page-form    
-                :pageObj="pageObj"  
+                :articleObj="pageObj"  
                 ref="pageForm"
                  :afterSubmit="submitForm"> </qy-page-form>
     </div>

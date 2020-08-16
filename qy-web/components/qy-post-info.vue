@@ -72,13 +72,7 @@ export default Vue.extend({
 
 <style lang="scss" scoped>
 
-.content {
-  padding: 20px 15px;
-    width: 85%;
-    margin-right: auto;
-    margin-left: auto;
-    
-}
+ 
 
 .single-header {
     background: #fff;

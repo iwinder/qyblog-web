@@ -4,7 +4,12 @@
                 <a-row>
                     <a-col :xs="24"   :lg="24"  >
                         <a-form-model-item has-feedback   prop="title"> 
-                            <a-input v-model="articleForm.title" type="text" autocomplete="off" placeholder="添加标题" />
+                            <a-input v-model="articleForm.title" type="text" autocomplete="off" placeholder="添加标题"    @blur="initPermaLink" />
+                        </a-form-model-item>
+                         <a-form-model-item has-feedback   prop="permaLink">
+                             <template v-if="articleForm.permaLink">
+                                   <qy-post-link-edit :permaLink="articleForm.permaLink"  :postId="articleForm.id"    :afterSave="updateLink" > </qy-post-link-edit>
+                            </template> 
                         </a-form-model-item>
 
                         <a-form-model-item has-feedback   prop="content">
@@ -47,15 +52,16 @@
 import Vue from 'vue'
 import { FormModel } from 'ant-design-vue';
  import  QyArticleCategoryTreeSelect from './qy-article-category-tree-select.vue';
+import  QyPostLinkEdit from"./qy-post-link-edit.vue"
 import debounce from 'lodash/debounce';
-
+ import { mapState } from 'vuex'
 
 
 Vue.use(FormModel);
 export default {
     components: {
         QyArticleCategoryTreeSelect,
-        // mavonEditor
+        QyPostLinkEdit
     },
     props: { 
        articleObj:null,
@@ -65,18 +71,20 @@ export default {
         }, 
         
     },
+    computed: {
+        ...mapState({
+        siteInfo: state => state.siteInfo.siteInfo
+        })
+    },
     data() {
          this.lastFetchId = 0;
         this.fetchTags = debounce(this.fetchTags, 800);
         return {
             articleForm:  {
                     title: '',
-                    thumbnail: '',
-                    content: '',
                     type: 2,
                     published: true,
                     deleted:  false,
-                    tags:''
                 },
                 editParentData:{},
                 rules: {
@@ -84,7 +92,7 @@ export default {
                 },
                 layout:   {
                     labelCol: { span: 1 },
-                    wrapperCol: { span: 18 }
+                    wrapperCol: { span: 22 }
                 },
                 loading: false,
                 categoryId:null,
@@ -96,16 +104,18 @@ export default {
                 markdownOption:{
                     toolbarsFlag: true
                 },
-                imageNum: 0
+                imageNum: 0,
+                // showPermaLink: false
+
         }
     },
     watch: {
         articleObj(val) {
              let _this = this;
              _this.articleForm = val;
-            _this.editParentData =  val.category ?val.category : {id:0}
-            _this.articleForm.tagStrings = val.tagStrings? val.tagStrings:[];
-            _this.selectTags = _this.articleForm.tagStrings ;
+            // _this.editParentData =  val.category ?val.category : {id:0}
+            // _this.articleForm.tagStrings = val.tagStrings? val.tagStrings:[];
+            // _this.selectTags = _this.articleForm.tagStrings ;
              _this.markdownContent = val.content;
         }
     },
@@ -219,12 +229,34 @@ export default {
             })
         },
         markSave(value, render) {
-            console.log("save value,",value,);
-               console.log("save  render",render);
                 let  _this = this;
                 _this.htmlContent = render;
                 _this.$refs.saveButton.$emit('click');
+        }, 
+        initPermaLink() {
+            let _this  =this;
+            console.log("blur initPermaLink");
+            if(QyTool.isNotEmpty(_this.articleForm.title) && QyTool.isEmpty(_this.articleForm.permaLink) ) {
+                    let params = {
+                        title: _this.articleForm.title
+                    }
+                    _this.checkAndGetNewLink(params);
+            }
         },
+        updateLink(val) { 
+            let _this = this;
+            _this.articleForm.permaLink = val;
+        },
+        checkAndGetNewLink(params) {
+             let _this = this;
+            _this.$axios.post('/admin/pages/checkPermaLink', params).then((res) => {
+                let resp = res.data;
+                if(resp.success) { 
+                    _this.articleForm.permaLink = resp.content;
+                }
+            });
+        }
+ 
     }
 }
 </script>

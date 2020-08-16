@@ -98,6 +98,7 @@
 </template>
 
 <script>
+ import { mapState } from 'vuex'
 export default {
     props: { 
         isCollapsed: {
@@ -108,10 +109,15 @@ export default {
             default: null
         }, 
     },
+    computed: {
+        ...mapState({
+        site: state => state.siteInfo.siteInfo
+        })
+    },
     data() {
         return {
             collapsed: this.isCollapsed,
-            site: {}
+             
         }
     },
     watch: {
@@ -121,13 +127,19 @@ export default {
     },
     created() {
       let _this = this; 
-      _this.site = QyTool.getSiteInfoBase();
+      _this.initSiteInfo(); 
   },
     methods: {
             onBreakpoint(broken) {
                 let _this = this;
                 _this.afterBreakpoint(broken);
             },
+            initSiteInfo() {
+              let _this = this; 
+              if(QyTool.isEmpty( _this.site)) {
+                  _this.$store.dispatch("initSiteBase");
+              } 
+          },
     }
 }
 </script>

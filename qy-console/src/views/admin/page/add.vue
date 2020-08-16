@@ -8,7 +8,7 @@
             />
             <!-- <h3>新增文章</h3> -->
             <qy-page-form    
-                :pageObj="null"  
+                :articleObj="null"  
                 ref="pageForm"
                  :afterSubmit="submitForm">
 
@@ -41,8 +41,7 @@ export default Vue.extend({
     methods: {
         submitForm(page) {
             let  _this = this;
-            _this.$axios.post('/admin/pages/save',page).then(res => {
-                    console.log("保存文章的结果：", res);
+            _this.$axios.post('/admin/pages/save',page).then(res => { 
                     _this.$refs.pageForm.loading = false;
                     if(res.data.success) {
                           this.$message.success('保存成功',5);

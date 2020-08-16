@@ -73,6 +73,8 @@
 
 <script >
 import Vue from 'vue'
+ import { mapState } from 'vuex'
+
 export default Vue.extend({
     layout:'page',
     data() {
@@ -88,24 +90,17 @@ export default Vue.extend({
               loginType: 0,
               smsSendBtn: false
             }, 
-            site: {}
+            // site: {}
         }
+    },
+    computed: {
+        ...mapState({
+        site: state => state.siteInfo.siteInfo
+        })
     },
     created() {
       let _this = this; 
- _this.initSiteInfo();
-      // _this.site = QyTool.getSiteInfoBase();
-      // console.log("  _this.site login",   _this.site);
-      //   if(QyTool.isEmpty( _this.site))  {
-      
-      //           _this.site =  _this.$store.getters.getSiteBase;
-      //                console.log("  _this.site2 login",   _this.site);
-      //   }
-      // console.log("  _this.site login",   _this.site);
-      // if (!_this.site) {
-      //    _this.site =  _this.$store.state.siteInfo.siteBase;
-      //         console.log("  _this.site2 login",   _this.site);
-      // }
+      _this.initSiteInfo(); 
   },
     mounted(){
       let _this  =this;
@@ -135,24 +130,10 @@ export default Vue.extend({
                  
         },
         initSiteInfo() {
-              let _this = this;
-            _this.site  = QyTool.getSiteInfoBase();
+              let _this = this; 
               if(QyTool.isEmpty( _this.site)) {
-                _this.$axios.get('/web/siteInfo/all' ).then(res => {
-                    let resp  = res.data				
-                    if(resp.success) {
-                      _this.site =   resp.content;
-                      //   document.title = _this.site.site_name;
-                      // // QyTool.setSiteInfoBase(resp.content);
-                      // _this.initIco( _this.site .site_icon);
-
-                      QyTool.refreshSiteInfoBase( _this.site);
-                      _this.$store.commit("setSiteBase",resp.content);
-                    }
-                  });
-              } else {
-                 QyTool.refreshSiteInfoBase( _this.site); 
-              }
+                  _this.$store.dispatch("initSiteBase");
+              } 
           },
           initIco(url) {
 
