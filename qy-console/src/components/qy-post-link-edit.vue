@@ -1,8 +1,10 @@
 <template>
     <a-row> 
          <template v-if="!editLinkShow"> 
-            永久链接： <a  :href="siteInfo.site_url+'/'+oldLink" class="viewlinka" target="_blank" > {{siteInfo.site_url}}/<span class="viewlink">{{oldLink}}</span> 
-                </a>  
+            永久链接： 
+            <a-tooltip placement="topLeft"  :title="siteInfo.site_url+'/'+oldLink" arrow-point-at-center>
+            <a  :href="siteInfo.site_url+'/'+oldLink" class="viewlinka" target="_blank" > {{siteInfo.site_url}}/<span class="viewlink">{{oldLink}}</span> 
+                </a>   </a-tooltip>
                 <a-button type="dashed" @click="opneEditLink(oldLink)">
                         编辑
             </a-button>
