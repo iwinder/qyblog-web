@@ -28,7 +28,7 @@
                 </template>
                 <a-col>
                     <span key="post-meta-views">
-                         <a-icon type="eye" />   <span class="num">254</span> 
+                         <a-icon type="eye" />   <span class="num">{{postData.viewCount}}</span> 
                     </span>
                 </a-col>
 
