@@ -4,8 +4,22 @@
        <qy-post-list  :pagination="pagination" :listData="listData"></qy-post-list>
     </a-col>
 
-  <a-col :xs="{span:24}"  :lg="{  span: 5, offset: 1 }" class="content-right" > 
+  <a-col :xs="{span:24}"  :lg="{  span: 7, offset: 1 }" class="content-right" > 
+            <a-card  style="width: 100%">
+            <template slot="title"> 
 
+              <a-avatar icon="user"  :src ="siteInfo.avatar"/>
+            <p>  {{siteInfo.nickname}}</p>
+           <p>   {{siteInfo.site_desc}}</p>
+            </template>
+             <template > 
+                <a-icon type="qq" />
+                <a-icon type="team" />
+<a-icon type="wechat"   />
+<a-icon type="weibo-circle"   />
+<a-icon type="mail" />
+             </template>
+            </a-card>
   </a-col>
 
 </a-row>

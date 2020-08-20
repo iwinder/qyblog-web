@@ -58,9 +58,12 @@
           max-height: 175px;
     }
   }
-  .content-left, .content-right {
+  .content-left {
     background: #fff;
     padding: 20px 15px;
+  }
+  .content-right {
+    padding: 20px 0;
   }
  .post-summary {
   overflow: hidden;

@@ -20,16 +20,16 @@
         <a-row class="single-body">
             <a-row class="article-header">
                 <template v-if="postData.tags!=null">
-                    <a-col> 
+                    <a-col  class="post-tags"> 
                         <a-tag color="#f50" v-for=" tag in postData.tags" :key="tag.id">
                              <nuxt-link :to=" {name:'tag-name',  params:{name:tag.identifier, aid:tag.id} }"> {{tag.name}} </nuxt-link>
                         </a-tag>
                     </a-col>
                 </template>
-                <a-col>
-                    <span key="post-meta-views">
-                         <a-icon type="eye" />   <span class="num">{{postData.viewCount}}</span> 
-                    </span>
+                <a-col class="post-meta"> 
+                      <a class="post-meta-views" href="javascript: void(0)">   <a-icon type="eye" />   <span class="num">{{postData.viewCount}}</span>  </a>
+                     <a class="post-meta-comments" href="javascript: void(0)">    <a-icon type="message" /> <span class="num">{{postData.commentCount}}</span>   </a>
+                     
                 </a-col>
 
             </a-row> 
@@ -131,5 +131,22 @@ export default Vue.extend({
         background: #fff;
     margin-top: 30px;
     padding: 20px;
+}
+.post-tags {
+        display: table-cell;
+    padding-right: 40px;
+}
+.post-meta {
+    display: table-cell;
+    padding-left: 1px;
+    white-space: nowrap;
+    vertical-align: top;
+    width: 1%;
+    a{
+        font-size: 1.1rem;
+    line-height: 24px;
+    padding: 0 5px;
+    color: #34495e;
+    }
 }
 </style>

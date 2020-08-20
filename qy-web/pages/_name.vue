@@ -1,12 +1,18 @@
 <template>
     <a-row class="content">
-        <a-col  class="single-left" :xs="{span:24}"  :lg="postData.type==1? { span: 16} :{span:24}" > 
-            <qy-post-info :postData="postData"> </qy-post-info> 
-        </a-col>
+        <template  v-if=" postData.type==1">
+            <a-col  class="single-left" :xs="{span:24}"  :lg="postData.type==1? { span: 16} :{span:24}" > 
+                <qy-post-info :postData="postData"> </qy-post-info> 
+            </a-col>
 
-        <a-col :xs="{span:24}"  v-if="postData.type==1" :lg=" {  span: 5, offset: 1 } " > 
+            <a-col  class="single-right"   xs="{span:24}"  v-if="postData.type==1" :lg=" {  span: 5, offset: 1 } " > 
 
-        </a-col>
+            </a-col>
+        </template>
+        <template v-else>
+              <qy-page-info :postData="postData"> </qy-page-info> 
+        </template>
+        
     </a-row>
 </template>
 
@@ -16,6 +22,7 @@ import moment from 'moment';
 import { FormModel } from 'ant-design-vue';
 //  import  QyCommentList from '~/components/qy-comment-list.vue'
  import  QyPostInfo from '~/components/qy-post-info.vue'
+  import  QyPageInfo from '~/components/qy-page-info.vue'
 
 Vue.use(FormModel); 
  import { mapState } from 'vuex'
@@ -71,7 +78,8 @@ export default {
         }
     },
     components: {
-        QyPostInfo
+        QyPostInfo,
+        QyPageInfo
     },
       computed: {
     ...mapState({
