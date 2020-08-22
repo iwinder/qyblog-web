@@ -1,25 +1,13 @@
 <template>
   <a-row class="content">
-    <a-col :xs="{span:24}"  :lg="{ span: 16}"  class="content-left"> 
+    <a-col :xs="{span:24}"    :lg="{ span: 16}"  class="content-left"> 
        <qy-post-list  :pagination="pagination" :listData="listData"></qy-post-list>
     </a-col>
 
-  <a-col :xs="{span:24}"  :lg="{  span: 7, offset: 1 }" class="content-right" > 
-            <a-card  style="width: 100%">
-            <template slot="title"> 
+  <a-col :xs="{span:24}"      :lg="{  span: 7, offset: 1 }" class="content-right" > 
 
-              <a-avatar icon="user"  :src ="siteInfo.avatar"/>
-            <p>  {{siteInfo.nickname}}</p>
-           <p>   {{siteInfo.site_desc}}</p>
-            </template>
-             <template > 
-                <a-icon type="qq" />
-                <a-icon type="team" />
-<a-icon type="wechat"   />
-<a-icon type="weibo-circle"   />
-<a-icon type="mail" />
-             </template>
-            </a-card>
+<qy-post-right-sider></qy-post-right-sider>
+ 
   </a-col>
 
 </a-row>
@@ -31,19 +19,20 @@
 <script>
 import Vue from 'vue'
 import QyPostList from '~/components/qy-post-list.vue'
+import QyPostRightSider from '~/components/qy-post-right-sider.vue'
  import { mapState } from 'vuex'
 import moment from 'moment';
 
 export default Vue.extend({
   components: { 
-    QyPostList
+    QyPostList,
+    QyPostRightSider
   },
 async fetch({ store, params }) {
   await store. dispatch('siteInfo/getSiteInfo');
 },
  async  asyncData (context) {
-   let _this = context; 
-    console.log("async context siteIndo", context); 
+   let _this = context;  
     let[res1] = await Promise.all([ 
         _this.$axios.get('articles',{ params: {
               page: 1,
@@ -66,6 +55,8 @@ async fetch({ store, params }) {
                       category: e.category,
                       avatar: e.author.avatar,
                       author: e.author,
+                      viewCount: e.viewCount,
+                      commentCount: e.commentCount,
                       publishedDateMD:   moment(e.publishedDate).format('YYYY-MM-DD'),
                       content:
                         e.summary,
@@ -81,23 +72,7 @@ async fetch({ store, params }) {
             return result;
           }), 
          ]);
-        //  console.log("LruCache siteInfo",  _this.$LruCache());
-        //  let siteInfo = _this.$LruCache().get("qy_siteInfo");
-        //   console.log("LruCache siteInfo", siteInfo);
-        //  if (!siteInfo) {
-        //    console.log("!siteInfo", siteInfo);
-        //      siteInfo  =  await     _this.$axios.get('/siteInfo/all').then(res => {
-        //       let resp  = res.data;	
-        //         if(resp.success) { 
-        //           _this.store. commit('siteInfo/setSiteBase',  resp.content);
-        //           return resp.content;
-        //         }
-        //     })
-        //     console.log("!siteInfo2", siteInfo);
-        //   _this.$LruCache().set("qy_siteInfo",siteInfo);    
-        //  }
-
-      //  await _this.store. dispatch('siteInfo/getSiteInfo');
+     
         console.log("init  !siteInfo2 ", _this.store.state.siteInfo);
           return{
               listData : res1.listData, 
@@ -130,10 +105,7 @@ computed: {
   })
 },
   created() {
-    let _this  =  this;
-    console.log("_this.$siteInfo", _this.siteInfo);
-    //     console.log("_this.$LruCache" , this.$LruCache());
-    //  _this.$store.dispatch("siteInfo/getSiteInfo");
+    let _this  =  this;  
   },
   head () {
         return {
@@ -144,7 +116,7 @@ computed: {
 
             ],
             link: [
-                // {rel:"stylesheet" ,type:"text/css", href:"/css/qy-index.css"}
+                {rel:"canonical" , href: this.siteInfo.site_url+this.$nuxt.$route.path}
             ],
             
         }
@@ -155,6 +127,7 @@ computed: {
 })
 </script>
 
+
 <style lang="scss"   scoped>
-@import "@/assets/css/qy-index.scss"
+@import "@/assets/css/qy-index.scss";
 </style>

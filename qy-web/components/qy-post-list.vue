@@ -5,28 +5,36 @@
         <template   slot="extra" style="width:272px"> 
             <template v-if="item.category!=null">
                 <nuxt-link :to=" {name:'category-name',  params:{name:item.category.identifier, aid:item.category.id} }"     class="category-tag"> {{item.category.name}} </nuxt-link>
-                  <!-- <a href="https://windcoder.com/category/java"  class="category-tag" rel="category tag"> {{item.category.name}}</a> -->
             </template>
-            <!-- <template v-else>                
-                    <a href="https://windcoder.com/category/java"  class="category-tag" rel="category tag"> 未分类</a>   
-            </template> -->
-            <!-- <a href="https://windcoder.com/dawenjianfenpianshangchuanjavabanjiandanshixian" > -->
             <nuxt-link  slot="title"  :to="{name:'name',params:{name:item.href, aid:item.id}}" class="img-a">
                             <img
                             width="272px"
                             alt="logo"
                             :src="item.thumbnail"
                         />
-                        
                          </nuxt-link>  
         </template>
-        <template v-for="{ type, text } in actions" slot="actions">
-            <span :key="type">
-            <a-icon :type="type" style="margin-right: 8px" />
-              
-                {{ text }}
+
+    <template v-for="{ type, text } in actions" slot="actions">
+        <span :key="type" v-if="type==='view-o'">
+          <a-icon type="eye" style="margin-right: 8px" />
+          {{ item.viewCount || text }} 
+        </span>
+          <span :key="type" v-else-if="type==='comment-o'">
+                <a-icon type="message" style="margin-right: 8px" />
+          {{ item.commentCount || text }} 
+        </span>
+      </template>
+        <!-- <template   slot="actions">
+            <span key="view-o">
+                    <a-icon type="eye" style="margin-right: 8px" />
+                        {{ item.viewCount }} 
+            </span> 
+            <span key="comment-o">
+                        <a-icon type="message" style="margin-right: 8px" />
+                            {{ item.commentCount }}  
             </span>
-        </template>
+        </template> -->
 
         <a-list-item-meta >
             <template slot="description">
@@ -56,12 +64,17 @@ export default Vue.extend({
             pagination: {},
             listData: {
                 type: Array,
-                default: []
+                default: [] 
             },
-            actions: [
-          { type: 'like-o', text: '156' },
-          { type: 'message', text: '2' },
-        ],
+           actions: {
+                  type: Array,
+                 default: function() {
+                     return  [
+                            { type: 'view-o', text: '0' }, 
+                            { type: 'comment-o', text: '0' },
+                        ];
+                 }
+           }   
 
     },
     watch: {
@@ -72,7 +85,7 @@ export default Vue.extend({
     },
     data() {
         return {
-
+ 
         }
     },
     

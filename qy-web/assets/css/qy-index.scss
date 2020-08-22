@@ -62,9 +62,12 @@
     background: #fff;
     padding: 20px 15px;
   }
-  .content-right {
-    padding: 20px 0;
+  @media screen and (max-width: 992px) {
+    .content-right {
+      padding: 20px 0;
+    }
   }
+
  .post-summary {
   overflow: hidden;
   display: -webkit-box;

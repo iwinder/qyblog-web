@@ -4,8 +4,8 @@
         <qy-post-list  :pagination="pagination" :listData="listData"></qy-post-list>
         </a-col>
 
-        <a-col :xs="{span:24}"  :lg="{  span: 5, offset: 1 }" class="content-right" > 
-
+       <a-col :xs="{span:24}"      :lg="{  span: 7, offset: 1 }" class="content-right" >  
+         <qy-post-right-sider></qy-post-right-sider>
         </a-col>
 
     </a-row>
@@ -16,12 +16,14 @@ import Vue from 'vue'
 import moment from 'moment';
 import { FormModel } from 'ant-design-vue';
 import QyPostList from '~/components/qy-post-list.vue'
+import QyPostRightSider from '~/components/qy-post-right-sider.vue'
  import { mapState } from 'vuex'
  
 Vue.use(FormModel); 
 export default {
       components: { 
-        QyPostList
+        QyPostList,
+        QyPostRightSider
      },
      async fetch({ store, params }) {
   await store. dispatch('siteInfo/getSiteInfo');
@@ -98,7 +100,7 @@ export default {
 
             ],
             link: [
-                {rel:"stylesheet" ,type:"text/css", href:"/css/github-markdown.css"}
+               {rel:"canonical" , href: this.siteInfo.site_url+this.$nuxt.$route.path}
             ],
             
         }

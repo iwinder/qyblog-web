@@ -4,8 +4,8 @@
            <qy-post-list  :pagination="pagination" :listData="listData"></qy-post-list>
         </a-col>
 
-        <a-col :xs="{span:24}"  :lg="{  span: 5, offset: 1 }"  class="content-right" > 
-
+       <a-col :xs="{span:24}"      :lg="{  span: 7, offset: 1 }" class="content-right" >  
+         <qy-post-right-sider></qy-post-right-sider>
         </a-col>
 
     </a-row>
@@ -14,11 +14,13 @@
 <script  >
 import Vue from 'vue'
 import QyPostList from '~/components/qy-post-list.vue'
+import QyPostRightSider from '~/components/qy-post-right-sider.vue'
   import { mapState } from 'vuex'
 import moment from 'moment';
 export default Vue.extend({
       components: { 
-    QyPostList
+    QyPostList,
+    QyPostRightSider
   },
     validate ({ params }) {
         // 必须是number类型
@@ -47,6 +49,8 @@ export default Vue.extend({
                         category: e.category,
                         avatar: 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
                         author: e.author,
+                        viewCount: e.viewCount,
+                      commentCount: e.commentCount,
                        publishedDateMD:   moment(e.publishedDate).format('YYYY-MM-DD'),
                         description:
                             '蜜汁超酸奶/2020-07-08',
@@ -93,7 +97,7 @@ export default Vue.extend({
 
             ],
             link: [
-                // {rel:"stylesheet" ,type:"text/css", href:"/css/qy-index.css"}
+                      {rel:"canonical" , href: this.siteInfo.site_url+this.$nuxt.$route.path}
             ],
             
         }

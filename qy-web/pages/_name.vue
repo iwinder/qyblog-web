@@ -1,12 +1,12 @@
 <template>
     <a-row class="content">
         <template  v-if=" postData.type==1">
-            <a-col  class="single-left" :xs="{span:24}"  :lg="postData.type==1? { span: 16} :{span:24}" > 
+            <a-col  class="single-left" :xs="{span:24}"  :lg=" { span: 16}" > 
                 <qy-post-info :postData="postData"> </qy-post-info> 
             </a-col>
 
-            <a-col  class="single-right"   xs="{span:24}"  v-if="postData.type==1" :lg=" {  span: 5, offset: 1 } " > 
-
+            <a-col  class="single-right"   :xs="{span:24}"  v-if="postData.type==1" :lg=" {  span: 7, offset: 1 } " > 
+                         <qy-post-right-sider></qy-post-right-sider>
             </a-col>
         </template>
         <template v-else>
@@ -20,7 +20,7 @@
 import Vue from 'vue'
 import moment from 'moment';
 import { FormModel } from 'ant-design-vue';
-//  import  QyCommentList from '~/components/qy-comment-list.vue'
+import QyPostRightSider from '~/components/qy-post-right-sider.vue'
  import  QyPostInfo from '~/components/qy-post-info.vue'
   import  QyPageInfo from '~/components/qy-page-info.vue'
 
@@ -49,6 +49,9 @@ export default {
             } 
              result.publishedDateMD =   moment(result.publishedDate).format('YYYY-MM-DD');
               result.publishedDateTime =   moment(result.publishedDate).format('YYYY-MM-DD HH:mm:ss');
+            //   if(!result.canonicalLink) {
+            //       result.canonicalLink =  context.siteInfo.url + result.permaLink
+            //   }
             //  result.contentHtmlT =  hljs.highlightAuto(result.contentHtml).value;
             //   console.log("restempTimeult", tempTime);
             // result.publishedDateMD =  context. moment(result.publishedDate, 'YYYY/MM/DD');
@@ -72,14 +75,16 @@ export default {
 
             ],
             link: [
-                {rel:"stylesheet" ,type:"text/css", href:"/css/github-markdown.css"}
+                {rel:"stylesheet" ,type:"text/css", href:"/css/github-markdown.css"},
+                {rel:"canonical" , href:this.postData.canonicalLink ? this.postData.canonicalLink : this.siteInfo.site_url+"/" +this.postData.permaLink }
             ],
             
         }
     },
     components: {
         QyPostInfo,
-        QyPageInfo
+        QyPageInfo,
+        QyPostRightSider
     },
       computed: {
     ...mapState({
@@ -165,5 +170,10 @@ export default {
     margin-left: auto;
     
 }
- 
+   @media screen and (max-width: 992px) {
+    .single-right {
+      padding: 20px 0;
+    }
+  }
+
 </style>
