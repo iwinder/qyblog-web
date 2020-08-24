@@ -141,6 +141,25 @@ getLoginToken: function() {
 removeLoginToken: function() {
   LocalStorage.remove(LOCAL_KEY_LOGIN_TOKEN);
 },
+    /**
+   *  保存登录Token
+   * @param {*} token 
+   */
+  setSIteGoLink: function(token) {
+    LocalStorage.set(LOCAL_KEY_SITE_GO_LINK, token);
+  },
+  /**
+   *  获取登录Token
+   */
+  getSIteGoLink: function() {
+      return LocalStorage.get(LOCAL_KEY_SITE_GO_LINK) || {};
+  },
+  /**
+   * 清除登录Token
+   */
+  removeSIteGoLink: function() {
+    LocalStorage.remove(LOCAL_KEY_SITE_GO_LINK);
+  },
   /**
    *  设置【记住我】的用户信息
    * @param {*} loginUser 

@@ -57,7 +57,7 @@ export const state = () => ({
       let _this  =  this; 
       if (  _this.$QyServeTool().isEmpty(state.siteInfo) ) {
         let  siteInfo =   _this.$LruCache().get("qy_siteInfo"); 
-        if ( _this.$QyServeTool().isEmpty(siteInfo)) { 
+        if ( _this.$QyServeTool().isEmpty(siteInfo)) {  
             siteInfo  =  await     _this.$axios.get('/siteInfo/all').then(res => {
             let resp  = res.data;	
               if(resp.success) {  
@@ -85,19 +85,24 @@ export const state = () => ({
     },
     async getSiteGo({state, commit}, val)  {
       let _this  =  this;
+      console.log("getSiteGo _this", _this, _this.$LocalServeStorage());
       if (  _this.$QyServeTool().isEmpty(state.siteGo) ) { 
         let  siteGo=   _this.$LruCache().get("qy_siteGo"); 
         if(_this.$QyServeTool().isEmpty(siteGo)) {
-          siteGo =   await     _this.$axios.get('/siteInfo/shortLinks').then(res => {
-            let resp  = res.data;	
-              if(resp.success) {  
-               console.log("resp.content",  resp.content);
-                return resp.content;
-              }
-          })
+          // siteGo =  _this.$LocalServeStorage().getSIteGoLink();
+          // console.log("getSIteGoLink",siteGo );
+          if ( _this.$QyServeTool().isEmpty(siteGo)) { 
+            siteGo =   await     _this.$axios.get('/siteInfo/shortLinks').then(res => {
+              let resp  = res.data;	
+                if(resp.success) {  
+                console.log("resp.content",  resp.content);
+                  return resp.content;
+                }
+            });
+            // _this.$LocalServeStorage().setSIteGoLink(state.siteGo);   
         }
-
-        commit('setSiteGo',  siteGo);
       }
-    }
-   };
+      commit('setSiteGo',  siteGo);
+    } 
+  }
+};
