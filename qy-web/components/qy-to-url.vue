@@ -19,7 +19,6 @@ export default Vue.extend({
     methods: {
         validateUrl(url) {
             const reg = /^(http:\/\/|https:\/\/)/;
-            console.log("url", url);
            return reg.test(url);
         }
     }

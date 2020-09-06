@@ -39,6 +39,7 @@ export const state = () => ({
       state.siteGo =  siteGoBase;
       let _this  = this; 
       _this.$LruCache().set("qy_siteGo",state.siteGo );     
+      _this.$LocalServeStorage().setSIteGoLink(state.siteGo);   
     },
     setSiteIndexLink(state, data) {
         state.siteIndexLink =  data;
@@ -81,28 +82,39 @@ export const state = () => ({
           commit('setSiteBase',  siteInfo);
         }
       } 
-       
+     console.log("state", state, this)
+     _this.dispatch("siteInfo/getSiteIndexLink");
     },
     async getSiteGo({state, commit}, val)  {
       let _this  =  this;
-      console.log("getSiteGo _this", _this, _this.$LocalServeStorage());
       if (  _this.$QyServeTool().isEmpty(state.siteGo) ) { 
         let  siteGo=   _this.$LruCache().get("qy_siteGo"); 
         if(_this.$QyServeTool().isEmpty(siteGo)) {
-          // siteGo =  _this.$LocalServeStorage().getSIteGoLink();
-          // console.log("getSIteGoLink",siteGo );
-          if ( _this.$QyServeTool().isEmpty(siteGo)) { 
             siteGo =   await     _this.$axios.get('/siteInfo/shortLinks').then(res => {
               let resp  = res.data;	
                 if(resp.success) {  
                 console.log("resp.content",  resp.content);
                   return resp.content;
                 }
-            });
-            // _this.$LocalServeStorage().setSIteGoLink(state.siteGo);   
-        }
+            }); 
       }
       commit('setSiteGo',  siteGo);
     } 
-  }
+  },
+  async getSiteIndexLink({state, commit}, val)  {
+    let _this  =  this;
+    if (  _this.$QyServeTool().isEmpty(state.siteIndexLink) ) { 
+      let  siteIndexLink=   _this.$LruCache().get("qy_siteIndexLink"); 
+      if(_this.$QyServeTool().isEmpty(siteIndexLink)) {
+        siteIndexLink =   await     _this.$axios.get('/siteInfo/indexlinks').then(res => {
+            let resp  = res.data;	
+              if(resp.success) {  
+              console.log("resp.content",  resp.content);
+                return resp.content;
+              }
+          }); 
+    }
+    commit('setSiteIndexLink',  siteIndexLink);
+  } 
+}
 };

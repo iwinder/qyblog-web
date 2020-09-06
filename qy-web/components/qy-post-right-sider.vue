@@ -30,6 +30,20 @@
                     <a-col  :span="4"  v-if="$QyServeTool().isNotEmpty(siteInfo.site_mailme_id)" > <a class="fts-mailme"    :href="'http://mail.qq.com/cgi-bin/qm_share?t=qm_mailme&email='+siteInfo.site_mailme_id" target="_blank" rel="noopener"> <a-icon type="mail" /> </a> </a-col>
             </a-row>
         </a-card>
+        <!-- 友情链接 -->
+        <a-card   title="友情链接"  style="width: 100%" v-show="siteIndexLink && siteIndexLink.length>0">  
+            <nuxt-link    slot="extra"  :to="{name:'name',params:{name:'link'}}"   target="_blank"> 更多 </nuxt-link>
+       
+                <a-row class="card_site_index_url" >
+                    <ul>
+                        <li v-for="(link) in siteIndexLink" :key="link.id">
+                                <a :href="link.url"  :title="link.description"  target="_blank" rel="noopener">
+                                <img  :src="link.url+'/favicon.ico'" width="18px">  
+                                     {{link.name}}</a>
+                        </li>
+                    </ul>
+            </a-row>
+        </a-card>
     </a-row>
 </template>
 
@@ -39,7 +53,8 @@ import Vue from 'vue'
 export default Vue.extend({
     computed: {
             ...mapState({
-                siteInfo: state => state.siteInfo.siteInfo
+                siteInfo: state => state.siteInfo.siteInfo,
+                siteIndexLink: state => state.siteInfo.siteIndexLink,
         })
     },
     data() {
@@ -51,6 +66,10 @@ export default Vue.extend({
 </script>
 
 <style lang="scss"   scoped> 
+
+.ant-card {
+        margin-bottom: 10px;
+}
 .card_site_header {
   margin: auto;
     padding: 0px 0 10px 0;
@@ -60,7 +79,16 @@ export default Vue.extend({
   padding: 10px 0;
   i {
   font-size: 20px;
-  }
+  } 
 
 }
+.card_site_index_url {
+            ul {
+              list-style: none;
+              li {
+                      width: 50%;
+                         display: inline-block;
+              }
+      }
+  }
 </style>

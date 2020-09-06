@@ -12,15 +12,20 @@ export default Vue.extend({
 
 },
   async   asyncData (context) {
+    let _this = context;
+         let old =  context.route.path; 
+         let news  = old.replace("/go/", ""); 
+                _this.store. dispatch('siteInfo/getSiteGo');
+              let url  =    _this.store.getters["siteInfo/getSiteGoUrl"](news);
+              console.log("news", news, url);
         // await  context.store. dispatch('siteInfo/getSiteGo');
-//          let old =  context.route.path;
-//          let news  = old.replace("/go/", ""); 
+
 //         //   context.store.getters("siteInfo/getSiteGoUrl")()
 //         let url  = context.store.getters["siteInfo/getSiteGoUrl"](news);
-//         if(!url) {
-//  return context.redirect("/");
-//         }
-//             return context.redirect(url);
+        if(!url) {
+ return context.redirect("/");
+        }
+            return context.redirect(url);
     },
     computed: {
         ...mapState({
@@ -35,16 +40,23 @@ created() {
     
 },
   mounted() {
-      //     let _this = this;
-      //     console.log(_this);
-      //      let old =  _this.$route.path;
-      //    let news  = old.replace("/go/", ""); 
+          let _this = this;
+          console.log(_this);
+          //  window.location.href = url 
+           let old =  _this.$route.path;
+         let news  = old.replace("/go/", ""); 
       //       let url  =    _this.$store.getters["siteInfo/getSiteGoUrl"](news);
       //         if(!url) {
       //           url = "/";
       //  }
         // this.$router.redirect(url);
-              // this.store. dispatch('siteInfo/getSiteGo');
+              // _this.$store. dispatch('siteInfo/getSiteGo');
+              // let url  =    _this.$store.getters["siteInfo/getSiteGoUrl"](news);
+              // console.log("news", news, url);
+              //     if(!url) { 
+              //        url = "/";
+              //     }
+                    // window.location.href = url ;
         //  let old =  context.route.path;
         //  let news  = old.replace("/go/", ""); 
         // //   context.store.getters("siteInfo/getSiteGoUrl")()

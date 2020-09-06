@@ -42,10 +42,12 @@ export default {
   */
   plugins: [
     '@/plugins/antd-ui',
+    {src: '@/plugins/local-serve-storage', ssr: false},
+    {src: '@/plugins/localStorage', ssr: false},
     '@/plugins/lru-cache',
     '@/plugins/qy-serve-tool',
     "@/plugins/vue-update-url",
-    {src: '@/plugins/local-serve-storage', ssr: false},
+
     { src: '@/plugins/vue-highlight', ssr: false }, 
   ],
   /*

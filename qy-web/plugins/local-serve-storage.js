@@ -20,19 +20,19 @@
    * @param {*} token 
    */
     setSIteGoLink: function(token) {
-         set(LOCAL_KEY_SITE_GO_LINK, token);
+        this. set(LOCAL_KEY_SITE_GO_LINK, token);
     },
     /**
      *  获取登录Token
      */
     getSIteGoLink: function() {
-        return  get(LOCAL_KEY_SITE_GO_LINK) || {};
+        return    this. get(LOCAL_KEY_SITE_GO_LINK) || {};
     },
     /**
      * 清除登录Token
      */
     removeSIteGoLink: function() {
-         remove(LOCAL_KEY_SITE_GO_LINK);
+        this. remove(LOCAL_KEY_SITE_GO_LINK);
     },
 };
 

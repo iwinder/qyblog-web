@@ -14,8 +14,10 @@
     "ant-design-vue": "^1.6.2",
     "cheerio": "^1.0.0-rc.3",
     "highlight.js": "^10.1.1",
+    "js-cookie": "^2.2.1",
     "lru-cache": "^6.0.0",
-    "nuxt": "^2.13.0"
+    "nuxt": "^2.13.0",
+    "vuex-persistedstate": "^3.1.0"
   },
   "devDependencies": {
     "@nuxt/typescript-build": "^1.0.3",
