@@ -91,6 +91,7 @@ export default Vue.extend({
             _this.$axios.get('comment/' +  _this.agentId, { params: params })
                 .then(res => {
                     let resp  = res.data				
+                    console.log("res cookie", res);
                     if(resp.success) {
                         _this.comments = resp.content.list;
                         _this.comments.forEach((e,i)  => { 
@@ -99,6 +100,7 @@ export default Vue.extend({
                              _this.repliesForm[i] = "repliesForm" + i; 
                              _this.repliesChildList[i] = "repliesChildList" + i;
                         });
+ 
                     }
                     _this.pagination.total =   resp.content.total;
                     _this.pagination.current =   resp.content.page;
@@ -149,7 +151,8 @@ export default Vue.extend({
             }
               _this.$refs[_this.repliesChildList[index]].initData(); 
               _this.onShow(index);
-        }
+        },
+
     }
     
 })

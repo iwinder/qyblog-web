@@ -30,7 +30,7 @@ export default Vue.extend({
         let _this = context; 
         let name = _this.params.name; 
         let res1 = await   _this.$axios.get('articles',{ params: {
-            tagName: name,
+            categoryName: name,
                             page:  _this.params.id,
                 size:  1
             } }).then(res => {
@@ -72,8 +72,7 @@ export default Vue.extend({
                 } 
                 return result;
 
-            });
-            console.log("datae res1", res1);
+            }); 
               await _this.store. dispatch('siteInfo/getSiteInfo');
             return{
                 listData : res1.listData, 
@@ -83,9 +82,9 @@ export default Vue.extend({
                     pageSize : res1.pageSize, 
                             onChange: page => { 
                                 if(page===1) {
-                                    _this.app.router.push("/tag/"+name);
+                                    _this.app.router.push("/category/"+name);
                                 } else {
-                                     _this.app.router.push("/tag/"+name+"/page/"+page);
+                                     _this.app.router.push("/category/"+name+"/page/"+page);
                                 }
                            
                         },

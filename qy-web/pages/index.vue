@@ -43,8 +43,11 @@ async fetch({ store, params }) {
             let listData = [];
             if(resp.success) {
                 let data = resp.content.list;
-              
+                let defImg = "/img/image-pending.gif"; 
                 data.forEach(e  => {
+                      if(process.browser) {
+                            defImg = '/img/thumb/'+ _this.$QyServeTool().randomNum(1,32)+'.jpg';
+                      } 
                     listData.push({
                       id: e.id,
                       href:  e.permaLink,
@@ -55,11 +58,11 @@ async fetch({ store, params }) {
                       category: e.category,
                       avatar: e.author.avatar,
                       author: e.author,
+                      defImg: defImg,
                       viewCount: e.viewCount,
                       commentCount: e.commentCount,
                       publishedDateMD:   moment(e.publishedDate).format('YYYY-MM-DD'),
-                      content:
-                        e.summary,
+                      content: e.summary,
                     });
                });
               result = {

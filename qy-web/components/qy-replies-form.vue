@@ -2,12 +2,12 @@
     <a-comment>
         <a-avatar
             slot="avatar"
-            src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png"
-            alt="Han Solo"
+            :src="'//sdn.geekzu.org/avatar/'+commentForm.authotImg"
+            :alt="commentForm.authorName"
         />
     <div slot="content">
             <a-form-model ref="commentForm" :model="commentForm" :rules="rules" v-bind="layout"> 
-                <a-row>
+                <a-row  v-if="isInitForm">
                     <a-col   :xs="{span:24}"  :lg="{ span: 8}">
                         <a-form-model-item    prop="authorName">
                             <a-input   v-model="commentForm.authorName"   placeholder="昵称" />
@@ -23,7 +23,13 @@
                             <a-input   v-model="commentForm.authorUrl" placeholder="网址"/>
                         </a-form-model-item>
                                 </a-col>
-                    </a-row>
+                </a-row>
+                 <a-row  v-else style="margin-bottom: 10px;">
+                   <a-col>  <a-tooltip placement="topLeft"  :title="commentForm.authorEmail" arrow-point-at-center> {{ commentForm.authorName}}  
+                   </a-tooltip> <a-button type="dashed" @click="opneEditLink()" size="small">
+                        编辑
+            </a-button></a-col>
+                </a-row>
                 
             <a-form-model-item has-feedback  prop="content">
                 <a-textarea :rows="4" v-model="commentForm.content"   placeholder="评论内容" />
@@ -40,7 +46,9 @@
 <script  >
 import Vue from 'vue'
 import { FormModel } from 'ant-design-vue';
+
 Vue.use(FormModel); 
+// Vue.use(Cookies); 
 export default Vue.extend({
         props: { 
             commentAgentId: null,
@@ -78,8 +86,9 @@ export default Vue.extend({
             }
             if(   _this.repliesIndex) {
                 _this.parentIndex = _this.repliesIndex;
-            }
-           
+            } 
+            _this.initCommentByCookie();
+ 
     },
      data() {
          return {
@@ -87,11 +96,13 @@ export default Vue.extend({
              parentId: null,
              parentIndex : null,
              submitting: false,
+             isInitForm: true,
              commentForm: {
                 content: '',
                 authorName: '',
                 authorEmail: '',
-                authorUrl: ''
+                authorUrl: '',
+                authorImg:""
             },
             rules: {
                 authorName :[
@@ -122,11 +133,12 @@ export default Vue.extend({
                     let url = 'comment/'+_this.agentId;
                     url = _this.parentId !==null? url + "/" +_this.parentId+"/replies/add" :  url +"/add";
                     _this.$axios.post(url,val).then(res => {
-                            _this.$refs.commentForm.submitting = false;
+                            _this.$refs.commentForm.submitting = false; 
                             if(res.data.success) {
                                  _this.$refs.commentForm.content = null;
                                 _this.$message.success('保存成功',15);
                                 _this.afterSubmit( _this.parentIndex);
+                                _this.initCommentByCookie();
                             } else {
                                   _this.$message.error('保存失败: ' + res.data.message,5);
                             }
@@ -147,7 +159,15 @@ export default Vue.extend({
         resetForm() {
                 this.$refs.commentForm.resetFields();
         },
-
+         initCommentByCookie() {
+            let _this  = this;
+            _this.$QyServeTool().initCommentByCookie( _this.commentForm);
+             _this.isInitForm = _this.commentForm.authorName? false : true; 
+        },
+        opneEditLink() {
+            let _this = this;
+            _this.isInitForm = true;
+        }
     }
 })
 </script>

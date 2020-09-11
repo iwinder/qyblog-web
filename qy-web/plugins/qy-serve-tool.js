@@ -1,6 +1,7 @@
 // import SessionStorage from './session-storage'
 // import LocalStorage from './local-storage'
-
+import * as Cookies from "js-cookie";
+import   md5 from 'js-md5'
 const QyServeTool = {
   /**
  * 空校验 null或""都返回true
@@ -118,6 +119,40 @@ hasResource: function (id) {
   }
   return false;
 }, 
+
+defaultImageFuc: function(event) {
+  console.log("defaultImageFuc", event);
+  var img=event.srcElement;
+  img.src = "../../static/images/course/avatar"+this.randomNum(1,8)+".jpg";
+  img.onerror = null; //防止一直跳动
+},
+randomNum: function(minNum,maxNum) {
+  // https://www.cnblogs.com/mq0036/p/9139231.html
+  // https://www.cnblogs.com/starof/p/4988516.html
+  switch(arguments.length){ 
+      case 1: 
+          return parseInt(Math.random()*minNum+1,10);  
+      case 2: 
+          return parseInt(Math.random()*(maxNum-minNum+1)+minNum,10);  
+      default: 
+          return 0;
+  } 
+},
+initCommentByCookie(commentForm) {
+  let _this = this;
+    console.log("comment, this commentUsername",this, Cookies);
+  let commentUsername = Cookies.get("comment_remember_author");
+    console.log("comment, this commentUsername",this,  commentUsername);
+  if(_this.isNotEmpty(commentUsername)) {
+      let commentMail = Cookies.get("comment_remember_mail");
+      let  commentUrl = Cookies.get("comment_remember_url");
+     commentForm.authorName = commentUsername;
+      commentForm.authorEmail = commentMail;
+      commentForm.authorUrl = commentUrl;
+      commentForm.authotImg  = md5(commentMail);
+  }         
+
+}
 }
 export default ({ app }, inject) => {
   // Set the function directly on the context.app object

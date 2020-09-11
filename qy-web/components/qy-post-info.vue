@@ -1,7 +1,7 @@
 <template>
      <a-row> 
          <a-row class="single-header"  >
-                <a-card    :style="{backgroundImage:'url(' + postData.thumbnail + ')'}">
+                <a-card    :style="{backgroundImage:'url(' + postData.defImg + ')'}"  v-real-background-img="postData.thumbnail">
                     <a-row class="header-wrap">
                             <a-row class="header-meta">
                                     <template v-if="postData.category!=null">

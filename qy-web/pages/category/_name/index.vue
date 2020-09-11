@@ -1,6 +1,6 @@
 <template>
     <a-row class="content">
-        <a-col :xs="{span:24}"  :lg="{ span: 16}"  class="content-left"> 
+        <a-col :xs="{span:24}"  :lg="{ span: 16}"  class="content-left" > 
         <qy-post-list  :pagination="pagination" :listData="listData"></qy-post-list>
         </a-col>
 
@@ -29,6 +29,7 @@ export default {
   await store. dispatch('siteInfo/getSiteInfo');
 },
      async  asyncData (context) { 
+       let _this = context;
          let id = context.params.aid;
         let name = context.params.name;
         let params = {
@@ -37,33 +38,36 @@ export default {
          }
          let url = "articles/tag";
             if  (id) {
-                   params.tagId = id;
+                   params.categoryId = id;
               } else {
-                   params.tagName = name;
+                   params.categoryName = name;
               }
-          let[res1] = await Promise.all([ 
-           
-        context.$axios.get("articles", {params: params}).then(res => {
+          let res1 = await     context.$axios.get("articles", {params: params}).then(res => {
             let resp  = res.data				
             let result = {}; 
             let listData = [];
             if(resp.success) {
                 let data = resp.content.list;
-              
-                data.forEach(e  => {
+               let defImg = "/img/image-pending.gif";
+                data.forEach(e  => { 
+                      if(process.browser) {
+                                defImg = '/img/thumb/'+ _this.$QyServeTool().randomNum(1,32)+'.jpg';
+                          } 
                     listData.push({
-                      id: e.id,
-                      href:  e.permaLink,
-                      title: e.title,
-                      thumbnail: e.thumbnail,
-                      tagStrings: e.tagStrings,
-                      tags: e.tags,
-                      category: e.category,
-                      avatar: e.author.avatar,
-                      author: e.author,
-                      publishedDateMD:   moment(e.publishedDate).format('YYYY-MM-DD'),
-                      content:
-                        e.summary,
+                             id: e.id,
+                            href:  e.permaLink,
+                            title: e.title,
+                            thumbnail: e.thumbnail,
+                            tagStrings: e.tagStrings,
+                            tags: e.tags,
+                            category: e.category,
+                            avatar: e.author.avatar,
+                            author: e.author,
+                            defImg: defImg,
+                            viewCount: e.viewCount,
+                            commentCount: e.commentCount,
+                            publishedDateMD:   moment(e.publishedDate).format('YYYY-MM-DD'),
+                            content: e.summary,
                     });
                });
               result = {
@@ -75,8 +79,7 @@ export default {
             }
             return result;
 
-          })
-         ])
+          }) 
         return{
              listData : res1.listData, 
               pagination: {
@@ -84,7 +87,7 @@ export default {
                 current : res1.current ,
                 pageSize : res1.pageSize, 
                 onChange: page => { 
-                                _this.app.router.push("/page/"+page);
+                                _this.app.router.push("/category/"+name+"/page/"+page);
                         
                 },
               },
@@ -100,7 +103,7 @@ export default {
 
             ],
             link: [
-                  {rel:"canonical" , href: this.siteInfo.site_url+this.$nuxt.$route.path}
+               {rel:"canonical" , href: this.siteInfo.site_url+this.$nuxt.$route.path}
             ],
             
         }

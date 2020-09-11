@@ -22,4 +22,7 @@ For detailed explanation on how things work, check out [Nuxt.js docs](https://nu
 ```
 npm i -S vuex-persistedstate
 npm install js-cookie --save
+npm install --save js-md5
+
+npm install nuxt-ssr-cache -save
 ```

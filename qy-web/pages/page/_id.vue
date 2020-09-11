@@ -1,7 +1,7 @@
 <template>
     <a-row class="content">
         <a-col :xs="{span:24}"  :lg="{ span: 16}"  class="content-left"> 
-           <qy-post-list  :pagination="pagination" :listData="listData"></qy-post-list>
+           <qy-post-list  :pagination="pagination" :listData="listData" ></qy-post-list>
         </a-col>
 
        <a-col :xs="{span:24}"      :lg="{  span: 7, offset: 1 }" class="content-right" >  
@@ -26,10 +26,10 @@ export default Vue.extend({
         // 必须是number类型
         return /^\d+$/.test(params.id)
     },
-    async  asyncData (context) {
-        let _this = context;
-        let[res1] = await Promise.all([ 
-            _this.$axios.get('articles',{ params: {
+    async  asyncData (context) { 
+        let _this = context; 
+
+        let res1 = await   _this.$axios.get('articles',{ params: {
                             page:  _this.params.id,
                 size:  1
             } }).then(res => {
@@ -37,25 +37,28 @@ export default Vue.extend({
                 let result = {};
                 let listData = [];
                 if(resp.success) {
-                    let data = resp.content.list;
-                
-                    data.forEach(e  => {
+                    let data = resp.content.list; 
+                    let defImg = "/img/image-pending.gif";
+                    data.forEach((e,i ) => {  
+                            
+                          if(process.browser) {
+                                defImg = '/img/thumb/'+ _this.$QyServeTool().randomNum(1,32)+'.jpg';
+                          } 
                         listData.push({
-                        id: e.id,
-                        href:  e.permaLink,
-                        title: e.title,
-                        thumbnail: e.thumbnail,
-                        tagStrings: e.tagStrings,
-                        category: e.category,
-                        avatar: 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
-                        author: e.author,
-                        viewCount: e.viewCount,
-                      commentCount: e.commentCount,
-                       publishedDateMD:   moment(e.publishedDate).format('YYYY-MM-DD'),
-                        description:
-                            '蜜汁超酸奶/2020-07-08',
-                        content:
-                            e.summary,
+                            id: e.id,
+                            href:  e.permaLink,
+                            title: e.title,
+                            thumbnail: e.thumbnail,
+                            tagStrings: e.tagStrings,
+                            tags: e.tags,
+                            category: e.category,
+                            avatar: e.author.avatar,
+                            author: e.author,
+                            defImg: defImg,
+                            viewCount: e.viewCount,
+                            commentCount: e.commentCount,
+                            publishedDateMD:   moment(e.publishedDate).format('YYYY-MM-DD'),
+                            content: e.summary,
                         });
                 });
               
@@ -69,7 +72,7 @@ export default Vue.extend({
                 return result;
 
             })
-            ])
+           
               await _this.store. dispatch('siteInfo/getSiteInfo');
             return{
                 listData : res1.listData, 

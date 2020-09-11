@@ -10,7 +10,10 @@
                             <img
                             width="272px"
                             alt="logo"
-                            :src="item.thumbnail"
+                            :src="item.defImg"
+                            v-real-img="item.thumbnail" 
+                            @error="defaultImageFuc"
+                            data-server-rendered="true"
                         />
                          </nuxt-link>  
         </template>
@@ -74,7 +77,14 @@ export default Vue.extend({
                             { type: 'comment-o', text: '0' },
                         ];
                  }
-           }   
+           },
+          defaultImageFucs: {
+              type: Function,
+              default: function(event) {
+                //   console.log("this", this.$QyServeTool());
+// this.$QyServeTool().defaultImageFuc(event);
+                }
+          }  
 
     },
     watch: {
@@ -88,6 +98,21 @@ export default Vue.extend({
  
         }
     },
+    methods: {
+        defaultImageFuc: function(event, defImg) {
+            // console.log("dddd",this, defImg );
+            // let _this  = this;
+            //  const   num = _this.$QyServeTool().randomNum(1,32);
+            //  console.log("num", event,num);
+            //    return '/img/thumb/'+num+'.jpg';
+              let img=event.srcElement; 
+              img.src = img.dataset.defimg;
+              img.onerror = null; 
+            //   debugger
+            // img.src = "/img/thumb/"+_this.$QyServeTool().randomNum(1,32)+".jpg";
+            // img.onerror = null; //防止一直跳动
+        }
+    }
     
 })
 </script>

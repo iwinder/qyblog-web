@@ -31,6 +31,7 @@ export default {
   await store. dispatch('siteInfo/getSiteInfo');
 },
      async  asyncData (context) { 
+         let _this = context;
          let id = context.params.aid;
         let name = context.params.name;
          let url = "articles/";
@@ -41,14 +42,22 @@ export default {
               }
           let[res1] = await Promise.all([ 
            
-        context.$axios.get(url).then(res => {
+        context.$axios.get(url, {useCache: true}).then(res => {
             let resp  = res.data				
             let result = {};
             if(resp.success) { 
                 result  = resp.content;
+                if(result.type == 1) {
+                        let defImg = "/img/image-pending.gif"; 
+                       if(process.browser) {
+                            defImg = '/img/thumb/'+ _this.$QyServeTool().randomNum(1,32)+'.jpg';
+                      } 
+                      result.defImg = defImg;
+                }
+                result.publishedDateMD =   moment(result.publishedDate).format('YYYY-MM-DD');
+                result.publishedDateTime =   moment(result.publishedDate).format('YYYY-MM-DD HH:mm:ss');
             } 
-             result.publishedDateMD =   moment(result.publishedDate).format('YYYY-MM-DD');
-              result.publishedDateTime =   moment(result.publishedDate).format('YYYY-MM-DD HH:mm:ss');
+
             //   if(!result.canonicalLink) {
             //       result.canonicalLink =  context.siteInfo.url + result.permaLink
             //   }
