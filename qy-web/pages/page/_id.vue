@@ -1,6 +1,9 @@
 <template>
     <a-row class="content">
-        <a-col :xs="{span:24}"  :lg="{ span: 16}"  class="content-left"> 
+
+        <a-col :xs="{span:24}"  :lg="{ span: 16}"  class="content-left">  
+           <h2 v-if="!isSearchFlag">近期文章</h2>
+          <h2 v-else>搜索 “{{searchText}}”  的结果</h2>
            <qy-post-list  :pagination="pagination" :listData="listData" ></qy-post-list>
         </a-col>
 
@@ -22,14 +25,23 @@ export default Vue.extend({
     QyPostList,
     QyPostRightSider
   },
+  
     validate ({ params }) {
         // 必须是number类型
         return /^\d+$/.test(params.id)
     },
+         async fetch({ store, params }) {
+  await store. dispatch('siteInfo/getSiteInfo');
+},
     async  asyncData (context) { 
         let _this = context; 
-
+        let searchText =  _this.query.searchText; 
+        let isSearchFlag = false;
+        if(_this.$QyServeTool().isNotEmpty(searchText)) {
+               isSearchFlag = true;
+        }
         let res1 = await   _this.$axios.get('articles',{ params: {
+                  searchText: searchText,
                             page:  _this.params.id,
                 size:  1
             } }).then(res => {
@@ -72,28 +84,33 @@ export default Vue.extend({
                 return result;
 
             })
-           
-              await _this.store. dispatch('siteInfo/getSiteInfo');
+            
             return{
                 listData : res1.listData, 
                 pagination: {
                     total:  res1.total,
                     current : res1.current ,
                     pageSize : res1.pageSize, 
-                            onChange: page => { 
-                                if(page===1) {
-                                    _this.app.router.push("/");
-                                } else {
-                                    _this.app.router.push("/page/"+page);
-                                }
-                           
-                        },
-                }  
+                    onChange: page => { 
+                        let baseUrl =  "/page/"+page;
+                        if(page==1) { 
+                              baseUrl = "/"
+                        } 
+                        let url  = baseUrl;  
+                        if(isSearchFlag) {
+                            url = url +"?searchText="+searchText;
+                          } 
+                          _this.app.router.push(url); 
+                      }
+                   
+                }, 
+                searchText: searchText,
+                isSearchFlag: isSearchFlag 
             }
     },
     head () {
         return {
-            title: this.siteInfo.site_name  +" --第" +this.pagination.current+"页" ,
+            title:   (this.isSearchFlag? "搜索 "+ this.searchText +" - "+ this.siteInfo.site_name: this.siteInfo.site_name)  + " --第" +this.pagination.current+"页" ,
             meta: [
                { hid: "keywords", name: "keywords", content: this.siteInfo. site_key},
                 { hid: "description", name: "description", content: this.siteInfo. site_description},
@@ -105,6 +122,7 @@ export default Vue.extend({
             
         }
     },
+    watchQuery: ['searchText'],
     computed: {
     ...mapState({
       siteInfo: state => state.siteInfo.siteInfo
@@ -122,6 +140,8 @@ export default Vue.extend({
           total: 23,
           showLessItems: true,
         },
+        isSearchFlag: false,
+        searchText: "",
         actions: [
       
           { type: 'like-o', text: '156' },

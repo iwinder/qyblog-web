@@ -1,6 +1,7 @@
 <template>
     <a-row class="content">
-        <a-col :xs="{span:24}"  :lg="{ span: 16}"  class="content-left" > 
+        <a-col :xs="{span:24}"  :lg="{ span: 16}"  class="content-left" >
+                       <h2  >分类  {{targetObj.name}} 的结果</h2>  
         <qy-post-list  :pagination="pagination" :listData="listData"></qy-post-list>
         </a-col>
 
@@ -36,11 +37,14 @@ export default {
               page: 1,
               size:  1
          }
-         let url = "articles/tag";
+          let baseTagurl = "/category/";
+          let tagUrl = "";
             if  (id) {
                    params.categoryId = id;
+                     tagUrl = baseTagurl + id;
               } else {
                    params.categoryName = name;
+                 tagUrl = baseTagurl + "name/" + name ;
               }
           let res1 = await     context.$axios.get("articles", {params: params}).then(res => {
             let resp  = res.data				
@@ -78,9 +82,18 @@ export default {
                 };
             }
             return result;
-
           }) 
-        return{
+          let  category = await  context.$axios.get(tagUrl).then(res => {
+              let resp  = res.data			
+               if(resp.success) {
+                 return resp.content;
+            } else {
+                return {
+                  name: ""
+                }
+            }
+          }); 
+        return{ 
              listData : res1.listData, 
               pagination: {
                 total:  res1.total,
@@ -91,12 +104,13 @@ export default {
                         
                 },
               },
+            targetObj  : category
         }
 
      },
     head () {
         return {
-            title: this.siteInfo.site_name,
+            title:  this.targetObj.name + " - "+  this.siteInfo.site_name,
             meta: [
                 // { hid: "keywords", name: "keywords", content: this.postData. tagStrings},
                 // { hid: "description", name: "description", content: this.postData. summary},
@@ -118,6 +132,7 @@ export default {
                 showLessItems: true,
                 onChange: page => { }
             },
+            targetObj: {},
          }
            
             

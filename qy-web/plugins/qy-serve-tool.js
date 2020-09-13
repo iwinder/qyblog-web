@@ -139,10 +139,8 @@ randomNum: function(minNum,maxNum) {
   } 
 },
 initCommentByCookie(commentForm) {
-  let _this = this;
-    console.log("comment, this commentUsername",this, Cookies);
-  let commentUsername = Cookies.get("comment_remember_author");
-    console.log("comment, this commentUsername",this,  commentUsername);
+  let _this = this; 
+  let commentUsername = Cookies.get("comment_remember_author"); 
   if(_this.isNotEmpty(commentUsername)) {
       let commentMail = Cookies.get("comment_remember_mail");
       let  commentUrl = Cookies.get("comment_remember_url");

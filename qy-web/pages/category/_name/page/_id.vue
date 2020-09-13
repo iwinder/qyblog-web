@@ -1,6 +1,7 @@
 <template>
     <a-row class="content">
         <a-col :xs="{span:24}"  :lg="{ span: 16}"  class="content-left"> 
+                    <h2  >分类  {{targetObj.name}} 的结果</h2>  
            <qy-post-list  :pagination="pagination" :listData="listData" ></qy-post-list>
         </a-col>
 
@@ -26,9 +27,13 @@ export default Vue.extend({
     //     // 必须是number类型
     //     return /^\d+$/.test(params.id)
     // },
+         async fetch({ store, params }) { 
+                await store. dispatch('siteInfo/getSiteInfo');
+      },
     async  asyncData (context) { 
         let _this = context; 
         let name = _this.params.name; 
+          let tagUrl = "/category/name/" + name;
         let res1 = await   _this.$axios.get('articles',{ params: {
             categoryName: name,
                             page:  _this.params.id,
@@ -73,7 +78,18 @@ export default Vue.extend({
                 return result;
 
             }); 
-              await _this.store. dispatch('siteInfo/getSiteInfo');
+
+            let  category = await  context.$axios.get(tagUrl).then(res => {
+              let resp  = res.data			
+               if(resp.success) {
+                 return resp.content;
+            } else {
+                return {
+                  name: ""
+                }
+            }
+          }); 
+
             return{
                 listData : res1.listData, 
                 pagination: {
@@ -88,12 +104,13 @@ export default Vue.extend({
                                 }
                            
                         },
-                }  
+                } ,
+                   targetObj  : category
             }
     },
     head () {
         return {
-            title: this.siteInfo.site_name  +" --第" +this.pagination.current+"页" ,
+            title:   this.targetObj.name +"- "+this.siteInfo.site_name  +" --第" +this.pagination.current+"页" ,
             meta: [
                { hid: "keywords", name: "keywords", content: this.siteInfo. site_key},
                 { hid: "description", name: "description", content: this.siteInfo. site_description},
@@ -127,6 +144,7 @@ export default Vue.extend({
           { type: 'like-o', text: '156' },
           { type: 'message', text: '2' },
         ],
+            targetObj: {},
     }
   },
   methods: {

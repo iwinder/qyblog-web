@@ -1,6 +1,7 @@
 <template>
     <a-row class="content">
-        <a-col :xs="{span:24}"  :lg="{ span: 16}"  class="content-left"> 
+        <a-col :xs="{span:24}"  :lg="{ span: 16}"  class="content-left">
+               <h2  >标签 {{targetTag.name}} 的结果</h2> 
         <qy-post-list  :pagination="pagination" :listData="listData"></qy-post-list>
         </a-col>
 
@@ -36,24 +37,26 @@ export default {
               page: 1,
               size:  1
          } 
+         let baseTagurl = "/tag/";
+         let tagUrl = ""; 
             if  (id) {
                    params.tagId = id;
+                   tagUrl = baseTagurl + id;
               } else {
                    params.tagName = name;
+                   tagUrl = baseTagurl + "name/" + name ;
               }
-          let[res1] = await Promise.all([ 
-           
-        context.$axios.get("articles", {params: params}).then(res => {
+          let res1 = await  context.$axios.get("articles", {params: params}).then(res => {
             let resp  = res.data				
             let result = {}; 
             let listData = [];
             if(resp.success) {
                 let data = resp.content.list;
               let defImg = "/img/image-pending.gif"; 
-                data.forEach(e  => {
+                data.forEach( e  => {
                    if(process.browser) {
                           defImg = '/img/thumb/'+ _this.$QyServeTool().randomNum(1,32)+'.jpg';
-                    } 
+                    }  
                     listData.push({
                       id: e.id,
                       href:  e.permaLink,
@@ -78,10 +81,19 @@ export default {
                   pageSize:  resp.content.size
                 };
             }
-            return result;
-
-          })
-         ])
+            return result; 
+          });
+          let tag = await  context.$axios.get(tagUrl).then(res => {
+              let resp  = res.data			
+               if(resp.success) {
+                 return resp.content;
+            } else {
+                return {
+                  name: ""
+                }
+            }
+          });
+      
         return{
              listData : res1.listData, 
               pagination: {
@@ -93,12 +105,13 @@ export default {
                         
                 },
               },
+              targetTag: tag
         }
 
      },
     head () {
         return {
-            title: this.siteInfo.site_name,
+            title:    this.targetTag.name + " - "+  this.siteInfo.site_name,
             meta: [
                 // { hid: "keywords", name: "keywords", content: this.postData. tagStrings},
                 // { hid: "description", name: "description", content: this.postData. summary},
@@ -114,6 +127,7 @@ export default {
      data() {
          return {
             listData:[], 
+           targetTag: {},
             pagination: {
                 pageSize: 3,
                 total: 0,

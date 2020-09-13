@@ -17,7 +17,7 @@
          mode="horizontal"
            :defaultSelectedKeys="[$route.path]"
            :selectedKeys= "selectedKey"
-        :style="{ lineHeight: '64px' }" 
+        :style="{ lineHeight: '64px',float:'left' }" 
           @select="handleSelectKeys"
       >
             <a-menu-item key="/"  style="display:none"  >
@@ -42,14 +42,35 @@
           </a-menu-item>
       </template>
       </a-menu>
+      <a-col  :xs="{span:3,offset:4}"  :sm="{span:3,offset: 4}"  :md="{ span: 2, offset:3}">  <a-button shape="circle" icon="search"  :loading="searchLoading"   @click="openSearch"/></a-col>
       </a-row>
+
+      <a-modal 
+      :visible="visible" 
+      :closable="closable"
+      centered
+      @ok="handleOk"
+      @cancel="handleCancel"
+      :footer="null"
+    >
+      <a-form-model ref="searchForm"  layout="horizontal" :model="form" >
+        <a-form-model-item style="margin: 6px 0;" prop="searchText">
+    <a-input-search placeholder="请输入关键字"  v-model="form.searchText"   enter-button @search="onSearch"  />
+        </a-form-model-item>
+      </a-form-model>
+    </a-modal>
     </a-layout-header>
+
+    
 </template>
 
 <script>
  import { mapState } from 'vuex'
 import  QyToUrl from '~/components/qy-to-url.vue'
+import Vue from 'vue'
+import { FormModel } from 'ant-design-vue';
 
+Vue.use(FormModel); 
 export default {
     props: { 
         isCollapsed: {
@@ -85,7 +106,13 @@ export default {
           collapsed: false,
           screenWidth: '',
           screenHeight: '',
-          selectedKey:["/"]
+          selectedKey:["/"],
+          visible: false,
+          closable: false,
+          searchLoading:false,
+          form: {
+              searchText:""
+          }
       };
     },
     watch: {
@@ -138,7 +165,37 @@ export default {
           console.log("obj", obj);
           let _this =  this;
           _this.$refs.headerMenus.handleSelect({key: "/" });
+        },
+        openSearch(e) { 
+           if( event.detail ==0) {
+             return;
+           }
+        let _this = this;
+          _this.visible = true;
+        },
+        handleCancel() {
+          let _this = this;
+          _this.visible = false;
+        },
+        handleOk() {
+
+        },
+        onSearch(e) {
+          let _this = this;
+
+          if(_this.$QyServeTool().isEmpty(_this.form.searchText)) {
+            _this.visible = false;
+            return;
+          }
+          let searchText = _this.form.searchText;
+            _this.$refs.searchForm.resetFields();
+            // debugger
+           _this.handleCancel() ;
+          _this.$router.push("/?searchText="+searchText);
+
+
         }
+        
   }
 }
 </script>

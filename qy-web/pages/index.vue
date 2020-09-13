@@ -1,6 +1,8 @@
 <template>
   <a-row class="content">
     <a-col :xs="{span:24}"    :lg="{ span: 16}"  class="content-left"> 
+          <h2 v-if="!isSearchFlag">近期文章</h2>
+           <h2 v-else>搜索 “{{searchText}}”  的结果</h2>
        <qy-post-list  :pagination="pagination" :listData="listData"></qy-post-list>
     </a-col>
 
@@ -33,10 +35,17 @@ async fetch({ store, params }) {
 },
  async  asyncData (context) {
    let _this = context;  
+
+  let searchText =  _this.query.searchText; 
+  let isSearchFlag = false;
+  if(_this.$QyServeTool().isNotEmpty(searchText)) {
+    isSearchFlag = true;
+  }
     let[res1] = await Promise.all([ 
         _this.$axios.get('articles',{ params: {
               page: 1,
-              size:  1
+              size:  1,
+              searchText: searchText
          } }).then(res => {
             let resp  = res.data				
             let result = {};
@@ -75,8 +84,7 @@ async fetch({ store, params }) {
             return result;
           }), 
          ]);
-     
-        console.log("init  !siteInfo2 ", _this.store.state.siteInfo);
+      
           return{
               listData : res1.listData, 
               pagination: {
@@ -84,16 +92,23 @@ async fetch({ store, params }) {
                 current : res1.current ,
                 pageSize : res1.pageSize, 
                 onChange: page => { 
-                                _this.app.router.push("/page/"+page);
+                          let url = "/page/"+page;
+                          if(isSearchFlag) {
+                            url = url +"?searchText="+searchText;
+                          }
+                          _this.app.router.push(url);
                         
                 },
               },
-      
+            searchText: searchText,
+            isSearchFlag: isSearchFlag
         }
     },
     data() {
       return {
         listData:[], 
+        isSearchFlag: false,
+        searchText: "",
         pagination: {
           pageSize: 3,
           total: 0,
@@ -110,9 +125,10 @@ computed: {
   created() {
     let _this  =  this;  
   },
+  watchQuery: ['searchText'],
   head () {
         return {
-           title: this.siteInfo.site_name,
+           title:   this.isSearchFlag? "搜索 "+ this.searchText +" - "+ this.siteInfo.site_name: this.siteInfo.site_name,
             meta: [
                 { hid: "keywords", name: "keywords", content: this.siteInfo. site_key},
                 { hid: "description", name: "description", content: this.siteInfo. site_description},
