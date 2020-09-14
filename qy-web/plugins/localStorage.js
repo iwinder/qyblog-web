@@ -9,7 +9,11 @@ let cookieStorage = {
   getItem: function(key) { 
     let value =  null;
     if(key =='vuex') {
-      value =  JSON.parse(Base64.decode(Cookies.get(key)) );
+      let oldVal = Cookies.get(key);
+      if(oldVal!=null && oldVal != '') {
+        value =  JSON.parse(Base64.decode( oldVal));
+      }
+      value = null;
     } else {
       value = Cookies.getJSON(key);
     }

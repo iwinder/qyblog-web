@@ -24,6 +24,20 @@
             <a-row class="" v-highlight> 
                     <div  class="markdown-body"   v-html="postData.contentHtml"></div>
             </a-row>
+             <a-row v-show="linkList && linkList.length>0">
+                    <ul class="ant-row" style="
+    margin: 0;
+    padding: 0;
+"> 
+                        <li v-for="link in linkList" :key="link.id" class="link-li ant-col ant-col-xs-12  ant-col-md-8 ant-col-lg-6"     > 
+                            <a-row class="link-div">
+                            <img src="https://windcoder.com/wp-content/themes/Tint/assets/img/link-favicon.png" v-real-img="link.url+'/favicon.ico'" class="link-img">
+                            <a  :href="link.url"  :title="link.name" target="_blank" rel="noopener">{{link.name}}</a>
+                            <p>{{link.description}}</p>
+                            </a-row>
+                        </li>
+                    </ul>     
+             </a-row>
         </a-row>
         <a-row class="single-comments"> 
                 <qy-comment-list :commentAgentId= "postData.commentAgentId"></qy-comment-list>
@@ -42,6 +56,9 @@ export default Vue.extend({
       props: { 
           postData: {
               default: {}
+          },
+          linkList: {
+              default: []
           }
       }
 })
@@ -136,5 +153,40 @@ font-size: 0.9rem;
     padding: 0 5px;
     color: rgba(0, 0, 0, 0.65);
     }
+}
+
+.link-li {
+    line-height: 1.8;
+    opacity: .9;
+    text-align: center;
+}
+.link-div { 
+    background: #e6faf0;
+    margin: 10px;
+    padding: 10px;
+    position: relative;
+    border: 1px solid #d5efe2;
+    border-radius: 2px;
+}
+ 
+.link-img {
+    width: 30px;
+    height: 30px!important;
+    box-shadow: none;
+    margin-right: 10px!important;
+    vertical-align: bottom;
+    display: inline-block!important;
+    position: absolute;
+    bottom: -15px;
+    left: 50%;
+    margin-left: -15px!important;
+    margin-bottom: 0!important;
+    border-radius: 50%;
+    padding: 1px;
+    border: 1px solid #bbb;
+    background: #fff;
+    -webkit-transition: all .5s ease;
+    -moz-transition: all .5s ease;
+    transition: all .5s ease;
 }
 </style>

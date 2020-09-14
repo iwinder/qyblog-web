@@ -3,6 +3,7 @@ Vue.directive('real-img', async function (el, binding) {//指令名称为：real
     let imgURL = binding.value;//获取图片地址
     if (imgURL) {
         let exist = await imageIsExist(imgURL);
+        console.log("imgURL", imgURL, exist);
         if (exist) {
             el.setAttribute('src', imgURL);
         } 
@@ -27,12 +28,14 @@ let imageIsExist = function(url) {
     return new Promise((resolve) => {
         var img = new Image();
         img.onload = function () {
-            if (this.complete == true){
+            console.log("url", url, img.complete);
+            if (img.complete == true){
                 resolve(true);
                 img = null;
             }
         }
         img.onerror = function () {
+            console.log("url onerror", url, this);
             resolve(false);
             img = null;
         }

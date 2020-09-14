@@ -10,7 +10,7 @@
             </a-col>
         </template>
         <template v-else>
-              <qy-page-info :postData="postData"> </qy-page-info> 
+              <qy-page-info :postData="postData" :linkList="linkList"> </qy-page-info> 
         </template>
         
     </a-row>
@@ -28,7 +28,7 @@ Vue.use(FormModel);
  import { mapState } from 'vuex'
 export default {
     async fetch({ store, params }) {
-  await store. dispatch('siteInfo/getSiteInfo');
+         await store. dispatch('siteInfo/getSiteInfo');
 },
      async  asyncData (context) { 
          let _this = context;
@@ -40,9 +40,7 @@ export default {
               } else {
                    url = "articles/name/" + name ;
               }
-          let[res1] = await Promise.all([ 
-           
-        context.$axios.get(url, {useCache: true}).then(res => {
+          let res1  = await   context.$axios.get(url, {useCache: true}).then(res => {
             let resp  = res.data				
             let result = {};
             if(resp.success) { 
@@ -56,22 +54,27 @@ export default {
                 }
                 result.publishedDateMD =   moment(result.publishedDate).format('YYYY-MM-DD');
                 result.publishedDateTime =   moment(result.publishedDate).format('YYYY-MM-DD HH:mm:ss');
-            } 
+            }   
+            return result; 
+          });
+          let linkList = [];
 
-            //   if(!result.canonicalLink) {
-            //       result.canonicalLink =  context.siteInfo.url + result.permaLink
-            //   }
-            //  result.contentHtmlT =  hljs.highlightAuto(result.contentHtml).value;
-            //   console.log("restempTimeult", tempTime);
-            // result.publishedDateMD =  context. moment(result.publishedDate, 'YYYY/MM/DD');
-            
-            return result;
-
-          })
-         ]);
-        //   await  context.store. dispatch('siteInfo/getSiteInfo');
+         if(name && name == "links") {
+           linkList =  await   context.$axios.get("/siteInfo/allLinks", {useCache: true}).then(res => {
+                    let resp  = res.data		
+                   if(resp.success) { 
+                       return  resp.content;
+                   } else {
+                       return [];
+                   }
+             }); 
+   
+          
+         };
+       
           return{
               postData : res1,  
+              linkList: linkList
         }
 
      },
@@ -97,7 +100,8 @@ export default {
     },
       computed: {
     ...mapState({
-      siteInfo: state => state.siteInfo.siteInfo
+      siteInfo: state => state.siteInfo.siteInfo,
+       siteIndexLink: state => state.siteInfo.siteIndexLink,
     })
   },
      data() {
@@ -111,59 +115,13 @@ export default {
                 authorEmail: '',
                 authorUrl: ''
             },
-            rules: {
-                authorName :[
-                    {required: true,whitespace: true, message: "昵称不可为空"}
-                ],
-                authorEmail: [
-                    {required: true,whitespace: true, message: "邮箱不可为空"},
-                    {pattern:new RegExp(/^([a-zA-Z\d])(\w|\-)+@[a-zA-Z\d]+\.[a-zA-Z]{2,6}$/ig), message: "邮箱格式错误"}
-                          
-                ],
-                content: [
-                    {required: true,whitespace: true, message: "内容不可为空"}
-                ]
-            },
-             layout: {
-                labelCol: { span: 1 },
-                wrapperCol: { span: 23 },
-            },
+            linkList:[]
          }
      },
      mounted() { 
      },
     methods: {
-        moment,
-         handleSubmit() {
-             let _this = this;
-             _this.$refs.commentForm.submitting = true;
-            _this.$refs.commentForm.validate(valid => {
-                if (valid) { 
-                    let val = _this.commentForm;
-                    _this.$axios.post('comment/'+_this.postData.commentAgentId +"/add",val).then(res => {
-                            _this.$refs.commentForm.submitting = false;
-                            console.log("res", res);
-                            if(res.data.success) {
-                                 _this.$refs.commentForm.content = null;
-                                this.$message.success('保存成功',15);
-                                // _this.backF() ;
-                            } else {
-                                  _this.$message.error('保存失败: ' + res.data.message,5);
-                            }
-                    }).catch((response) => {
-                            _this.$refs.commentForm.submitting = false;
-                            _this.$message.error('保存失败: ' + response,5);
-                    });
-                       
-                } else {
-                    console.log('error submit!!');
-                    return false;
-                }
-            });
-         },
-         handleChange(e) {
-            this.value = e.target.value;
-        },
+        moment
   },
 }
 </script>

@@ -16,18 +16,11 @@ export const state = () => ({
   
   export const getters = {
     getSiteGoUrl: (state) => (key) => {
-      // console.log("getSiteGoUrl siteGo", state, state.siteInfo, state.siteGo);
-      //  console.log("getSiteGoUrl key", key);
       return state.siteGo[key];
-      // let _this  =  this; 
-      // console.log("getters getSiteGoUrl", _this);
-      // let url  = "";
-      // if(_this.$QyServeTool().isEmpty(key)) {
-      //   return ;
-      // } 
-      // url = _this.$state.siteGo[key];
-      // console.log("url", url);
-    }
+    },
+    getIndexLink:  (state) => (key) => {
+      return state.siteIndexLink;
+    },
   }
   export const mutations = {
     setSiteBase(state, siteBase) {
