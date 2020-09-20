@@ -8,7 +8,14 @@
   align-items: center;
   text-align: center;
 }
-  
+/deep/ .ant-list-item-meta-title   {
+  a {
+    color: #1890ff;
+  }
+  a:hover {
+    color: #40a9ff;
+}
+}
   .title {
     font-family:
       'Quicksand',

@@ -21,7 +21,7 @@
                 <qy-replies-form  :ref="repliesForm[index]"   v-show="repliesFormShow[index]"   :repliesIndex="repliesIndex" :afterSubmit="repliesChildFormAfterSubmit"  :commentAgentId="agentId"  :parentCommentId="item.id"> </qy-replies-form>
             </span>
             <p slot="content"> 
-                {{item.content}}
+{{item.content}}
             </p>
             <qy-comment-child-list  v-show="item.replyCount>0"   :ref="repliesChildList[index]"   :parentId="item.id"  :commentAgentId="agentId"  :afteReplieShow="parentReplieChange"></qy-comment-child-list>
 
@@ -35,7 +35,7 @@
 import Vue from 'vue'
 import  QyCommentChildList from '~/components/qy-comment-child-list.vue'
 import  QyRepliesForm from '~/components/qy-replies-form.vue'
-
+import   md5 from 'js-md5'
 export default Vue.extend({
     props: {  
         commentAgentId: null
@@ -95,7 +95,12 @@ export default Vue.extend({
                     if(resp.success) {
                         _this.comments = resp.content.list;
                         _this.comments.forEach((e,i)  => { 
-                            e.avatar =  'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png';
+                            // e.avatar =  'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png';
+                             if(e.user && e.user.avatar) {
+                                e.avatar =  e.user.avatar;
+                            } else {
+                                  e.avatar =  '//sdn.geekzu.org/avatar/'+e.authorEmail;
+                            }
                             Vue.set(_this.repliesFormShow,i, false);
                              _this.repliesForm[i] = "repliesForm" + i; 
                              _this.repliesChildList[i] = "repliesChildList" + i;
@@ -162,4 +167,5 @@ export default Vue.extend({
 .commentItem {
         line-height: 1;
 }
+ 
 </style>

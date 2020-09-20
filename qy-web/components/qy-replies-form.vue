@@ -4,6 +4,7 @@
             slot="avatar"
             :src="'//sdn.geekzu.org/avatar/'+commentForm.authotImg"
             :alt="commentForm.authorName"
+            v-if="!isInitForm"
         />
     <div slot="content">
             <a-form-model ref="commentForm" :model="commentForm" :rules="rules" v-bind="layout"> 
@@ -36,7 +37,7 @@
             </a-form-model-item>
             <a-form-model-item>
                 <a-button html-type="submit" :loading="submitting" type="primary" @click="handleSubmit">
-                    Add Comment
+                   回复
                 </a-button>
             </a-form-model-item>
         </a-form-model>
@@ -138,6 +139,7 @@ export default Vue.extend({
                                  _this.$refs.commentForm.content = null;
                                 _this.$message.success('保存成功',15);
                                 _this.afterSubmit( _this.parentIndex);
+                                            _this.isInitForm = false;
                                 _this.initCommentByCookie();
                             } else {
                                   _this.$message.error('保存失败: ' + res.data.message,5);

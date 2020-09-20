@@ -11,7 +11,7 @@
                                    <qy-post-link-edit :permaLink="articleForm.permaLink"  :postId="articleForm.id"    :afterSave="updateLink" > </qy-post-link-edit>
                             </template> 
                         </a-form-model-item>
-
+                        <a-form-model-item has-feedback  v-if="saveEndTime!=null && saveEndTime!=''"> {{saveEndTime}}</a-form-model-item>
                         <a-form-model-item has-feedback   prop="content">
                             <!-- <a-input v-model="articleForm.content" type="textarea" /> -->
                             <div class="mavonEditor">
@@ -25,7 +25,7 @@
                                 <!-- </no-ssr> -->
                             </div>
                         </a-form-model-item>
-
+                       
                         <a-form-model-item :wrapper-col="{ span: 14, offset: 4 }">
                             <a-button  ref="saveButton"  type="primary"  :loading ="loading"  @click="submitForm('articleForm')">
                                 保存
@@ -112,7 +112,7 @@ export default {
             type: Function,
             default: null
         }, 
-        
+        saveContentLabel:null
     },
     computed: {
         ...mapState({
@@ -133,9 +133,11 @@ export default {
                     tags:''
                 },
                 editParentData:{},
-                rules: {
-
-                },
+                rules:{
+                title: [
+                    {required: true,whitespace: true, message: "标题不可为空",  trigger:"change"}
+                ]
+            }, 
                 layout:   {
                     labelCol: { span: 5 },
                     wrapperCol: { span: 18 }
@@ -150,7 +152,8 @@ export default {
                 markdownOption:{
                     toolbarsFlag: true
                 },
-                imageNum: 0
+                imageNum: 0,
+                saveEndTime: null
         }
     },
     watch: {
@@ -161,6 +164,10 @@ export default {
             _this.articleForm.tagStrings = val.tagStrings? val.tagStrings:[];
             _this.selectTags = _this.articleForm.tagStrings ;
              _this.markdownContent = val.content;
+        },
+        saveContentLabel(val) {
+            let _this = this;
+            _this.saveEndTime = val;
         }
     },
     mounted() {

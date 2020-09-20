@@ -8,6 +8,7 @@
             <qy-article-form    
                 :articleObj="articleObj"  
                 ref="articleForm"
+                :saveContentLabel="saveContentLabel"
                  :afterSubmit="submitForm"> </qy-article-form>
     </div>
 </template>
@@ -24,7 +25,9 @@ export default Vue.extend({
     data() {
         return {
             articleId: null,
-            articleObj: null
+            articleObj: null,
+            saveContentInterval: {},
+            saveContentLabel: "",
         }
     },
     created() {
@@ -35,6 +38,11 @@ export default Vue.extend({
          let _this = this;
         _this.loadInfo();
     },
+    destroyed: function() {
+      let _this = this;
+      console.log("组件销毁");
+      clearInterval(_this.saveContentInterval);
+    },
     methods: {
         loadInfo() {
             let  _this = this;
@@ -42,6 +50,10 @@ export default Vue.extend({
             _this.$axios.get("/admin/articles/" + _this.articleId).then(res => {
                     if(res.data.success) {
                             _this.articleObj = res.data.content;
+                                        // 定时自动保存
+                                    _this.saveContentInterval = setInterval(function() {
+                                    _this.$refs.articleForm.$refs.saveButton.$emit('click');
+                                }, 5000);
                     }
             });
         },
@@ -51,10 +63,14 @@ export default Vue.extend({
                     console.log("保存文章的结果：", res);
                     _this.$refs.articleForm.loading = false;
                     if(res.data.success) {
-                          this.$message.success('保存成功',15);
+                        //  _this.$message.destroy();
+                        //   _this.$message.success('保存成功',15);
+                            let now =QyTool.dateFormat("hh:mm:ss");
+                         _this.saveContentLabel = "最后保存时间：" + now;
                     }
             }).catch((response) => {
                     _this.$refs.articleForm.loading = false;
+                     _this.$message.destroy();
                      _this.$message.error('保存失败: ' + response,5);
             });
            

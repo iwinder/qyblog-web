@@ -35,8 +35,20 @@ export default Vue.extend({
                     published: true,
                     deleted:  false
                 },
-                loading: false
+                loading: false,
+                saveContentInterval: {}, 
         }
+    },
+    destroyed: function() {
+      let _this = this;
+      console.log("组件销毁");
+      clearInterval(_this.saveContentInterval);
+    },
+    mounted() {
+            let _this = this;
+            _this.saveContentInterval = setInterval(function() {
+                                    _this.$refs.articleForm.$refs.saveButton.$emit('click');
+           }, 15000);
     },
     methods: {
         submitForm(article) {
@@ -46,6 +58,7 @@ export default Vue.extend({
                     _this.$refs.articleForm.loading = false;
                     if(res.data.success) {
                           this.$message.success('保存成功',5);
+                          _this.toEdit(res.data.content.id);
                     }
             }).catch((response) => {
                     _this.$refs.articleForm.loading = false;
@@ -56,6 +69,15 @@ export default Vue.extend({
         backF() {
               let _this = this;
                 _this.$router.push("/article");
+        },
+        toEdit(e) {
+              let _this = this;
+               _this.$router.push( {
+                   name: 'article-id',
+                   params:{
+                       id: e
+                   }
+               });
         }
     },
 })

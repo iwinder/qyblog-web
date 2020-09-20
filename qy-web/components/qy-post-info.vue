@@ -36,7 +36,12 @@
             <a-row class="" v-highlight> 
                     <div  class="markdown-body"   v-html="postData.contentHtml"></div>
             </a-row>
+
+            <a-row class="single-copyright"> 
+                        除特别注明外，本站所有文章均为<a :href="siteInfo.site_url">{{siteInfo.site_name}}</a>原创，转载请注明出处来自<a :href="siteInfo.site_url+'/'+postData.permaLink">{{siteInfo.site_url}}/{{postData.permaLink}}</a>
+          </a-row>
         </a-row>
+
         <a-row class="single-comments"> 
                 <qy-comment-list :commentAgentId= "postData.commentAgentId"></qy-comment-list>
         </a-row>
@@ -46,7 +51,7 @@
 <script  >
 import Vue from 'vue'
  import  QyCommentList from '~/components/qy-comment-list.vue'
-
+ import { mapState } from 'vuex'
 export default Vue.extend({
     components: {
         QyCommentList
@@ -55,7 +60,12 @@ export default Vue.extend({
           postData: {
               default: {}
           }
-      }
+      },
+        computed: {
+            ...mapState({
+            siteInfo: state => state.siteInfo.siteInfo
+    })
+  },
 })
 </script>
 
@@ -126,6 +136,16 @@ export default Vue.extend({
 .article-header {
         margin-bottom: 30px;
         
+}
+.single-copyright{
+    border-radius: 3px;
+    background: #fcf8e3;
+    margin: 20px 0;
+    padding: 12px 20px 12px 40px;
+    font-size: 0.8rem;
+    position: relative;
+    color: #000;
+    word-break: break-all;
 }
 .single-comments {
         background: #fff;
