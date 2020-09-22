@@ -66,7 +66,7 @@ export default {
             editParentId: null,
             editLoading: false,
              editParentData: {},
-                             rules:  {},
+              rules:  {},
                 categoryObj: {},
                 layout: {
                     labelCol: { span: 4 },

@@ -13,7 +13,6 @@ export const state = () => ({
   export const actions = {
     async nuxtServerInit({ dispatch }) {
       // logger.log("dispatch", dispatch);
-      // console.log("dispatch", dispatch);
       await dispatch('siteInfo/getSiteInfo'); 
     }
   }

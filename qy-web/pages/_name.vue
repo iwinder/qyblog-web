@@ -34,11 +34,12 @@ export default {
          let _this = context;
          let id = context.params.aid;
         let name = context.params.name;
-         let url = "articles/";
-            if  (id) {
-                    url = url  +id;
+         let url = "/articles/";
+            if  (name) {
+                    url = "/articles/name/" + name ;
               } else {
-                   url = "articles/name/" + name ;
+                    url = url  +id;
+                 
               }
           let res1  = await   context.$axios.get(url, {useCache: true}).then(res => {
             let resp  = res.data				
@@ -54,6 +55,7 @@ export default {
                 }
                 result.publishedDateMD =   moment(result.publishedDate).format('YYYY-MM-DD');
                 result.publishedDateTime =   moment(result.publishedDate).format('YYYY-MM-DD HH:mm:ss');
+
             }   
             return result; 
           });
@@ -119,9 +121,26 @@ export default {
          }
      },
      mounted() { 
+            // 更新统计
+            let _this = this;
+        if(process.browser && _this.postData!=null ) { 
+            _this.updateViews(_this.postData.id);
+        }
      },
     methods: {
-        moment
+        moment,
+        updateViews(blogId) {
+            let _this = this; 
+            let formData = new FormData();
+            formData.append(" articleId", blogId);
+            _this.$axios.post("/articles/updateViews", formData).then(res => {
+                    let resp  = res.data		
+                   if(resp.success) {  
+                   } else {
+                       return [];
+                   }
+             }); 
+        }
   },
 }
 </script>

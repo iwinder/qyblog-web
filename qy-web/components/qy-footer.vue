@@ -1,6 +1,7 @@
 <template>
     <a-layout-footer >
         <a-row class="footer-nav"  type="flex" justify="center" align="middle" >
+           
         <a-row  class="footer-menus" v-if="siteInfo.footer">
          
             <a-menu  class="footerMenus"  ref="footerMenus"
@@ -30,7 +31,14 @@
                 <a href="https://windcoder.com" title="WindCoder" rel="link noopener" target="_blank">WindCoder.</a>
                 </a-col>   
         </a-row>
+        <template   v-if="siteInfo.site_foot_code"> 
+                <div class="footer-diy ant-row"   v-html="siteInfo.site_foot_code"></div> 
+        </template>
+        
   </a-row>
+
+
+
    <!-- :xs="{span:24}"  :sm="{span:9}"  :md="{ span: 5}" -->
     </a-layout-footer>
 </template>
