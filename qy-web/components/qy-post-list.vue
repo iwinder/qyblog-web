@@ -64,7 +64,10 @@ export default Vue.extend({
          console.log("listcontext", context);
      },
     props: { 
-            pagination: {},
+            pagination: {
+                type:Object,
+                default: {}
+            },
             listData: {
                 type: Array,
                 default: [] 

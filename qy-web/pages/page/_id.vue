@@ -53,9 +53,9 @@ export default Vue.extend({
                     let defImg = "/img/image-pending.gif";
                     data.forEach((e,i ) => {  
                             
-                          if(process.browser) {
+                          // if(process.browser) {
                                 defImg = '/img/thumb/'+ _this.$QyServeTool().randomNum(1,32)+'.jpg';
-                          } 
+                          // } 
                         listData.push({
                             id: e.id,
                             href:  e.permaLink,
@@ -78,7 +78,7 @@ export default Vue.extend({
                     listData:  listData,
                     total:   resp.content.total,
                     current:  resp.content.page,
-                    pageSize:  resp.content.size
+                    pageSize:  resp.content.size,
                     };
                 } 
                 return result;
@@ -90,18 +90,8 @@ export default Vue.extend({
                 pagination: {
                     total:  res1.total,
                     current : res1.current ,
-                    pageSize : res1.pageSize, 
-                    onChange: page => { 
-                        let baseUrl =  "/page/"+page;
-                        if(page==1) { 
-                              baseUrl = "/"
-                        } 
-                        let url  = baseUrl;  
-                        if(isSearchFlag) {
-                            url = url +"?searchText="+searchText;
-                          } 
-                          _this.app.router.push(url); 
-                      }
+                    pageSize : res1.pageSize,  
+                     showLessItems: true, 
                    
                 }, 
                 searchText: searchText,
@@ -122,6 +112,20 @@ export default Vue.extend({
             
         }
     },
+  created() {
+    let _this  =  this;  
+     _this.pagination.onChange= page => { 
+                        let baseUrl =  "/page/"+page;
+                        if(page==1) { 
+                              baseUrl = "/"
+                        } 
+                        let url  = baseUrl;  
+                        if(_this.isSearchFlag) {
+                            url = url +"?searchText="+searchText;
+                          } 
+                              _this.$router.push(url); 
+                      };
+  },
     watchQuery: ['searchText'],
     computed: {
     ...mapState({

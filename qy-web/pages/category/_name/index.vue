@@ -99,12 +99,9 @@ export default {
                 total:  res1.total,
                 current : res1.current ,
                 pageSize : res1.pageSize, 
-                onChange: page => { 
-                                _this.app.router.push("/category/"+name+"/page/"+page);
-                        
-                },
               },
-            targetObj  : category
+            targetObj  : category,
+               paramName: name
         }
 
      },
@@ -133,6 +130,7 @@ export default {
                 onChange: page => { }
             },
             targetObj: {},
+              paramName: "",
          }
            
             
@@ -142,6 +140,13 @@ export default {
     siteInfo: state => state.siteInfo.siteInfo
   })
 },
+  created() {
+        let _this  =  this;    
+     _this.pagination.onChange= function(page) { 
+                let url ="/category/"+_this.paramName+"/page/"+page;
+                _this.$router.push(url); 
+      };
+  },
      mounted() { 
      },
     methods: {

@@ -1,6 +1,7 @@
 import Vue from 'vue'
 Vue.directive('real-img', async function (el, binding) {//指令名称为：real-img
     let imgURL = binding.value;//获取图片地址
+    console.log("imageIsExist binding", binding);
     if (imgURL) {
         let exist = await imageIsExist(imgURL);
         console.log("imgURL", imgURL, exist);
@@ -25,6 +26,7 @@ Vue.directive('real-background-img', async function (el, binding) {//指令名�
  * @param url
  */
 let imageIsExist = function(url) {
+    console.log("imageIsExist url", url, img.complete);
     return new Promise((resolve) => {
         var img = new Image();
         img.onload = function () {

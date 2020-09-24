@@ -48,9 +48,9 @@ export default {
                 result  = resp.content;
                 if(result.type == 1) {
                         let defImg = "/img/image-pending.gif"; 
-                       if(process.browser) {
+                    //    if(process.browser) {
                             defImg = '/img/thumb/'+ _this.$QyServeTool().randomNum(1,32)+'.jpg';
-                      } 
+                    //   } 
                       result.defImg = defImg;
                 }
                 result.publishedDateMD =   moment(result.publishedDate).format('YYYY-MM-DD');

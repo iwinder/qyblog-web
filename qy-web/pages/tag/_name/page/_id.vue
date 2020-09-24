@@ -47,9 +47,9 @@ export default Vue.extend({
                     let defImg = "/img/image-pending.gif";
                     data.forEach((e,i ) => {  
                            
-                          if(process.browser) {
+                          // if(process.browser) {
                                 defImg = '/img/thumb/'+ _this.$QyServeTool().randomNum(1,32)+'.jpg';
-                          } 
+                          // } 
                         listData.push({
                             id: e.id,
                             href:  e.permaLink,
@@ -95,16 +95,10 @@ export default Vue.extend({
                     total:  res1.total,
                     current : res1.current ,
                     pageSize : res1.pageSize, 
-                            onChange: page => { 
-                                if(page===1) {
-                                    _this.app.router.push("/tag/"+name);
-                                } else {
-                                     _this.app.router.push("/tag/"+name+"/page/"+page);
-                                }
-                           
-                        },
+             
                 } ,
-                  targetTag: tag
+                  targetTag: tag,
+                  paramName: name
             }
     },
     head () {
@@ -138,6 +132,7 @@ export default Vue.extend({
           total: 23,
           showLessItems: true,
         },
+         paramName: "",
         actions: [
       
           { type: 'like-o', text: '156' },
@@ -145,6 +140,17 @@ export default Vue.extend({
         ],
     }
   },
+  created() {
+         let _this  =  this;  
+     _this.pagination.onChange= page => {  
+                let url = "/tag/"+_this.paramName;
+                                if(page!=1) {
+                                    url = url + "/page/"+page;
+                                } 
+                          _this.$router.push(url); 
+                };
+     
+},
   methods: {
      moment,
   }

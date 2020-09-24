@@ -41,8 +41,7 @@ async fetch({ store, params }) {
   if(_this.$QyServeTool().isNotEmpty(searchText)) {
     isSearchFlag = true;
   }
-    let[res1] = await Promise.all([ 
-        _this.$axios.get('articles',{ params: {
+    let res1 = await     _this.$axios.get('articles',{ params: {
               page: 1,
               size:  1,
               searchText: searchText
@@ -54,9 +53,9 @@ async fetch({ store, params }) {
                 let data = resp.content.list;
                 let defImg = "/img/image-pending.gif"; 
                 data.forEach(e  => {
-                      if(process.browser) {
+                      // if(process.browser) {
                             defImg = '/img/thumb/'+ _this.$QyServeTool().randomNum(1,32)+'.jpg';
-                      } 
+                      // } 
                     listData.push({
                       id: e.id,
                       href:  e.permaLink,
@@ -82,27 +81,21 @@ async fetch({ store, params }) {
                 };
             }
             return result;
-          }), 
-         ]);
-      
-          return{
-              listData : res1.listData, 
-              pagination: {
+          });
+    
+
+      return {
+            listData : res1.listData, 
+            searchText: searchText,
+            isSearchFlag: isSearchFlag,
+            pagination:{
                 total:  res1.total,
                 current : res1.current ,
                 pageSize : res1.pageSize, 
-                onChange: page => { 
-                          let url = "/page/"+page;
-                          if(isSearchFlag) {
-                            url = url +"?searchText="+searchText;
-                          }
-                          _this.app.router.push(url);
-                        
-                },
-              },
-            searchText: searchText,
-            isSearchFlag: isSearchFlag
-        }
+                 showLessItems: true, 
+              }
+          };
+        
     },
     data() {
       return {
@@ -113,7 +106,7 @@ async fetch({ store, params }) {
           pageSize: 3,
           total: 0,
           showLessItems: true,
-           onChange: page => { }
+           onChange: page => { console.log(page); }
         },
     }
   },
@@ -124,6 +117,13 @@ computed: {
 },
   created() {
     let _this  =  this;  
+     _this.pagination.onChange= function(page) { 
+                let url = "/page/"+page;
+                if(_this.isSearchFlag) {
+                  url = url +"?searchText="+searchText;
+                }
+                _this.$router.push(url); 
+      };
   },
   watchQuery: ['searchText'],
   head () {

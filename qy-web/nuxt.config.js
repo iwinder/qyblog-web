@@ -73,11 +73,25 @@ export default {
   },
   hooks: {
     'render:route': (url, result) => {
-      this.doc = cheerio.load(result.html,{decodeEntities: false});
+      // const $ = cheerio.load(result.html,{decodeEntities: false});
       //由于window.__nuxt__总是位于body中的第一个script中，
       //所以我移除了body中第一个脚本标签
-      // this.doc(`body script`).eq(0).remove();
-      // result.html = this.doc.html()
+      // console.log("this.doc(`body script`).", this.doc(`body script`));
+      // let num = -1;
+      // let leng = $(`body script`).length;
+      // for(let i=0;i<leng;i++) {
+      //   console.log("$(`body script`)[i]", $(`body script`)[i]);
+      //   if($($(`body script`)[i]).text().indexOf("window.__NUXT__")>=0) {
+      //     num = i;break;
+      //   }
+      // }
+      // if(num>=0) {
+      //   $($(`body script`)[num]).remove();
+      
+      //   // eq(0).remove();
+      //   result.html = $.html()
+      // }
+
     }
   },
   axios: {
@@ -116,7 +130,7 @@ export default {
     // header field to provide req.hostname (actual host name)
     useHostPrefix: false,
     pages: [
-      '/'
+      '/',
       // these are prefixes of pages that need to be cached
       // if you want to cache all pages, just include '/'
       // '/page1',

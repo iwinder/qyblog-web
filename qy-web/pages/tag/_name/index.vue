@@ -54,9 +54,9 @@ export default {
                 let data = resp.content.list;
               let defImg = "/img/image-pending.gif"; 
                 data.forEach( e  => {
-                   if(process.browser) {
+                  //  if(process.browser) {
                           defImg = '/img/thumb/'+ _this.$QyServeTool().randomNum(1,32)+'.jpg';
-                    }  
+                    // }  
                     listData.push({
                       id: e.id,
                       href:  e.permaLink,
@@ -99,13 +99,10 @@ export default {
               pagination: {
                 total:  res1.total,
                 current : res1.current ,
-                pageSize : res1.pageSize, 
-                onChange: page => { 
-                                _this.app.router.push("/tag/"+name+"/page/"+page);
-                        
-                },
+                pageSize : res1.pageSize,  
               },
-              targetTag: tag
+              targetTag: tag,
+              paramName: name
         }
 
      },
@@ -134,6 +131,7 @@ export default {
                 showLessItems: true,
                 onChange: page => { }
             },
+            paramName: ""
          }
            
             
@@ -142,6 +140,13 @@ export default {
   ...mapState({
     siteInfo: state => state.siteInfo.siteInfo
   })
+},
+created() {
+         let _this  =  this;  
+     _this.pagination.onChange= page => {  
+                          _this.$router.push("/tag/"+_this.paramName+"/page/"+page); 
+                };
+     
 },
      mounted() { 
      },

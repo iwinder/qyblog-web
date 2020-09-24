@@ -95,17 +95,10 @@ export default Vue.extend({
                 pagination: {
                     total:  res1.total,
                     current : res1.current ,
-                    pageSize : res1.pageSize, 
-                            onChange: page => { 
-                                if(page===1) {
-                                    _this.app.router.push("/category/"+name);
-                                } else {
-                                     _this.app.router.push("/category/"+name+"/page/"+page);
-                                }
-                           
-                        },
+                    pageSize : res1.pageSize
                 } ,
-                   targetObj  : category
+                   targetObj  : category,
+                   paramName: name
             }
     },
     head () {
@@ -145,7 +138,18 @@ export default Vue.extend({
           { type: 'message', text: '2' },
         ],
             targetObj: {},
+              paramName: "",
     }
+  },
+    created() {
+        let _this  =  this;    
+     _this.pagination.onChange= function(page) { 
+                let url ="/category/"+_this.paramName; 
+                    if(page!=1) {
+                        url = url+ "/page/"+page
+                    }  
+                     _this.$router.push(url); 
+      };
   },
   methods: {
      moment,
