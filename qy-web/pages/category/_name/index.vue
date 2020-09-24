@@ -54,9 +54,9 @@ export default {
                 let data = resp.content.list;
                let defImg = "/img/image-pending.gif";
                 data.forEach(e  => { 
-                      if(process.browser) {
+                      // if(process.browser) {
                                 defImg = '/img/thumb/'+ _this.$QyServeTool().randomNum(1,32)+'.jpg';
-                          } 
+                          // } 
                     listData.push({
                              id: e.id,
                             href:  e.permaLink,
