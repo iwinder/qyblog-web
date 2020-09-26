@@ -95,7 +95,8 @@ export default Vue.extend({
                 pagination: {
                     total:  res1.total,
                     current : res1.current ,
-                    pageSize : res1.pageSize
+                    pageSize : res1.pageSize,
+                     showLessItems: true, 
                 } ,
                    targetObj  : category,
                    paramName: name

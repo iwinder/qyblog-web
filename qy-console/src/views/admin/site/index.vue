@@ -25,7 +25,7 @@
                                                     <a-icon slot="unCheckedChildren" type="close" />
                                             </a-switch> 
                               </template>
-                                <template v-else-if="option.configKey == 'site_head_code' || option.configKey == 'site_foot_code' " > 
+                                <template v-else-if="option.configKey == 'site_head_code' || option.configKey == 'site_foot_code'  || option.configKey == 'site_sider_code'" > 
                                           <a-textarea placeholder="输入内容"  v v-model="option.configValue"   :rows="4" />
                                 </template>
                                <a-input v-else  v-model="option.configValue" />

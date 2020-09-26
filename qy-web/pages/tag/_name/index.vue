@@ -47,6 +47,7 @@ export default {
                    tagUrl = baseTagurl + "name/" + name ;
               }
           let res1 = await  context.$axios.get("articles", {params: params}).then(res => {
+            console.log("res", res);
             let resp  = res.data				
             let result = {}; 
             let listData = [];
@@ -99,7 +100,8 @@ export default {
               pagination: {
                 total:  res1.total,
                 current : res1.current ,
-                pageSize : res1.pageSize,  
+                pageSize : res1.pageSize,   
+                 showLessItems: true, 
               },
               targetTag: tag,
               paramName: name

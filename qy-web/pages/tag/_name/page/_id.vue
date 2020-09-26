@@ -95,7 +95,7 @@ export default Vue.extend({
                     total:  res1.total,
                     current : res1.current ,
                     pageSize : res1.pageSize, 
-             
+                    showLessItems: true, 
                 } ,
                   targetTag: tag,
                   paramName: name

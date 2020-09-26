@@ -99,6 +99,7 @@ export default {
                 total:  res1.total,
                 current : res1.current ,
                 pageSize : res1.pageSize, 
+                 showLessItems: true, 
               },
             targetObj  : category,
                paramName: name

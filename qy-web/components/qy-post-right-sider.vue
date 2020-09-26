@@ -44,6 +44,10 @@
                     </ul>
             </a-row>
         </a-card>
+           <!-- 自定义 -->
+          <a-card  class="card_site_sider"   style="width: 100%" v-show="$QyServeTool().isNotEmpty(siteInfo.site_sider_code)">   
+              <div class="ant-row" v-html="siteInfo.site_sider_code"></div>
+           </a-card>
     </a-row>
 </template>
 

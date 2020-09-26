@@ -41,11 +41,14 @@ export default {
                     url = url  +id;
                  
               }
-          let res1  = await   context.$axios.get(url, {useCache: true}).then(res => {
+        let res1  = {};
+         try{
+            res1  = await   context.$axios.get(url, {useCache: true}).then(res => {
             let resp  = res.data				
             let result = {};
             if(resp.success) { 
                 result  = resp.content;
+                    console.log("result",  result);
                 if(result.type == 1) {
                         let defImg = "/img/image-pending.gif"; 
                     //    if(process.browser) {
@@ -56,9 +59,22 @@ export default {
                 result.publishedDateMD =   moment(result.publishedDate).format('YYYY-MM-DD');
                 result.publishedDateTime =   moment(result.publishedDate).format('YYYY-MM-DD HH:mm:ss');
 
+            } else {
+                if(resp.code == '404') {
+                    _this.error({ statusCode: 404, message: resp.message});
+                } else  {
+                    _this.error({ statusCode: 500, message: resp.message});
+                }
             }   
             return result; 
           });
+          } catch (error) {
+            if(error.status == 404)  {
+                 _this.error({ statusCode: 404, message: error.message});
+            } else {
+                _this.error({ statusCode: 500, message: error.message});
+            }
+          }
           let linkList = [];
 
          if(name && name == "links") {
@@ -103,7 +119,7 @@ export default {
       computed: {
     ...mapState({
       siteInfo: state => state.siteInfo.siteInfo,
-       siteIndexLink: state => state.siteInfo.siteIndexLink,
+    //    siteIndexLink: state => state.siteInfo.siteIndexLink,
     })
   },
      data() {

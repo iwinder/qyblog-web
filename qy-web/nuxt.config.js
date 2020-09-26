@@ -1,5 +1,7 @@
 const cheerio = require('cheerio');
 export default {
+  debug:false,
+  dev:false, 
   server: {
     port: 4001, // default: 3000
   //  host: '0.0.0.0' // default: localhost
@@ -52,6 +54,15 @@ export default {
 
     { src: '@/plugins/vue-highlight', ssr: false }, 
   ],
+  router: {
+    extendRoutes(routes, resolve) {
+      routes.push({
+        name: 'custom',
+        path: '*',
+        component: resolve(__dirname, 'pages/404.vue')
+      })
+    }
+  },
   /*
   ** Nuxt.js dev-modules
   */
