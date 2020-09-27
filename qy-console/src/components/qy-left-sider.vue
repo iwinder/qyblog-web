@@ -89,6 +89,11 @@
                         站点管理
                      </router-link>
                 </a-menu-item>
+                <a-menu-item key="/ip-black">
+                    <router-link to="/ip-black">
+                        IP黑名单
+                     </router-link>
+                </a-menu-item>
             </a-sub-menu>
 
 

@@ -193,6 +193,11 @@ const router = new Router({
             path: 'short-link',
             name: 'short-link',
             component: ShortLink,
+        },
+        {
+            path: 'ip-black',
+            name: 'ip-black',
+            component: IpBlack,
         }
     ] // admin child end
     }]
