@@ -46,7 +46,9 @@ export default {
                    params.tagName = name;
                    tagUrl = baseTagurl + "name/" + name ;
               }
-          let res1 = await  context.$axios.get("articles", {params: params}).then(res => {
+          let res1 = {};
+          try{
+          res1 = await  context.$axios.get("articles", {params: params}).then(res => {
             console.log("res", res);
             let resp  = res.data				
             let result = {}; 
@@ -81,7 +83,14 @@ export default {
                   current:  resp.content.page,
                   pageSize:  resp.content.size
                 };
-            }
+            } else {
+               if(error.status == 404)  {
+                      _this.error({ statusCode: 404, message: error.message});
+                } else {
+                    _this.error({ statusCode: 500, message: error.message});
+                }
+         
+            } 
             return result; 
           });
           let tag = await  context.$axios.get(tagUrl).then(res => {
@@ -89,12 +98,20 @@ export default {
                if(resp.success) {
                  return resp.content;
             } else {
-                return {
-                  name: ""
+               if(error.status == 404)  {
+                      _this.error({ statusCode: 404, message: error.message});
+                } else {
+                    _this.error({ statusCode: 500, message: error.message});
                 }
             }
           });
-      
+      }  catch (error) {
+            if(error.status == 404)  {
+                 _this.error({ statusCode: 404, message: error.message});
+            } else {
+                _this.error({ statusCode: 500, message: error.message});
+            }
+          }
         return{
              listData : res1.listData, 
               pagination: {

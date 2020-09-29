@@ -41,7 +41,9 @@ async fetch({ store, params }) {
   if(_this.$QyServeTool().isNotEmpty(searchText)) {
     isSearchFlag = true;
   }
-    let res1 = await     _this.$axios.get('articles',{ params: {
+  let res1 = {};
+        try{
+     res1 = await     _this.$axios.get('articles',{ params: {
               page: 1,
               size:  1,
               searchText: searchText
@@ -79,10 +81,22 @@ async fetch({ store, params }) {
                   current:  resp.content.page,
                   pageSize:  resp.content.size
                 };
-            }
+            }else {
+                if(resp.code == '404') {
+                    _this.error({ statusCode: 404, message: resp.message});
+                } else  {
+                    _this.error({ statusCode: 500, message: resp.message});
+                }
+            }   
             return result;
           });
-    
+    } catch (error) {
+            if(error.status == 404)  {
+                 _this.error({ statusCode: 404, message: error.message});
+            } else {
+                _this.error({ statusCode: 500, message: error.message});
+            }
+          }
 
       return {
             listData : res1.listData, 
