@@ -27,7 +27,7 @@ import Link from './views/admin/link/index.vue'
 import ShortLink from './views/admin/short-link/index.vue'
 import Dashboard from './views/admin/dashboard/index.vue'
 import NotFound  from './views/error/404.vue'
-
+import IpBlack from './views/admin/ip-black/index.vue'
 
 
 

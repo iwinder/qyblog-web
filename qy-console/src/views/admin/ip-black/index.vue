@@ -48,7 +48,28 @@
 
             </span>
         </a-table>
+
+            <a-modal v-model="visible"  on-ok="editIp" :footer="null" @cancel="handleCancel">
+              <template slot="title">
+                   新增黑名单
+              </template>
+                  <a-form-model ref="ipForm" :model="ipForm" :rules="rules" layout="vertical">
+                            <a-form-model-item has-feedback label="IP" prop="name">
+                                   <a-textarea :rows="4" v-model="ipForm.name"   placeholder="多个IP请换行输入" /> 
+                            </a-form-model-item>
+                            <a-form-model-item :wrapper-col="{ span: 14, offset: 4 }">
+                            <a-button type="primary" :loading="editLoading" @click="editIp">
+                                保存
+                            </a-button>
+                            <a-button style="margin-left: 10px" @click="handleCancel">
+                                取消
+                            </a-button>
+                            </a-form-model-item>
+                        </a-form-model>
+         </a-modal>
     </div>
+
+
 </template>
 
 <script  >
@@ -127,6 +148,18 @@
                     current: 1,
                     total: 0
                 },
+                  editLoading: false,
+                 visible: false,
+                ipForm: {
+                    name:''
+                },
+                rules:  {
+                },
+                tagObj: {},
+                layout: {
+                    labelCol: { span: 4 },
+                    wrapperCol: { span: 14 },
+                },
             };
         },
         mounted() {
@@ -153,7 +186,7 @@
                 }
 
 
-                _this.$axios.get('sysIpBlack',{ params: params
+                _this.$axios.get('/admin/sysIpBlack',{ params: params
 
                 }).then(res => {
                     let resp  = res.data
@@ -177,9 +210,14 @@
                     page: pagination.current,
                 })
             },
-            add() {
+            add(obj) {
                 let _this = this;
-                _this.$router.push("/sysIpBlack/add");
+               
+                if(obj) {
+                    _this.tagObj = obj[0];
+                    _this.tagForm.name = _this.tagObj.name;
+                }
+                 _this.visible = true;
             },
             searchForm() {
                 let _this = this;
@@ -230,7 +268,41 @@
                         class: 'test',
                     });
                 }
-            }
+            },
+         editIp() {
+                let _this = this;
+                  _this.editLoading = true;
+                _this.$refs.ipForm.validate(valid => {
+                    if (valid) {
+                        _this.tagObj.name = _this.ipForm.name;
+                        _this.$axios.post('/admin/sysIpBlack/save', _this.tagObj).then(res => {
+                                _this.editLoading = false;
+                                if(res.data.success) {
+                                    this.$message.success('保存成功',5);
+                                     _this.tagObj = {}; 
+                                     _this.$refs.ipForm.resetFields();
+                                    this.visible = false;
+                                    _this.initData();
+                                }
+                        }).catch((response) => {
+                                _this.editLoading = false;
+                                console.log("error：", response);
+                            });
+                    } else {
+                        _this.editLoading = false;
+                        return false;
+                    }
+                });
+            },
+        handleCancel() {
+                let _this = this;
+                 _this.ipForm= {
+                     name: ""
+                 };
+                _this.$refs.ipForm.resetFields();
+                _this.visible = false;
+                _this.tagObj = {}; 
+            },
         },
 
     })
