@@ -66,7 +66,7 @@
                             <a-form-model-item has-feedback label="选择分类" 
                                         extra="若无修改分类的需求，请勿选择"
                                         prop="editParentId">
-                                <qy-article-category-tree-select   ref="categoryTreeSelect"   :afterSelect="afterSelectTree"></qy-article-category-tree-select>
+                                <qy-article-category-tree-select   ref="categoryTreeSelect"   :afterSelect="afterSelectTree" placeholdera="请选择新分类"></qy-article-category-tree-select>
                             </a-form-model-item>
 
                         <a-form-model-item has-feedback label="发布" prop="published">
@@ -219,8 +219,7 @@ export default {
         fetchTags(value) {
             if(QyTool.isEmpty(value)) {
                 return;
-            }
-            console.log("tags handleSearch value",value);
+            } 
             let _this = this;
              _this.lastFetchId += 1;
               const fetchId = this.lastFetchId;
@@ -281,16 +280,13 @@ export default {
                
             })
         },
-        markSave(value, render) {
-            console.log("save value,",value,);
-               console.log("save  render",render);
+        markSave(value, render) { 
                 let  _this = this;
                 _this.htmlContent = render;
                 _this.$refs.saveButton.$emit('click');
         },
         initPermaLink() {
-            let _this  =this;
-            console.log("blur initPermaLink");
+            let _this  =this; 
             if(QyTool.isNotEmpty(_this.articleForm.title) && QyTool.isEmpty(_this.articleForm.permaLink) ) {
                     let params = {
                         title: _this.articleForm.title

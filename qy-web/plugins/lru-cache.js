@@ -35,8 +35,7 @@ const LruCache = {
   export default ({ app }, inject) => {
     // Set the function directly on the context.app object
     inject("LruCache",    ()=> {
-      num++;
-      console.log("~~~~~~num", num);
+      num++; 
         return LruCache;
     }  )
 

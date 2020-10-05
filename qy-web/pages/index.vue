@@ -96,7 +96,7 @@ async fetch({ store, params }) {
             } else {
                 _this.error({ statusCode: 500, message: error.message});
             }
-          }
+      }
 
       return {
             listData : res1.listData, 
@@ -120,7 +120,7 @@ async fetch({ store, params }) {
           pageSize: 3,
           total: 0,
           showLessItems: true,
-           onChange: page => { console.log(page); }
+           onChange: page => {   }
         },
     }
   },

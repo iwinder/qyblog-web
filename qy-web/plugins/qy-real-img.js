@@ -1,10 +1,8 @@
 import Vue from 'vue'
 Vue.directive('real-img', async function (el, binding) {//指令名称为：real-img
-    let imgURL = binding.value;//获取图片地址
-    console.log("imageIsExist binding", binding);
+    let imgURL = binding.value;//获取图片地址 
     if (imgURL) {
-        let exist = await imageIsExist(imgURL);
-        console.log("imgURL", imgURL, exist);
+        let exist = await imageIsExist(imgURL); 
         if (exist) {
             el.setAttribute('src', imgURL);
         } 

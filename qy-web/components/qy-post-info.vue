@@ -38,11 +38,14 @@
             </a-row>
 
             <a-row class="single-copyright"> 
-                        除特别注明外，本站所有文章均为<a :href="siteInfo.site_url">{{siteInfo.site_name}}</a>原创，转载请注明出处来自<a :href="siteInfo.site_url+'/'+postData.permaLink">{{siteInfo.site_url}}/{{postData.permaLink}}</a>
+              除特别注明外，本站所有文章均为<a :href="siteInfo.site_url">{{siteInfo.site_name}}</a>原创，转载请注明出处来自<a :href="siteInfo.site_url+'/'+postData.permaLink">{{siteInfo.site_url}}/{{postData.permaLink}}</a>
+              <a-row class="license-tag"><a href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" target="_blank"><span class="name">License</span> <span class="type">CC BY-SA 4.0</span>
+              以商业目的使用本网站原创内容需获许可，非商业目的使用授权遵循CC BY-NC 4.0
+              </a></a-row>
           </a-row>
         </a-row>
-
-        <a-row class="single-comments"> 
+ {{siteInfo.site_comment_flag  == 'true' }} {{   postData.commentAgentFlag  == true}}
+        <a-row class="single-comments"  v-if="siteInfo.site_comment_flag =='true' && postData.commentAgentFlag == true"> 
                 <qy-comment-list :commentAgentId= "postData.commentAgentId"></qy-comment-list>
         </a-row>
     </a-row>
@@ -168,5 +171,27 @@ export default Vue.extend({
     padding: 0 5px;
     color: #34495e;
     }
+}
+.license-tag {
+        margin: 2px 0;
+}
+ .license-tag  .name,
+      .license-tag .type {
+    text-align: center;
+    padding: 1px 3px;
+    font-size: 0.1rem;
+    display: table-cell;
+      }
+   .license-tag   .name {
+        background-color: #409eff;
+    color: #fefefe;
+    border: 1px solid #409eff;
+    font-weight: 700;
+
+    }
+      .license-tag  .type{
+background-color: #fefefe;
+    color: #409eff;
+    border: 1px solid #409eff; 
 }
 </style>

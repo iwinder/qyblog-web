@@ -234,8 +234,7 @@ export default {
                 _this.$refs.saveButton.$emit('click');
         }, 
         initPermaLink() {
-            let _this  =this;
-            console.log("blur initPermaLink");
+            let _this  =this; 
             if(QyTool.isNotEmpty(_this.articleForm.title) && QyTool.isEmpty(_this.articleForm.permaLink) ) {
                     let params = {
                         title: _this.articleForm.title

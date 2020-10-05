@@ -120,8 +120,7 @@ hasResource: function (id) {
   return false;
 }, 
 
-defaultImageFuc: function(event) {
-  console.log("defaultImageFuc", event);
+defaultImageFuc: function(event) { 
   var img=event.srcElement;
   img.src = "../../static/images/course/avatar"+this.randomNum(1,8)+".jpg";
   img.onerror = null; //防止一直跳动

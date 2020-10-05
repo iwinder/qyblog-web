@@ -32,12 +32,8 @@ axios.interceptors.request.use((config)=>{
   }
   return config;
 },error=>{
-  if (error.response) {
-      // console.log("response  error:", error.response);
-      console.log("response  ddds");
-      // console.log(error.response.data);
-      console.log(error.response.status);
-      console.log("ddd");
+  if (error.response) {  
+      console.log(error.response.status); 
   }   else if (error.request) {
     console.log("request  error:", error.request);
   } else {

@@ -159,8 +159,7 @@
                     _this.loading = false;
                     _this.selectedIds = [];
                 }).catch((response) => {
-                    _this.loading = false;
-                    console.log("error：", response);
+                    _this.loading = false; 
                 });
             },
             handleTableChange(pagination, filters, sorter ) {
@@ -182,8 +181,7 @@
 
             },
             handleMenuClick(e) {
-                let _this = this;
-                console.log('click', e);
+                let _this = this; 
                 if(e.key === "1") {
                     if( _this.selectedIds &&  _this.selectedIds.length>0) {
                         _this.deleted(_this.selectedIds );
@@ -207,20 +205,16 @@
                 if(ids) {
                     this.$confirm({
                         title: '确认删除?',
-                        onOk() {
-                            console.log('OK');
-                            _this.$axios.delete("/admin/user", {data:  ids}).then(res => {
-                                console.log("deleted !res", res);
+                        onOk() { 
+                            _this.$axios.delete("/admin/user", {data:  ids}).then(res => { 
                                 if(res.data.success) {
                                     _this.$message.success("删除成功",5);
                                     _this.initData();
                                 }
-                            }).catch((response) => {
-                                console.log("error：", response);
+                            }).catch((response) => { 
                             });
                         },
-                        onCancel() {
-                            console.log('Cancel');
+                        onCancel() { 
                         },
                         class: 'test',
                     });

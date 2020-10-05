@@ -60,8 +60,7 @@
 <script >
 import Vue from 'vue'
 export default Vue.extend({
-     async  asyncData (context) {
-         console.log("listcontext", context);
+     async  asyncData (context) { 
      },
     props: { 
             pagination: {
@@ -83,9 +82,7 @@ export default Vue.extend({
            },
           defaultImageFucs: {
               type: Function,
-              default: function(event) {
-                //   console.log("this", this.$QyServeTool());
-// this.$QyServeTool().defaultImageFuc(event);
+              default: function(event) { 
                 }
           }  
 
@@ -102,18 +99,10 @@ export default Vue.extend({
         }
     },
     methods: {
-        defaultImageFuc: function(event, defImg) {
-            // console.log("dddd",this, defImg );
-            // let _this  = this;
-            //  const   num = _this.$QyServeTool().randomNum(1,32);
-            //  console.log("num", event,num);
-            //    return '/img/thumb/'+num+'.jpg';
+        defaultImageFuc: function(event, defImg) { 
               let img=event.srcElement; 
               img.src = img.dataset.defimg;
-              img.onerror = null; 
-            //   debugger
-            // img.src = "/img/thumb/"+_this.$QyServeTool().randomNum(1,32)+".jpg";
-            // img.onerror = null; //防止一直跳动
+              img.onerror = null;  
         }
     }
     

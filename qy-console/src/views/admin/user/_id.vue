@@ -43,9 +43,7 @@ export default Vue.extend({
             let  _this = this;
             _this.$axios.get("/admin/user/" + _this.userId).then(res => {
                     if(res.data.success) {
-                            _this.userObj = res.data.content;
-                        
-                             console.log(" _this.userObj",  _this.userObj);
+                            _this.userObj = res.data.content; 
                     }
             });
         },

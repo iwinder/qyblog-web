@@ -209,8 +209,7 @@ export default Vue.extend({
       if(ids) {
           this.$confirm({
               title: '确认删除?',
-              onOk() {
-                console.log('OK');
+              onOk() { 
                 _this.$axios.delete("/admin/pages", {data:  ids}).then(res => {
                   if(res.data.success) {
                     _this.$message.success("删除成功",5); 
@@ -218,8 +217,7 @@ export default Vue.extend({
                   }
                 });
               },
-              onCancel() {
-                console.log('Cancel');
+              onCancel() { 
               },
               class: 'test',
             });

@@ -71,8 +71,7 @@ export default  {
     this.headMenuSelect = [$nuxt.$route.path];
   },
   methods: {
-    onCollapsed(val) {
-      console.log("onCollapsed",val);
+    onCollapsed(val) { 
       this.collapsed = val;
     },
     afterMenuSelect(val) {

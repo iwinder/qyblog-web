@@ -150,8 +150,7 @@ export default {
           _this.selectedKey = [e.key];
           _this.afterMenuSelect(_this.selectedKey );
       },
-        titleClick(e) {
-            console.log('titleClick', e);
+        titleClick(e) { 
         },
         initScreenWidth() {
             this.screenWidth = document.body.clientWidth;   
@@ -161,8 +160,7 @@ export default {
                 })();
           };
         },
-        toIndex(obj) {
-          console.log("obj", obj);
+        toIndex(obj) { 
           let _this =  this;
           _this.$refs.headerMenus.handleSelect({key: "/" });
         },

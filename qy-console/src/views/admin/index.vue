@@ -43,8 +43,7 @@ export default Vue.extend({
     },
     created() {
       let _this = this; 
-      if(QyTool.isEmpty(_this.site)) {
-        console.log("_this.site", _this.site);
+      if(QyTool.isEmpty(_this.site)) { 
             _this.$store.dispatch("initSiteBase");
       }
       // _this.site = QyTool.getSiteInfoBase();
@@ -55,8 +54,7 @@ export default Vue.extend({
     onCollapsed(val) {
       this.collapsed = val;
     },
-    afterBreakpoint(val) {
-      console.log("index afterBreakpoint", val);
+    afterBreakpoint(val) { 
       this.collapsed = val;
     }
   }

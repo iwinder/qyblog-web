@@ -90,8 +90,7 @@ export default Vue.extend({
             } ;
             _this.$axios.get('comment/' +  _this.agentId, { params: params })
                 .then(res => {
-                    let resp  = res.data				
-                    console.log("res cookie", res);
+                    let resp  = res.data;
                     if(resp.success) {
                         _this.comments = resp.content.list;
                         _this.comments.forEach((e,i)  => { 

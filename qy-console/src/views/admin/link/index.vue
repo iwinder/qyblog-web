@@ -231,8 +231,7 @@
                     _this.loading = false;
                     _this.selectedIds = [];
                 }).catch((response) => {
-                    _this.loading = false;
-                    console.log("error：", response);
+                    _this.loading = false; 
                 });
             },
             handleTableChange(pagination, filters, sorter ) {
@@ -251,8 +250,7 @@
             showDrawer(obj) {
                   let _this = this;
                 _this.visible = true;
-                if(obj) {
-                     console.log("edit")
+                if(obj) { 
                     _this.linkId  = obj.id;
                     _this.linkForm = {
                         name: obj.name,
@@ -260,8 +258,7 @@
                         showIndex:  obj.showIndex,
                         description: obj.description
                     }
-                } else {
-                    console.log("add")
+                } else { 
                     _this.linkId  = null;
                 }
                 
@@ -304,20 +301,16 @@
                 if(ids) {
                     this.$confirm({
                         title: '确认删除?',
-                        onOk() {
-                            console.log('OK');
-                            _this.$axios.delete("/admin/link/deleted", {data:  ids}).then(res => {
-                                console.log("deleted !res", res);
+                        onOk() { 
+                            _this.$axios.delete("/admin/link/deleted", {data:  ids}).then(res => { 
                                 if(res.data.success) {
                                     _this.$message.success("删除成功",5);
                                     _this.initData();
                                 }
-                            }).catch((response) => {
-                                console.log("error：", response);
+                            }).catch((response) => { 
                             });
                         },
-                        onCancel() {
-                            console.log('Cancel');
+                        onCancel() { 
                         },
                         class: 'test',
                     });

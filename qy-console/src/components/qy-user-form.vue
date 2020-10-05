@@ -153,14 +153,12 @@ export default Vue.extend({
             return  isLt2M;
 
         },
-        handleChange(info) {
-            console.log("handleChange", info);
+        handleChange(info) { 
             if (info.file.status === 'uploading') {
                     this.loading = true;
                     return;
                 }
-                if (info.file.status === 'done') {
-                     console.log("handleChange done", info);
+                if (info.file.status === 'done') { 
                      let resp = info.file.response;
                      if(resp.success) {
                          this.userForm.avatar = resp.content.relativePath;

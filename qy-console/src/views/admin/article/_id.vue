@@ -39,14 +39,12 @@ export default Vue.extend({
         _this.loadInfo();
     },
     destroyed: function() {
-      let _this = this;
-      console.log("组件销毁");
+      let _this = this; 
       clearInterval(_this.saveContentInterval);
     },
     methods: {
         loadInfo() {
-            let  _this = this;
-            console.log("_this.articleId", _this.articleId);
+            let  _this = this; 
             _this.$axios.get("/admin/articles/" + _this.articleId).then(res => {
                     if(res.data.success) {
                             _this.articleObj = res.data.content;
@@ -59,8 +57,7 @@ export default Vue.extend({
         },
         submitForm(article) {
             let  _this = this;
-            _this.$axios.post('/admin/articles/save',article).then(res => {
-                    console.log("保存文章的结果：", res);
+            _this.$axios.post('/admin/articles/save',article).then(res => { 
                     _this.$refs.articleForm.loading = false;
                     if(res.data.success) {
                         //  _this.$message.destroy();

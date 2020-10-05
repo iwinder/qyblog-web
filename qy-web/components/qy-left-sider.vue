@@ -91,8 +91,7 @@ export default {
   },
     methods: {
          afterVisibleChange(val) {
-             let _this = this;
-                console.log('visible', val);
+             let _this = this; 
                 // _this.visible = !val;
                 // if(val) {
                 //     _this.visible = false;
@@ -102,19 +101,16 @@ export default {
         this.visible = false;
         this.afterClose(false);
       },
-      titleClick(e) {
-            console.log('titleClick', e);
+      titleClick(e) { 
         },
-        handleSelectKeys(e) {
-          console.log('click ', e);
+        handleSelectKeys(e) { 
            let _this = this;
           // this.current = e.key;
           _this.selectedKey = [e.key];
           _this.afterMenuSelect(_this.selectedKey );
           _this.onClose();
       },
-      toIndex(obj) {
-          console.log("obj", obj);
+      toIndex(obj) { 
           let _this =  this;
           _this.$refs.leftSiderMenus.handleSelect({key: "/" });
         }

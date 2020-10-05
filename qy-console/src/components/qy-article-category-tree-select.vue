@@ -6,7 +6,7 @@
             :dropdown-style="{ maxHeight: '400px', overflow: 'auto' }"
             :tree-data="treeData"
             :replaceFields="replaceTreeFields" 
-            placeholder="请选择新父级分类"
+            :placeholder="placeholdera"
  
             :load-data="onLoadData"
             @select	= "onSelectTree"
@@ -22,7 +22,10 @@ export default {
             type: Function,
             default: null
         }, 
-        
+        placeholdera: {
+            type: String,
+            default: '请选择新父级分类'
+        }
     },
     data() {
         return {
@@ -35,18 +38,21 @@ export default {
                     title:'name', 
                     key:'id' 
                 },
-                expandedKeys:[]
+                expandedKeys:[],
+                placeholderText: ''
         }
     },
     watch: {
         parentTreeObj(val) {
-             console.log("parentObj", val);
             let _this = this;
             // _this.initTreeData(val);
         },
-        value(value) {
-            console.log(value);
+        value(value) { 
         },
+        placeholdera(val) {
+            let _this = this; 
+            _this.placeholderText = val;
+        }
   },
    mounted() {
        let _this = this;
@@ -56,14 +62,10 @@ export default {
     methods: {
         initList() {
             let _this = this;
-            _this.$axios.get('/admin/blogCategorys',{ params: {}}).then(res => {
-                    console.log("treeNode res", res);
+            _this.$axios.get('/admin/blogCategorys',{ params: {}}).then(res => { 
                     let resp = res.data;
-                    if(resp.success) {
-                        // treeNode.dataRef.children =   
-                        // console.log("treeNode 2", treeNode.dataRef);
-                        this.treeData =[...resp.content];
-                        console.log("treeNode 3",  this.treeData);
+                    if(resp.success) { 
+                        this.treeData =[...resp.content]; 
                      
                     }
             });
@@ -81,13 +83,11 @@ export default {
                         id:0
                     }
                 });
-            }
-            console.log('initTreeData', _this.expandedKeys);
+            } 
         },
         onLoadData(treeNode) {
             let _this = this;
-            return new Promise(resolve => {
-                console.log("treeNode", treeNode.dataRef);
+            return new Promise(resolve => { 
                 if(!treeNode || treeNode.dataRef.id == 0) {
                     let params = {};
                     treeNode.dataRef.children = [];
@@ -124,17 +124,7 @@ export default {
         onSelectTree(selectedKeys, info) {
                     let _this = this; 
                     _this.afterSelect(selectedKeys,  info);
-                    _this.value = undefined;
-                   
-                    // this.$refs.treeSelect.value = null;
-                    // let params = {};
-                    // if(selectedKeys[0]==0) {
-                    //     params = {};
-                    // } else {
-                    //     params.parentId = selectedKeys[0];
-                    // }
-                  
-                    // _this.list(params);
+                    _this.value = undefined; 
         }
 
     },

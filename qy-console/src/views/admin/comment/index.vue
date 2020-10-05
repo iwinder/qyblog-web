@@ -297,8 +297,7 @@
 
             },
             handleMenuClick(e) {
-                let _this = this;
-                console.log('click', e);
+                let _this = this; 
                 if( !_this.selectedIds ||  _this.selectedIds.length<=0) {
                         this.$message.warning("请选择要操作项",5);
                         return false;
@@ -334,12 +333,10 @@
                                     _this.$message.success("删除成功",5);
                                     _this.initData();
                                 }
-                            }).catch((response) => {
-                                console.log("error：", response);
+                            }).catch((response) => { 
                             });
                         },
-                        onCancel() {
-                            console.log('Cancel');
+                        onCancel() { 
                         },
                         class: 'test',
                     });

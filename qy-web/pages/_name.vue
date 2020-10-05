@@ -47,8 +47,7 @@ export default {
             let resp  = res.data				
             let result = {};
             if(resp.success) { 
-                result  = resp.content;
-                    console.log("result",  result);
+                result  = resp.content; 
                 if(result.type == 1) {
                         let defImg = "/img/image-pending.gif"; 
                     //    if(process.browser) {

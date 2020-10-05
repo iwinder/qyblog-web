@@ -170,8 +170,7 @@
                     _this.loading = false;
                     _this.selectedIds = [];
                 }).catch((response) => {
-                     _this.loading = false;
-                    console.log("error：", response);
+                     _this.loading = false; 
                 });
             },
             handleTableChange(pagination, filters, sorter ) {
@@ -254,8 +253,7 @@
                                     _this.initData();
                                 }
                         }).catch((response) => {
-                                _this.editLoading = false;
-                                console.log("error：", response);
+                                _this.editLoading = false; 
                             });
                     } else {
                         _this.editLoading = false;

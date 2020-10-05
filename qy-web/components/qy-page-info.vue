@@ -1,5 +1,5 @@
 <template>
-     <a-row> 
+     <a-row > 
          <a-row class="single-header"  >
                 <a-card    >
                     <!-- <a-row class="header-wrap"> -->
@@ -40,7 +40,7 @@
              </a-row>
         </a-row>
         <a-row class="single-comments"> 
-                <qy-comment-list :commentAgentId= "postData.commentAgentId"></qy-comment-list>
+                <qy-comment-list :commentAgentId= "postData.commentAgentId"  v-if="siteInfo.site_comment_flag&& postData.commentAgentFlag"></qy-comment-list>
         </a-row>
     </a-row>
 </template>
@@ -48,7 +48,7 @@
 <script  >
 import Vue from 'vue'
  import  QyCommentList from '~/components/qy-comment-list.vue'
-
+ import { mapState } from 'vuex'
 export default Vue.extend({
     components: {
         QyCommentList
@@ -60,7 +60,12 @@ export default Vue.extend({
           linkList: {
               default: []
           }
-      }
+      },
+          computed: {
+            ...mapState({
+                siteInfo: state => state.siteInfo.siteInfo, 
+        })
+    },
 })
 </script>
 

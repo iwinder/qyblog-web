@@ -97,8 +97,7 @@ export default Vue.extend({
     _this.list();
   },
   methods: {
-    callback(key) {
-      console.log(key);
+    callback(key) { 
     },
     initOptions() {
       let _this = this;
@@ -133,8 +132,7 @@ export default Vue.extend({
             _this.loading = false;
             _this.selectedIds = [];
         }).catch((response) => {
-            _this.loading = false;
-            console.log("error：", response);
+            _this.loading = false; 
         });
     },
     submitForm() {

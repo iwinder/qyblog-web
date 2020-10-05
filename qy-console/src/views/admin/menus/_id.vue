@@ -268,8 +268,7 @@ export default Vue.extend({
                     }
                   
                 }).catch((response) => {
-                    _this.loading = false;
-                    console.log("error：", response);
+                    _this.loading = false; 
                 });
         },
         findTarget() {

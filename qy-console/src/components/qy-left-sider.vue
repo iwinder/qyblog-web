@@ -34,8 +34,7 @@
                             标签管理
                      </router-link>
                 </a-menu-item>
-            </a-sub-menu> 
-            <a-menu-item key="/page">
+                            <a-menu-item key="/page">
                <router-link to="/page">
                 <a-icon type="snippets" />
                 <span>页面管理</span>
@@ -47,25 +46,43 @@
                 <span>评论管理</span>
                 </router-link>
             </a-menu-item>
-          <a-menu-item key="/menus">
+            </a-sub-menu> 
+
+
+           <a-sub-menu key="system-link">
+                <span slot="title"><a-icon type="setting" /><span>链接管理</span></span>
+            <a-menu-item key="/menus">
                <router-link to="/menus">
                 <a-icon type="apartment" />
                 <span>导航管理</span>
                 </router-link>
             </a-menu-item>
-        <a-menu-item key="/link">
-               <router-link to="/link">
-                <a-icon type="share-alt" />
-                <span>友链管理</span>
-                </router-link>
-            </a-menu-item>
-           <a-menu-item key="/short-link">
-               <router-link to="/short-link">
-                <a-icon type="link" />
-                <span>短链接管理</span>
-                </router-link>
-            </a-menu-item>
-
+                <a-menu-item key="/link"> 
+                    <router-link to="/link">
+                        <a-icon type="share-alt" />
+                        <span>友链管理</span>
+                        </router-link>
+                    </a-menu-item>
+                <a-menu-item key="/short-link">
+                    <router-link to="/short-link">
+                        <a-icon type="link" />
+                        <span>短链接管理</span>
+                        </router-link>
+               </a-menu-item>
+           </a-sub-menu>
+             <a-sub-menu key="system-safe">
+                  <span slot="title"><a-icon type="setting" /><span>安全管理</span></span>
+                <a-menu-item key="/ip-black">
+                    <router-link to="/ip-black">
+                        IP黑名单
+                     </router-link>
+                </a-menu-item>
+                <a-menu-item key="/login-log">
+                    <router-link to="/login-log">
+                        登录日志
+                     </router-link>
+                </a-menu-item>
+            </a-sub-menu>
             <a-sub-menu key="system">
                 <span slot="title"><a-icon type="setting" /><span>系统管理</span></span>
                 <a-menu-item key="/user">
@@ -88,12 +105,7 @@
                     <router-link to="/site">
                         站点管理
                      </router-link>
-                </a-menu-item>
-                <a-menu-item key="/ip-black">
-                    <router-link to="/ip-black">
-                        IP黑名单
-                     </router-link>
-                </a-menu-item>
+                </a-menu-item> 
             </a-sub-menu>
 
 

@@ -27,8 +27,9 @@ import Link from './views/admin/link/index.vue'
 import ShortLink from './views/admin/short-link/index.vue'
 import Dashboard from './views/admin/dashboard/index.vue'
 import NotFound  from './views/error/404.vue'
+import ErrorPage  from './views/error/500.vue'
 import IpBlack from './views/admin/ip-black/index.vue'
-
+import LoginLog from './views/admin/login-log/index.vue'
 
 
 // import Teacher from './views/admin/teacher.vue'
@@ -74,7 +75,10 @@ const router = new Router({
     }, {
         path: '/404',
         component: NotFound
-    },  {
+    },   {
+        path: '/500', 
+        component: ErrorPage
+    }, {
         path: '/',
         name: 'admin', // 为每个路由增加name属性，后续做通用sidebar激活样式方法时需要用到，
         component: Admin,
@@ -198,6 +202,11 @@ const router = new Router({
             path: 'ip-black',
             name: 'ip-black',
             component: IpBlack,
+        },
+        {
+            path: 'login-log',
+            name: 'login-log',
+            component: LoginLog,
         }
     ] // admin child end
     }]
@@ -209,10 +218,8 @@ Router.prototype.push = function push(location) {
 
 // 路由登录拦截
 router.beforeEach((to, from, next) => {
-    // 要不要对meta.loginRequire属性做监控拦截
-    console.log(to, from);
-    if(to.matched.some(function(item){
-        console.log("item", item);
+    // 要不要对meta.loginRequire属性做监控拦截 
+    if(to.matched.some(function(item){ 
       return item.meta.loginRequire
     })) {
       let loginToken =  QyTool.getLoginToken();

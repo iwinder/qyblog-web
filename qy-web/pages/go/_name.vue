@@ -16,12 +16,7 @@ export default Vue.extend({
          let old =  context.route.path; 
          let news  = old.replace("/go/", ""); 
                 _this.store. dispatch('siteInfo/getSiteGo');
-              let url  =    _this.store.getters["siteInfo/getSiteGoUrl"](news);
-              console.log("news", news, url);
-        // await  context.store. dispatch('siteInfo/getSiteGo');
-
-//         //   context.store.getters("siteInfo/getSiteGoUrl")()
-//         let url  = context.store.getters["siteInfo/getSiteGoUrl"](news);
+              let url  =    _this.store.getters["siteInfo/getSiteGoUrl"](news); 
         if(!url) {
  return context.redirect("/");
         }
@@ -34,37 +29,14 @@ export default Vue.extend({
     }), 
 },
 created() {
-         let _this = this;
-               console.log("created",_this);
-  //  _this.$store. dispatch('siteInfo/getSiteGo');
+         let _this = this; 
     
 },
   mounted() {
-          let _this = this;
-          console.log(_this);
-          //  window.location.href = url 
+          let _this = this; 
            let old =  _this.$route.path;
          let news  = old.replace("/go/", ""); 
-      //       let url  =    _this.$store.getters["siteInfo/getSiteGoUrl"](news);
-      //         if(!url) {
-      //           url = "/";
-      //  }
-        // this.$router.redirect(url);
-              // _this.$store. dispatch('siteInfo/getSiteGo');
-              // let url  =    _this.$store.getters["siteInfo/getSiteGoUrl"](news);
-              // console.log("news", news, url);
-              //     if(!url) { 
-              //        url = "/";
-              //     }
-                    // window.location.href = url ;
-        //  let old =  context.route.path;
-        //  let news  = old.replace("/go/", ""); 
-        // //   context.store.getters("siteInfo/getSiteGoUrl")()
-        // let url  = context.store.getters["siteInfo/getSiteGoUrl"](news);
-        // if(!url) {
-        //        return context.redirect("/");
-        // }
-        //     return context.redirect(url);
+       
   }
 })
 </script>

@@ -40,8 +40,7 @@ export default Vue.extend({
         }
     },
     destroyed: function() {
-      let _this = this;
-      console.log("组件销毁");
+      let _this = this; 
       clearInterval(_this.saveContentInterval);
     },
     mounted() {
@@ -53,8 +52,7 @@ export default Vue.extend({
     methods: {
         submitForm(article) {
             let  _this = this;
-            _this.$axios.post('/admin/articles/save',article).then(res => {
-                    console.log("保存文章的结果：", res);
+            _this.$axios.post('/admin/articles/save',article).then(res => { 
                     _this.$refs.articleForm.loading = false;
                     if(res.data.success) {
                           this.$message.success('保存成功',5);

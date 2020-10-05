@@ -34,7 +34,9 @@ export default Vue.extend({
         let _this = context; 
         let name = _this.params.name; 
           let tagUrl = "/category/name/" + name;
-        let res1 = await   _this.$axios.get('articles',{ params: {
+            let res1 = {};
+            try {
+          res1 = await   _this.$axios.get('articles',{ params: {
             categoryName: name,
                             page:  _this.params.id,
                 size:  1
@@ -74,7 +76,13 @@ export default Vue.extend({
                     current:  resp.content.page,
                     pageSize:  resp.content.size
                     };
-                } 
+                } else { 
+                  if(resp.code == '404') {
+                    _this.error({ statusCode: 404, message: resp.message});
+                  } else  {
+                      _this.error({ statusCode: 500, message: resp.message});
+                  }
+                }
                 return result;
 
             }); 
@@ -83,13 +91,21 @@ export default Vue.extend({
               let resp  = res.data			
                if(resp.success) {
                  return resp.content;
-            } else {
-                return {
-                  name: ""
+            } else { 
+               if(resp.code == '404') {
+                    _this.error({ statusCode: 404, message: resp.message});
+                } else  {
+                    _this.error({ statusCode: 500, message: resp.message});
                 }
             }
           }); 
-
+        } catch (error) {
+            if(error.status == 404)  {
+                 _this.error({ statusCode: 404, message: error.message});
+            } else {
+                _this.error({ statusCode: 500, message: error.message});
+            }
+    }
             return{
                 listData : res1.listData, 
                 pagination: {
@@ -126,8 +142,7 @@ export default Vue.extend({
         listData:[],
         data:[],
         pagination: {
-          onChange: page => {
-            console.log(page);
+          onChange: page => { 
           },
           pageSize: 3,
           total: 23,
