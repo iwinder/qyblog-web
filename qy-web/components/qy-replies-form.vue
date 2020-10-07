@@ -131,7 +131,7 @@ export default Vue.extend({
             _this.$refs.commentForm.validate(valid => {
                 if (valid) { 
                     let val = _this.commentForm;
-                    let url = 'comment/'+_this.agentId;
+                    let url = '/web/comment/'+_this.agentId;
                     url = _this.parentId !==null? url + "/" +_this.parentId+"/replies/add" :  url +"/add";
                     _this.$axios.post(url,val).then(res => {
                             _this.$refs.commentForm.submitting = false; 

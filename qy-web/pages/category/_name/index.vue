@@ -37,7 +37,7 @@ export default {
               page: 1,
               size:  10
          }
-          let baseTagurl = "/category/";
+          let baseTagurl = "/web/category/";
           let tagUrl = "";
             if  (id) {
                    params.categoryId = id;
@@ -49,7 +49,7 @@ export default {
               let res1 = {};
                let  category =  {};
                 try{
-           res1 = await     context.$axios.get("articles", {params: params}).then(res => {
+           res1 = await     context.$axios.get("/web/articles", {params: params}).then(res => {
             let resp  = res.data				
             let result = {}; 
             let listData = [];

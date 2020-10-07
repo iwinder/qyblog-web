@@ -34,9 +34,9 @@ export default {
          let _this = context;
          let id = context.params.aid;
         let name = context.params.name;
-         let url = "/articles/";
+         let url = "/web/articles/";
             if  (name) {
-                    url = "/articles/name/" + name ;
+                    url = "/web/articles/name/" + name ;
               } else {
                     url = url  +id;
                  
@@ -77,7 +77,7 @@ export default {
           let linkList = [];
 
          if(name && name.indexOf( "links")==0) {
-           linkList =  await   context.$axios.get("/siteInfo/allLinks", {useCache: true}).then(res => {
+           linkList =  await   context.$axios.get("/web/siteInfo/allLinks", {useCache: true}).then(res => {
                     let resp  = res.data		
                    if(resp.success) { 
                        return  resp.content;

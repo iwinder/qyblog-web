@@ -124,7 +124,7 @@ export default Vue.extend({
             let params = {
                 ...pageInfo
             } ;
-            _this.$axios.get('comment/' +  _this.agentId + "/"+ _this.topParentId+"/replies", { params: params })
+            _this.$axios.get('/web/comment/' +  _this.agentId + "/"+ _this.topParentId+"/replies", { params: params })
                 .then(res => {
                     let resp  = res.data				
                     if(resp.success) {

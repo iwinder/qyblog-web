@@ -42,7 +42,7 @@ export default Vue.extend({
         }
          let res1 =  {};
          try{
-          res1 = await   _this.$axios.get('articles',{ params: {
+          res1 = await   _this.$axios.get('/web/articles',{ params: {
                   searchText: searchText,
                             page:  _this.params.id,
                 size:  10

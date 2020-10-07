@@ -33,10 +33,10 @@ export default Vue.extend({
     async  asyncData (context) { 
         let _this = context; 
         let name = _this.params.name; 
-          let tagUrl = "/category/name/" + name;
+          let tagUrl = "/web/category/name/" + name;
             let res1 = {};
             try {
-          res1 = await   _this.$axios.get('articles',{ params: {
+          res1 = await   _this.$axios.get('/web/articles',{ params: {
             categoryName: name,
                             page:  _this.params.id,
                 size:  10

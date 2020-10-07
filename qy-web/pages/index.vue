@@ -43,7 +43,7 @@ async fetch({ store, params }) {
   }
   let res1 = {};
         try{
-     res1 = await     _this.$axios.get('articles',{ params: {
+     res1 = await     _this.$axios.get('/web/articles',{ params: {
               page: 1,
               size:  10,
               searchText: searchText

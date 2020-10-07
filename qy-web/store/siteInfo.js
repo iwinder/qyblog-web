@@ -52,14 +52,14 @@ export const state = () => ({
       if (  _this.$QyServeTool().isEmpty(state.siteInfo) ) {
         let  siteInfo =   _this.$LruCache().get("qy_siteInfo"); 
         if ( _this.$QyServeTool().isEmpty(siteInfo)) {  
-            siteInfo  =  await     _this.$axios.get('/siteInfo/all').then(res => {
+            siteInfo  =  await     _this.$axios.get('/web/siteInfo/all').then(res => {
             let resp  = res.data;	
               if(resp.success) {  
                 return resp.content;
               }
           })
           if (siteInfo && !siteInfo.header ) {
-            let menus = await _this.$axios.get('/siteInfo/menus').then(res => {
+            let menus = await _this.$axios.get('/web/siteInfo/menus').then(res => {
               let resp  = res.data;	
                 if(resp.success) { 
                   return resp.content;
@@ -81,7 +81,7 @@ export const state = () => ({
       if (  _this.$QyServeTool().isEmpty(state.siteGo) ) { 
         let  siteGo=   _this.$LruCache().get("qy_siteGo"); 
         if(_this.$QyServeTool().isEmpty(siteGo)) {
-            siteGo =   await     _this.$axios.get('/siteInfo/shortLinks').then(res => {
+            siteGo =   await     _this.$axios.get('/web/siteInfo/shortLinks').then(res => {
               let resp  = res.data;	
                 if(resp.success) {  
                   return resp.content;
@@ -96,7 +96,7 @@ export const state = () => ({
     if (  _this.$QyServeTool().isEmpty(state.siteIndexLink) ) { 
       let  siteIndexLink=   _this.$LruCache().get("qy_siteIndexLink"); 
       if(_this.$QyServeTool().isEmpty(siteIndexLink)) {
-        siteIndexLink =   await     _this.$axios.get('/siteInfo/indexlinks').then(res => {
+        siteIndexLink =   await     _this.$axios.get('/web/siteInfo/indexlinks').then(res => {
             let resp  = res.data;	
               if(resp.success) {  
                 return resp.content;
