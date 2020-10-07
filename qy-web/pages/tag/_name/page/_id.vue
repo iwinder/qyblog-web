@@ -40,7 +40,7 @@ export default Vue.extend({
           res1 = await   _this.$axios.get('articles',{ params: {
             tagName: name,
                             page:  _this.params.id,
-                size:  1
+                size:  10
             } }).then(res => {
                 let resp  = res.data				
                 let result = {};
@@ -63,6 +63,7 @@ export default Vue.extend({
                             category: e.category,
                             avatar: e.author.avatar,
                             author: e.author,
+                            status: e.status,
                             defImg: defImg,
                             viewCount: e.viewCount,
                             commentCount: e.commentCount,

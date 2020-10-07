@@ -45,7 +45,7 @@ async fetch({ store, params }) {
         try{
      res1 = await     _this.$axios.get('articles',{ params: {
               page: 1,
-              size:  1,
+              size:  10,
               searchText: searchText
          } }).then(res => {
             let resp  = res.data				
@@ -65,6 +65,7 @@ async fetch({ store, params }) {
                       thumbnail: e.thumbnail,
                       tagStrings: e.tagStrings,
                       tags: e.tags,
+                      status: e.status,
                       category: e.category,
                       avatar: e.author.avatar,
                       author: e.author,

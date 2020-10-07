@@ -63,7 +63,7 @@ export default {
              if (QyTool.isEmpty( _this.user)) {
                     _this.$axios.get('/admin/currentUser' ).then(res => {
                         let resp  = res.data				
-                        if(resp.success) {
+                        if(resp && resp.success) {
                             _this.user =   resp.content;  
                             QyTool.setLoginUser(_this.user);
                         }

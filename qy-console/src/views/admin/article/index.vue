@@ -16,9 +16,12 @@
               </a-form-model>
              
           </a-col>
-          <a-col  :xs="{span:24}"  :lg="{ span: 5, offset: 7 }" style=" margin-top: 5px;">
+          <a-col  :xs="{span:24}"  :lg="{ span: 6, offset: 6 }" style=" margin-top: 5px;">
               <a-button  type="primary"  @click="add()">
                 新增
+              </a-button>
+            <a-button  type="primary"  @click="importb()">
+               导入
               </a-button>
                <a-dropdown>
                     <a-menu slot="overlay" @click="handleMenuClick">
@@ -65,6 +68,37 @@
                  
             </span>
         </a-table>
+
+        <a-modal v-model="visible"  on-ok="editImport" :footer="null" @cancel="handleCancel" :maskClosable="false">
+              <template slot="title">
+                   从WordPress导入
+              </template>
+                  <a-form-model ref="importForm" :model="importForm" :rules="rules" layout="vertical">
+                            <a-form-model-item has-feedback label="IP/地址" prop="name">
+                                   <a-input v-model="importForm.ip"   placeholder="ip地址" /> 
+                            </a-form-model-item>
+                          <a-form-model-item has-feedback label="端口号" prop="port">
+                                   <a-input-number v-model="importForm.port"   placeholder="端口号" /> 
+                            </a-form-model-item>
+                          <a-form-model-item has-feedback label="数据库名称" prop="database">
+                                   <a-input v-model="importForm.database"   placeholder="数据库名称" /> 
+                            </a-form-model-item>
+                           <a-form-model-item has-feedback label="用户名" prop="username">
+                                   <a-input v-model="importForm.username"   placeholder="用户名" /> 
+                            </a-form-model-item>
+                          <a-form-model-item has-feedback label="密码" prop="password">
+                                   <a-input v-model="importForm.password"   placeholder="密码" /> 
+                            </a-form-model-item>
+                            <a-form-model-item :wrapper-col="{ span: 14, offset: 4 }">
+                            <a-button type="primary" :loading="editLoading" @click="editImport">
+                                保存
+                            </a-button>
+                            <a-button style="margin-left: 10px" @click="handleCancel">
+                                取消
+                            </a-button>
+                            </a-form-model-item>
+                        </a-form-model>
+         </a-modal>
     </div>
 </template>
 
@@ -134,6 +168,32 @@ export default Vue.extend({
               current: 1,
               total: 0
             },
+            editLoading: false,
+            visible: false,
+          importForm: {
+              ip: '',
+              port: 3306,
+              database: '',
+              username: '',
+              password: ''
+          },
+          rules:  {
+                ip: [
+                    {required: true,whitespace: true, message: "ip地址不可为空",  trigger:"change"}
+                ],
+                port: [
+                    {required: true,whitespace: true, type: 'number', message: "端口号不可为空",  trigger:"change"}
+                ],
+                database: [
+                    {required: true,whitespace: true, message: "数据库名称不可为空",  trigger:"change"}
+                ],
+                username: [
+                    {required: true,whitespace: true, message: "用户名不可为空",  trigger:"change"}
+                ],
+                password: [
+                    {required: true,whitespace: true, message: "密码不可为空",  trigger:"change"}
+                ]
+          },
         };
     },
     mounted() {
@@ -185,6 +245,15 @@ export default Vue.extend({
         let _this = this;
         _this.$router.push("/article/add");
       },
+      importb() {
+              let _this = this; 
+                _this.visible = true;
+      },
+      handleCancel() {
+                let _this = this; 
+                _this.$refs.importForm.resetFields();
+                _this.visible = false; 
+      },
       searchForm() {
         let _this = this;
         _this.initData();
@@ -228,6 +297,28 @@ export default Vue.extend({
               class: 'test',
             });
         }
+      },
+      editImport() {  
+          let  _this = this;
+            _this.editLoading = true;
+            _this.$refs.importForm.validate(valid => {
+                if (valid) {
+                      _this.$axios.post('/admin/blogMove/save',_this.importForm).then(res => { 
+                              _this.editLoading= false;
+                              if(res.data.success) { 
+                                  _this.$message.destroy();
+                                   _this.$message.success('导入成功',5);
+                              }
+                      }).catch((response) => {
+                              _this.editLoading = false;
+                              _this.$message.destroy();
+                              _this.$message.error('导入失败: ' + response,5);
+                      }); 
+                } else {
+                    _this.editLoading= false;
+                    return false;
+                }
+            });
       }
     },
 

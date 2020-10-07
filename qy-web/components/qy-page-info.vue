@@ -22,7 +22,7 @@
         <a-row class="single-body">
             
             <a-row class="" v-highlight> 
-                    <div  class="markdown-body"   v-html="postData.contentHtml"></div>
+                    <div  class="markdown-body"   v-html="postData.contentHtml" style="white-space: pre-wrap;"></div>
             </a-row>
              <a-row v-show="linkList && linkList.length>0">
                     <ul class="ant-row" style="
@@ -39,8 +39,8 @@
                     </ul>     
              </a-row>
         </a-row>
-        <a-row class="single-comments"> 
-                <qy-comment-list :commentAgentId= "postData.commentAgentId"  v-if="siteInfo.site_comment_flag&& postData.commentAgentFlag"></qy-comment-list>
+        <a-row class="single-comments"  v-if="siteInfo.site_comment_flag =='true' && postData.commentAgentFlag == true"> 
+                <qy-comment-list :commentAgentId= "postData.commentAgentId"   ></qy-comment-list>
         </a-row>
     </a-row>
 </template>

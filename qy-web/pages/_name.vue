@@ -76,7 +76,7 @@ export default {
           }
           let linkList = [];
 
-         if(name && name == "links") {
+         if(name && name.indexOf( "links")==0) {
            linkList =  await   context.$axios.get("/siteInfo/allLinks", {useCache: true}).then(res => {
                     let resp  = res.data		
                    if(resp.success) { 

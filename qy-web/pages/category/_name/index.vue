@@ -35,7 +35,7 @@ export default {
         let name = context.params.name;
         let params = {
               page: 1,
-              size:  1
+              size:  10
          }
           let baseTagurl = "/category/";
           let tagUrl = "";
@@ -70,6 +70,7 @@ export default {
                             category: e.category,
                             avatar: e.author.avatar,
                             author: e.author,
+                            status: e.status,
                             defImg: defImg,
                             viewCount: e.viewCount,
                             commentCount: e.commentCount,

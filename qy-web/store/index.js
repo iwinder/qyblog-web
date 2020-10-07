@@ -1,5 +1,9 @@
 import createLogger from 'vuex/dist/logger'
-export const plugins = [createLogger()]
+
+
+const debug = process.env.NODE_ENV !== "production";
+
+export const plugins = debug?[createLogger()]:[];
 export const state = () => ({
     counter: 0
   })

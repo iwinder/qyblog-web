@@ -34,7 +34,7 @@
 
             </a-row> 
             <a-row class="" v-highlight> 
-                    <div  class="markdown-body"   v-html="postData.contentHtml"></div>
+                    <div  class="markdown-body"   v-html="postData.contentHtml" style="white-space: pre-wrap;"></div>
             </a-row>
 
             <a-row class="single-copyright"> 
@@ -43,8 +43,7 @@
               以商业目的使用本网站原创内容需获许可，非商业目的使用授权遵循CC BY-NC 4.0
               </a></a-row>
           </a-row>
-        </a-row>
- {{siteInfo.site_comment_flag  == 'true' }} {{   postData.commentAgentFlag  == true}}
+        </a-row> 
         <a-row class="single-comments"  v-if="siteInfo.site_comment_flag =='true' && postData.commentAgentFlag == true"> 
                 <qy-comment-list :commentAgentId= "postData.commentAgentId"></qy-comment-list>
         </a-row>

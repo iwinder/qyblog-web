@@ -43,7 +43,11 @@
             <template slot="description">
                 {{item.author.nickname}} {{item.publishedDateMD}}
             </template>
-            <nuxt-link  slot="title"  :to="{name:'name',params:{name:item.href, aid:item.id}}"> {{ item.title }} </nuxt-link>
+            <nuxt-link  slot="title"  :to="{name:'name',params:{name:item.href, aid:item.id}}"> 
+                <template v-if="item.status && item.status=='PRIVATE'">
+                    私密：
+                </template>  {{item.title }}
+                 </nuxt-link>
         </a-list-item-meta>
 
          <a-row style="margin: 5px 0;">

@@ -45,7 +45,7 @@ export default Vue.extend({
           res1 = await   _this.$axios.get('articles',{ params: {
                   searchText: searchText,
                             page:  _this.params.id,
-                size:  1
+                size:  10
             } }).then(res => {
                 let resp  = res.data				
                 let result = {};
@@ -67,6 +67,7 @@ export default Vue.extend({
                             tags: e.tags,
                             category: e.category,
                             avatar: e.author.avatar,
+                            status: e.status,
                             author: e.author,
                             defImg: defImg,
                             viewCount: e.viewCount,

@@ -147,7 +147,7 @@
                     current: 1,
                     total: 0
                 },
-                  editLoading: false,
+                editLoading: false,
                  visible: false,
                 ipForm: {
                     name:''
