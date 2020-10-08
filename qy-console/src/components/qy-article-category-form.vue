@@ -5,6 +5,10 @@
             <a-input v-model="categoryForm.name" />
         </a-form-model-item>
 
+        <a-form-model-item has-feedback label="别名" prop="identifier">
+            <a-input v-model="categoryForm.identifier" />
+        </a-form-model-item>
+
             <a-form-model-item has-feedback label="当前父级" prop="parent">
                 <a> 
                     <template v-if="editParentData.id==0" >  无</template>
@@ -61,6 +65,7 @@ export default {
         return {
             categoryForm: {
                 name: '',
+                identifier: "",
                 parentId: null
             },
             editParentId: null,
@@ -106,6 +111,7 @@ mounted() {
                 _this.$refs.categoryForm.validate(valid => {
                     if (valid) {
                         _this.categoryObj.name = _this.categoryForm.name;
+                         _this.categoryObj.identifier =  _this.categoryForm.identifier;
                         if(_this.editParentId) {
                             _this.categoryObj.parentId = _this.editParentId;
                         }

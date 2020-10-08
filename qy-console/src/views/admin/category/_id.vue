@@ -31,9 +31,9 @@
             // 必须是number类型
             return /^\d+$/.test(params.id)
         },
-        asyncData ({ params }) {
-            return  {categoryId:params.id,categoryObj: params.obj,parentTreeObj: params.parent };
-        },
+        // asyncData ({ params }) {
+        //     return  {categoryId:params.id,categoryObj: params.obj,parentTreeObj: params.parent };
+        // },
         data() {
             return {
                 categoryId: null,
@@ -42,6 +42,12 @@
                 editLoading: false
             }
         },
+        created() {
+            let _this = this; 
+            _this.categoryId = _this.$route.params.id;
+            _this.categoryObj = _this.$route.params.obj;
+            _this.parentTreeObj = _this.$route.params.parent;
+         },
         mounted() {
             let _this = this;
                 if(_this.categoryId && !_this.categoryObj ) {

@@ -19,7 +19,9 @@ export default {
     title: process.env.npm_package_name || '',
     meta: [
       { charset: 'utf-8' },  
-      { name: 'viewport', content: 'width=device-width, initial-scale=1' },
+      { "http-equiv": "X-UA-Compatible", content: "IE=edge,chrome=1" },
+      { name: "format-detection", content: "telephone=no" },
+      { name: 'viewport', content: 'width=device-width, initial-scale=1' },  
       { hid: 'description', name: 'description', content: process.env.npm_package_description || '' }
     ],
     link: [
@@ -162,9 +164,9 @@ export default {
 
     store: {
       type: 'redis',
-      host: '114.116.87.84',
+      host: '121.36.247.59',
       port: 6380,
-      auth_pass:"wind123coderCom",
+      auth_pass:"windadmin",
       ttl: 10 * 60,
       db: 0,
       configure: [

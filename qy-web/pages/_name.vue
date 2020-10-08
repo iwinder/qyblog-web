@@ -148,7 +148,7 @@ export default {
             let _this = this; 
             let formData = new FormData();
             formData.append(" articleId", blogId);
-            _this.$axios.post("/articles/updateViews", formData).then(res => {
+            _this.$axios.post("/web/articles/updateViews", formData).then(res => {
                     let resp  = res.data		
                    if(resp.success) {  
                    } else {

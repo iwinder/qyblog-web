@@ -1,6 +1,6 @@
 module.exports = {
     runtimeCompiler: true,
-    publicPath: '/', // 设置打包文件相对路径
+    publicPath:process.env.NODE_ENV === 'production'? '/qyAdminZ/':'/', // 设置打包文件相对路径
     devServer: {
       // open: process.platform === 'darwin',
       // host: 'localhost',
