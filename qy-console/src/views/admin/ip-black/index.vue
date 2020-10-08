@@ -248,7 +248,7 @@
                     this.$confirm({
                         title: '确认删除?',
                         onOk() { 
-                            _this.$axios.delete("sysIpBlack/deleted", {data:  ids}).then(res => { 
+                            _this.$axios.delete("/admin/sysIpBlack/deleted", {data:  ids}).then(res => { 
                                 if(res.data.success) {
                                     _this.$message.success("删除成功",5);
                                     _this.initData();

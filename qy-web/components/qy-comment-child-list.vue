@@ -92,7 +92,7 @@ export default Vue.extend({
               comments: [],
               topParentId: null,
               agentId: null,
-              defPageSize: 3,
+              defPageSize: 5,
               pagination:  false,
               repliesFormChildShow: [false],
               repliesChildForm: ["repliesChildForm0"],

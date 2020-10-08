@@ -50,6 +50,8 @@ export default Vue.extend({
               pagination:{
                   onChange: page => {
                     let _this  = this;
+                    _this.repliesChildList = ["repliesChildList0"];
+                    _this.comments = [];
                     _this.list({
                             page: page,
                             size: _this.defPageSize
@@ -57,7 +59,7 @@ export default Vue.extend({
                 },
               },
               repliesIndex: null,
-              defPageSize: 2,
+              defPageSize: 10,
               agentId: null,
               repliesFormShow: [false],
               repliesChildList:["repliesChildList0"],
