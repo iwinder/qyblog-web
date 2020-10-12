@@ -22,7 +22,11 @@ const state = () => ({
             if(resp.success) {
               return  resp.content;
             }
-        });
+        }).catch( e=>{
+          console.log(e);
+        }
+
+        );
       }
       QyTool.refreshSiteInfoBase(siteInfo);
       commit('setSiteBase',siteInfo);

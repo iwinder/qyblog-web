@@ -16,7 +16,7 @@
                 </a-form-model>
 
             </a-col>
-            <a-col  :xs="{span:24}"  :lg="{ span: 5, offset: 7 }" style=" margin-top: 5px;">
+            <a-col  :xs="{span:24}"  :lg="{ span: 6, offset: 6 }" style=" margin-top: 5px;">
                 <a-button  type="primary"  @click="add()">
                     新增
                 </a-button>
