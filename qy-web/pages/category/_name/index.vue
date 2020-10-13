@@ -27,7 +27,7 @@ export default {
         QyPostRightSider
      },
      async fetch({ store, params }) {
-  await store. dispatch('siteInfo/getSiteInfo');
+  // await store. dispatch('siteInfo/getSiteInfo');
 },
      async  asyncData (context) { 
        let _this = context;

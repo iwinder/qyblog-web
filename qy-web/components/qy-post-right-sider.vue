@@ -32,13 +32,13 @@
         </a-card>
         <!-- 友情链接 -->
         <a-card   title="友情链接"  style="width: 100%" v-show="siteIndexLink && siteIndexLink.length>0">  
-            <nuxt-link    slot="extra"  :to="{name:'name',params:{name:'link'}}"   target="_blank"> 更多 </nuxt-link>
+            <!-- <nuxt-link    slot="extra"  :to="{name:'name',params:{name:'link'}}"   target="_blank"> 更多 </nuxt-link> -->
        
                 <a-row class="card_site_index_url" >
                     <ul>
                         <li v-for="(link) in siteIndexLink" :key="link.id">
-                                <a :href="link.url"  :title="link.description"  target="_blank" rel="noopener">
-                                <img  :src="link.url+'/favicon.ico'" width="18px">  
+                                <a :href="'//'+link.url"  :title="link.description"  target="_blank" rel="noopener">
+                                <img src="/favicon.ico" v-real-img="'//'+link.url+'/favicon.ico'"  width="18px">  
                                      {{link.name}}</a>
                         </li>
                     </ul>

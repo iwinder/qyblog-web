@@ -12,7 +12,7 @@ export default function ({ $axios, redirect }) {
   let defaultAdapter = $axios.defaults.adapter;
   $axios.defaults.adapter = cacheAdapterEnhancer(defaultAdapter, { enabledByDefault: false, cacheFlag: 'useCache', defaultCache: cacheCfg });
   $axios.interceptors.response.use((response)=>{ 
-    if(response.data.success) {
+    if(response.data.success) { 
        return response;
     } else {
       if(response.data.code == '404') {
@@ -24,8 +24,12 @@ export default function ({ $axios, redirect }) {
       }
     }
     
-  },err => {
-
+  },(err) => {
+    if(err.code == '404') {
+      createError({ statusCode: 404, message: err.message});
+  } else  {
+    createError({ statusCode: 500, message: err.message});
+  }
   });
 }
 

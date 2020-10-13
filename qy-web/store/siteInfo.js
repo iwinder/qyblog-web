@@ -56,6 +56,12 @@ export const state = () => ({
             let resp  = res.data;	
               if(resp.success) {  
                 return resp.content;
+              } else {
+                  if(resp.code == '404') {
+                    _this.error({ statusCode: 404, message: resp.message});
+                  } else  {
+                      _this.error({ statusCode: 500, message: resp.message});
+                  }
               }
           })
           if (siteInfo && !siteInfo.header ) {
@@ -63,6 +69,12 @@ export const state = () => ({
               let resp  = res.data;	
                 if(resp.success) { 
                   return resp.content;
+                } else {
+                  if(resp.code == '404') {
+                    _this.error({ statusCode: 404, message: resp.message});
+                  } else  {
+                      _this.error({ statusCode: 500, message: resp.message});
+                  }
                 }
             })
             siteInfo.header =  menus.header;
@@ -85,6 +97,12 @@ export const state = () => ({
               let resp  = res.data;	
                 if(resp.success) {  
                   return resp.content;
+                } else {
+                  if(resp.code == '404') {
+                    _this.error({ statusCode: 404, message: resp.message});
+                  } else  {
+                      _this.error({ statusCode: 500, message: resp.message});
+                  }
                 }
             }); 
       }
@@ -100,6 +118,12 @@ export const state = () => ({
             let resp  = res.data;	
               if(resp.success) {  
                 return resp.content;
+              } else {
+                if(resp.code == '404') {
+                  _this.error({ statusCode: 404, message: resp.message});
+                } else  {
+                    _this.error({ statusCode: 500, message: resp.message});
+                }
               }
           }); 
     }

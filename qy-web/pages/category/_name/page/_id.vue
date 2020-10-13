@@ -28,7 +28,7 @@ export default Vue.extend({
     //     return /^\d+$/.test(params.id)
     // },
          async fetch({ store, params }) { 
-                await store. dispatch('siteInfo/getSiteInfo');
+                // await store. dispatch('siteInfo/getSiteInfo');
       },
     async  asyncData (context) { 
         let _this = context; 

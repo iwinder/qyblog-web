@@ -29,10 +29,10 @@
     margin: 0;
     padding: 0;
 "> 
-                        <li v-for="link in linkList" :key="link.id" class="link-li ant-col ant-col-xs-12  ant-col-md-8 ant-col-lg-6"     > 
+                        <li v-for="link in linkList" :key="'link-' + link.id" class="link-li ant-col ant-col-xs-12  ant-col-md-8 ant-col-lg-6"     > 
                             <a-row class="link-div">
-                            <img src="https://windcoder.com/wp-content/themes/Tint/assets/img/link-favicon.png" v-real-img="link.url+'/favicon.ico'" class="link-img">
-                            <a  :href="link.url"  :title="link.name" target="_blank" rel="noopener">{{link.name}}</a>
+                            <img src="/favicon.ico" v-real-img="'//'+link.url+'/favicon.ico'" class="link-img">
+                            <a  :href="'//'+link.url"  :title="link.name" target="_blank" rel="noopener">{{link.name}}</a>
                             <p>{{link.description}}</p>
                             </a-row>
                         </li>

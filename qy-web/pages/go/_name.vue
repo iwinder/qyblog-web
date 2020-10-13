@@ -8,7 +8,7 @@ import Vue from 'vue'
  import { mapState } from 'vuex'
 export default Vue.extend({
     async fetch({ store, params }) {
-  await store. dispatch('siteInfo/getSiteInfo');
+  // await store. dispatch('siteInfo/getSiteInfo');
 
 },
   async   asyncData (context) {
