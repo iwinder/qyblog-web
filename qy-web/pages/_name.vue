@@ -169,8 +169,18 @@ export default {
     width: 85%;
     margin-right: auto;
     margin-left: auto;
-    
+        @media (max-width: 767px) {
+      width: 100%;
+      margin: 0;
+    }
+    @media (min-width: 768px){ 
+      width: 85%;
+      margin-right: auto;
+      margin-left: auto;
+    }
 }
+
+
    @media screen and (max-width: 992px) {
     .single-right {
       padding: 20px 0;
