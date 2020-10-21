@@ -10,7 +10,7 @@ isEmpty: function (obj) {
   if ((typeof obj == 'string')) {
     return !obj || obj.replace(/\s+/g, "") == ""
   } else {
-    return (!obj || JSON.stringify(obj) === "{}" || obj.length === 0);
+    return (!obj ||  obj.length === 0);
   }
 },
 

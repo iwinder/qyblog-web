@@ -26,3 +26,12 @@ npm install --save js-md5
 
 npm install nuxt-ssr-cache -save
 ```
+
+```
+pm2 start npm --name "qy-web" -- run start
+
+pm2 stop qy-web
+$ pm2 logs                      # 显示所有应用程序的日志
+
+$ pm2 logs [app-name]           # 显示指定应用程序的日志
+```

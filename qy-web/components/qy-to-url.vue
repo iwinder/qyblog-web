@@ -1,5 +1,5 @@
 <template>
-  <!-- <span >  -->
+  <!-- <span v-if="targetObj.url" >  -->
         <a :href="targetObj.url"  v-if="validateUrl(targetObj.url)"  :target="targetObj.blanked?  '_blank':'_self'">   {{targetObj.name}}  </a>
 
         <nuxt-link  :to="targetObj.url"  v-else    :target="targetObj.blanked?  '_blank':'_self'"  >      {{targetObj.name}} </nuxt-link>

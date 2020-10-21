@@ -46,13 +46,12 @@ export default {
   */
   plugins: [
     '@/plugins/antd-ui',
-    {src: '@/plugins/local-serve-storage', ssr: false},
-    {src: '@/plugins/localStorage', ssr: false},
-    '@/plugins/lru-cache',
+    // {src: '@/plugins/local-serve-storage', ssr: false},
+    // {src: '@/plugins/localStorage', ssr: false},
+    // '@/plugins/lru-cache',
     '@/plugins/qy-serve-tool',
     "@/plugins/qy-real-img",
     "@/plugins/qy-axios-cache",
-    "@/plugins/vue-update-url",
 
     { src: '@/plugins/vue-highlight', ssr: false }, 
   ],

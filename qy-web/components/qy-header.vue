@@ -31,7 +31,7 @@
                       <span slot="title" class="submenu-title-wrapper"
                         >   {{menu.name}} </span >
                         <template v-for="(children) in menu.children">    
-                                  <a-menu-item :key="children.url" >
+                                  <a-menu-item :key="children.url"  >
                                         <qy-to-url :targetObj="children"> </qy-to-url> 
                                 </a-menu-item>
                         </template>
