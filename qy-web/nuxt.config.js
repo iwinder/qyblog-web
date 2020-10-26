@@ -45,7 +45,7 @@ export default {
   ** https://nuxtjs.org/guide/plugins
   */
   plugins: [
-    '@/plugins/antd-ui',
+    // '@/plugins/antd-ui',
     // {src: '@/plugins/local-serve-storage', ssr: false},
     // {src: '@/plugins/localStorage', ssr: false},
     // '@/plugins/lru-cache',
@@ -82,6 +82,31 @@ export default {
   ** See https://nuxtjs.org/api/configuration-build/
   */
   build: {
+    analyze: false,
+    transpile: ['ant-design-vue'],
+    babel: {
+        plugins: [
+        ['import', {
+        libraryName: 'ant-design-vue',
+        libraryDirectory: 'es',
+        style: 'css'
+        }, 'ant-design-vue']
+        ]
+    },
+    module:{
+      rules:[
+        {
+          loader:'webpack-ant-icon-loader',
+          enforce: 'pre',
+          // options:{
+          //   chunkName:'antd-icons'
+          // },
+          include:[
+            require.resolve('@ant-design/icons/lib/dist')
+          ]
+        }
+      ]
+    }
   },
   hooks: {
     'render:route': (url, result) => {
