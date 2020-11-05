@@ -37,7 +37,7 @@ export default {
   ** Global CSS
   */
   css: [
-    'ant-design-vue/dist/antd.css',
+    // 'ant-design-vue/dist/antd.css',
     '@/assets/css/main.scss'
   ],
   /*
@@ -45,7 +45,7 @@ export default {
   ** https://nuxtjs.org/guide/plugins
   */
   plugins: [
-    // '@/plugins/antd-ui',
+    '@/plugins/antd-ui',
     // {src: '@/plugins/local-serve-storage', ssr: false},
     // {src: '@/plugins/localStorage', ssr: false},
     // '@/plugins/lru-cache',
@@ -82,30 +82,41 @@ export default {
   ** See https://nuxtjs.org/api/configuration-build/
   */
   build: {
-    analyze: false,
+    analyze: true,
     transpile: ['ant-design-vue'],
     babel: {
         plugins: [
         ['import', {
         libraryName: 'ant-design-vue',
         libraryDirectory: 'es',
-        style: 'css'
+        style:  true
         }, 'ant-design-vue']
         ]
     },
     module:{
-      rules:[
-        {
-          loader:'webpack-ant-icon-loader',
-          enforce: 'pre',
-          // options:{
-          //   chunkName:'antd-icons'
-          // },
-          include:[
-            require.resolve('@ant-design/icons/lib/dist')
-          ]
+      // rules:[
+      //   {
+      //     loader:'webpack-ant-icon-loader',
+      //     enforce: 'pre',
+      //     // options:{
+      //     //   chunkName:'antd-icons'
+      //     // },
+      //     include:[
+      //       require.resolve('@ant-design/icons/lib/dist')
+      //     ]
+      //   }
+      // ]
+    },
+    loaders: {
+      less: {
+        lessOptions: {
+          javascriptEnabled: true
         }
-      ]
+      }
+    },
+    extend(config, ctx) {
+      const path = require('path');
+      config.resolve.alias['@ant-design/icons/lib/dist$'] = path.resolve(__dirname, './assets/icons/antd-icon.js') // 引入需要的
     }
   },
   hooks: {
@@ -167,7 +178,7 @@ export default {
     // header field to provide req.hostname (actual host name)
     useHostPrefix: false,
     pages: [
-      '/',
+      // '/',
       // these are prefixes of pages that need to be cached
       // if you want to cache all pages, just include '/'
       // '/page1',
