@@ -46,9 +46,9 @@
 </template>
 <script  >
 import Vue from 'vue'
-import { FormModel } from 'ant-design-vue';
+import { FormModel,Comment,Avatar, Tooltip } from 'ant-design-vue';
 
-Vue.use(FormModel); 
+Vue.use(FormModel,Comment,Avatar,Tooltip); 
 // Vue.use(Cookies); 
 export default Vue.extend({
         props: { 

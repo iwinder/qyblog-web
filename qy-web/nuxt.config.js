@@ -83,15 +83,16 @@ export default {
   */
   build: {
     analyze: true,
+    telemetry:false,
     transpile: ['ant-design-vue'],
     babel: {
-        plugins: [
-        ['import', {
-        libraryName: 'ant-design-vue',
-        libraryDirectory: 'es',
-        style:  true
-        }, 'ant-design-vue']
-        ]
+      plugins: [
+        ['import',{
+            libraryName: 'ant-design-vue',
+            libraryDirectory: 'es',
+            style: true,
+          }]
+      ]
     },
     module:{
       // rules:[
@@ -119,29 +120,29 @@ export default {
       config.resolve.alias['@ant-design/icons/lib/dist$'] = path.resolve(__dirname, './assets/icons/antd-icon.js') // 引入需要的
     }
   },
-  hooks: {
-    'render:route': (url, result) => {
-      // const $ = cheerio.load(result.html,{decodeEntities: false});
-      //由于window.__nuxt__总是位于body中的第一个script中，
-      //所以我移除了body中第一个脚本标签
-      // console.log("this.doc(`body script`).", this.doc(`body script`));
-      // let num = -1;
-      // let leng = $(`body script`).length;
-      // for(let i=0;i<leng;i++) {
-      //   console.log("$(`body script`)[i]", $(`body script`)[i]);
-      //   if($($(`body script`)[i]).text().indexOf("window.__NUXT__")>=0) {
-      //     num = i;break;
-      //   }
-      // }
-      // if(num>=0) {
-      //   $($(`body script`)[num]).remove();
+  // hooks: {
+  //   'render:route': (url, result) => {
+  //     // const $ = cheerio.load(result.html,{decodeEntities: false});
+  //     //由于window.__nuxt__总是位于body中的第一个script中，
+  //     //所以我移除了body中第一个脚本标签
+  //     // console.log("this.doc(`body script`).", this.doc(`body script`));
+  //     // let num = -1;
+  //     // let leng = $(`body script`).length;
+  //     // for(let i=0;i<leng;i++) {
+  //     //   console.log("$(`body script`)[i]", $(`body script`)[i]);
+  //     //   if($($(`body script`)[i]).text().indexOf("window.__NUXT__")>=0) {
+  //     //     num = i;break;
+  //     //   }
+  //     // }
+  //     // if(num>=0) {
+  //     //   $($(`body script`)[num]).remove();
       
-      //   // eq(0).remove();
-      //   result.html = $.html()
-      // }
+  //     //   // eq(0).remove();
+  //     //   result.html = $.html()
+  //     // }
 
-    }
-  },
+  //   }
+  // },
   axios: {
     // baseURL: 'http://localhost:8000/api/admin',
     // or other axios configs.

@@ -68,9 +68,9 @@
  import { mapState } from 'vuex'
 import  QyToUrl from '~/components/qy-to-url.vue'
 import Vue from 'vue'
-import { FormModel } from 'ant-design-vue';
+import { FormModel,Modal } from 'ant-design-vue';
 
-Vue.use(FormModel); 
+Vue.use(FormModel,Modal); 
 export default {
     props: { 
         isCollapsed: {
