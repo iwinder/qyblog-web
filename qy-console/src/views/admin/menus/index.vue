@@ -40,18 +40,18 @@
                  @change="handleTableChange"
         >
         
-         <template slot="type" slot-scope="text, record">
-            <template v-if="record.type==1">顶部菜单</template>
-            <template v-else-if="record.type==2">页尾菜单</template>
+         <template slot="identifier" slot-scope="text, record">
+            <template v-if="record.identifier==1">顶部菜单</template>
+            <template v-else-if="record.identifier==2">页尾菜单</template>
             <template v-else>未启用</template>
         </template>
 
             <span slot="action" slot-scope="text, record">
                 <router-link :to="{name:'menus-id',params:{ id: record.id, name: record.name, type: record.type }}">菜单 </router-link >
-                <a-divider type="vertical" />
-
-                     <a  href="javascript:void(0)"  @click="deleted([record.id])" >删除</a>
-
+                <template v-if="record.type!='SYSTEM'">
+                    <a-divider type="vertical" /> 
+                    <a  href="javascript:void(0)"  @click="deleted([record.id])" >删除</a>
+                </template>
             </span>
         </a-table>
     </div>
@@ -70,8 +70,9 @@
         },
         {
             title: '菜单位置',
-            dataIndex: 'type',
-            key: 'type',
+            dataIndex: 'identifier',
+            key: 'identifier',
+            scopedSlots: { customRender: 'identifier' },
         },
         {
             title: '创建者',

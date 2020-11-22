@@ -328,7 +328,7 @@ export default {
 
 
    .mavonEditor /deep/ .v-note-wrapper{
-    z-index:0 !important;
+    z-index:1 !important;
 }
 
 //  body /deep/ .ant-message {

@@ -54,6 +54,16 @@
                                                 <a-icon slot="unCheckedChildren" type="close" />
                                         </a-switch> 
                                   </template>
+                                  <template v-else-if="option.configKey == 'site_default_media_lib'" >
+                                    
+                                      <a-select   
+                             v-model="option.configValue"  placeholder="文件保存位置" > 
+                                    <a-select-option v-for="o in MEDIA_LIB_TYPE" :key="o.key">
+                                    {{ o.value }}
+                                    </a-select-option>
+
+                             </a-select>
+                                  </template>
                                  <a-input v-else  v-model="option.configValue" /> 
                              </a-col>
                              <template v-if="option.configTip" slot="extra">
@@ -86,10 +96,11 @@ export default Vue.extend({
       options3:[],
       options4:[],
       optionForm: {},
-       layout: {
-            labelCol: { span: 4 },
-            wrapperCol: { span: 14 },
-        },
+      layout: {
+          labelCol: { span: 4 },
+          wrapperCol: { span: 14 },
+      }, 
+      MEDIA_LIB_TYPE:MENUS_AGENT_IDENTIFIER_ARRAY,
     };
   },
   mounted() {
