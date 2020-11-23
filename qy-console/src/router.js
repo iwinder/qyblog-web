@@ -30,7 +30,7 @@ import NotFound  from './views/error/404.vue'
 import ErrorPage  from './views/error/500.vue'
 import IpBlack from './views/admin/ip-black/index.vue'
 import LoginLog from './views/admin/login-log/index.vue'
-
+import fileLib from './views/admin/file-lib/index.vue' 
 
 // import Teacher from './views/admin/teacher.vue'
 // import File from './views/admin/file.vue'
@@ -207,6 +207,11 @@ const router = new Router({
             path: 'login-log',
             name: 'login-log',
             component: LoginLog,
+        },
+        {
+            path: 'media-lib-config',
+            name: 'media-lib-config',
+            component: fileLib
         }
     ] // admin child end
     }]

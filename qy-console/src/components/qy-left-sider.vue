@@ -34,12 +34,12 @@
                             标签管理
                      </router-link>
                 </a-menu-item>
-                            <a-menu-item key="/page">
-               <router-link to="/page">
-                <a-icon type="snippets" />
-                <span>页面管理</span>
+               <a-menu-item key="/page">
+                <router-link to="/page">
+                    <a-icon type="snippets" />
+                    <span>页面管理</span>
                 </router-link>
-            </a-menu-item>
+                </a-menu-item>
             <a-menu-item key="/comment">
                <router-link to="/comment">
                 <a-icon type="message" />
@@ -47,8 +47,15 @@
                 </router-link>
             </a-menu-item>
             </a-sub-menu> 
-
-
+            <a-sub-menu key="media">
+                <span slot="title"><a-icon type="form" /><span>媒体管理</span></span>
+                <a-menu-item key="/media-lib-config">
+                <router-link to="/media-lib-config">
+                    <a-icon type="snippets" />
+                    <span>媒体库配置</span>
+                </router-link>
+                </a-menu-item>
+            </a-sub-menu>
            <a-sub-menu key="system-link">
                 <span slot="title"><a-icon type="setting" /><span>链接管理</span></span>
             <a-menu-item key="/menus">
