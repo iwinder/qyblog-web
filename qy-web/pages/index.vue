@@ -3,7 +3,7 @@
     <a-col :xs="{span:24}"    :lg="{ span: 16}"  class="content-left"> 
           <h2 v-if="!isSearchFlag">近期文章</h2>
            <h2 v-else>搜索 “{{searchText}}”  的结果</h2>
-       <qy-post-list  :pagination="pagination" :listData="listData"></qy-post-list>
+       <qy-post-list  :pagination="pagination" :listData="listData" ></qy-post-list>
     </a-col>
 
   <a-col :xs="{span:24}"      :lg="{  span: 7, offset: 1 }" class="content-right" > 
@@ -58,11 +58,12 @@ async fetch({ store, params }) {
                       // if(process.browser) {
                             defImg = '/img/thumb/'+ _this.$QyServeTool().randomNum(1,32)+'.jpg';
                       // } 
+                    
                     listData.push({
                       id: e.id,
                       href:  e.permaLink,
                       title: e.title,
-                      thumbnail: e.thumbnail,
+                      thumbnail: e.thumbnail?e.thumbnail:defImg,
                       tagStrings: e.tagStrings,
                       tags: e.tags,
                       status: e.status,
@@ -121,7 +122,7 @@ async fetch({ store, params }) {
           pageSize: 3,
           total: 0,
           showLessItems: true,
-           onChange: page => {   }
+          
         },
     }
   },
@@ -131,7 +132,8 @@ computed: {
   })
 },
   created() {
-    let _this  =  this;  
+    let _this  =  this; 
+    if(process.browser) {
      _this.pagination.onChange= function(page) { 
                 let url = "/page/"+page;
                 if(_this.isSearchFlag) {
@@ -139,6 +141,8 @@ computed: {
                 }
                 _this.$router.push(url); 
       };
+    } 
+
   },
   watchQuery: ['searchText'],
   head () {

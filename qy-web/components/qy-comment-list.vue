@@ -36,6 +36,8 @@ import Vue from 'vue'
 import  QyCommentChildList from '~/components/qy-comment-child-list.vue'
 import  QyRepliesForm from '~/components/qy-replies-form.vue'
 import   md5 from 'js-md5'
+import { Comment} from 'ant-design-vue';
+Vue.use( Comment);
 export default Vue.extend({
     props: {  
         commentAgentId: null

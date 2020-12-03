@@ -26,11 +26,11 @@ import QyHeader from '~/components/qy-header.vue'
 import QyFooter from '~/components/qy-footer.vue'
 import QyLeftSider from '~/components/qy-left-sider.vue'
 import Vue from 'vue'
-import { ConfigProvider,Menu,Drawer,Card,Tag,popover,Input  } from 'ant-design-vue';
+import { ConfigProvider,Menu,Drawer,Card,Tag,Popover,Input,Avatar,List,Pagination,Button,BackTop    } from 'ant-design-vue';
  import zh_CN from 'ant-design-vue/lib/locale-provider/zh_CN';
   import moment from 'moment';
   import 'moment/locale/zh-cn';
-Vue.use( ConfigProvider,Menu,Drawer,Card,Tag,popover,Input );
+Vue.use( ConfigProvider,Menu,Drawer,Card,Tag,Popover,Input,Avatar,List,Pagination,Button,BackTop  );
 moment.locale('zh-cn');
 import { mapState } from 'vuex'
 
@@ -112,7 +112,9 @@ html {
   box-sizing: border-box;
   margin: 0;
 }
-
+body{
+  background:#f5f6f8;
+}
 .button--green {
   display: inline-block;
   border-radius: 4px;

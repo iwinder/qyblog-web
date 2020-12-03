@@ -20,13 +20,13 @@
         <a-row class="single-body">
             <a-row class="article-header">
                 <template v-if="postData.tags!=null">
-                    <a-col  class="post-tags"> 
+                    <a-col  class="post-tags"  :xs="{span:24}"  :sm="{ span: 16}"> 
                         <a-tag color="#f50" v-for=" tag in postData.tags" :key="tag.id">
                              <nuxt-link :to=" {name:'tag-name',  params:{name:tag.identifier, aid:tag.id} }"> {{tag.name}} </nuxt-link>
                         </a-tag>
                     </a-col>
                 </template>
-                <a-col class="post-meta"> 
+                <a-col class="post-meta" :xs="{span:24}"  :sm="{ span: 4,offset: 3}" :lg="{offset: 2}" :xl="{offset: 4}"> 
                       <a class="post-meta-views" href="javascript: void(0)">   <a-icon type="eye" />   <span class="num">{{postData.viewCount}}</span>  </a>
                      <a class="post-meta-comments" href="javascript: void(0)">    <a-icon type="message" /> <span class="num">{{postData.commentCount}}</span>   </a>
                      
@@ -70,17 +70,7 @@ export default Vue.extend({
   },
 })
 </script>
-
-<style lang="scss" scoped>
-@media (max-width: 480px) {
-#main>.post>.single-body>.article-header>.post-meta {
-    display: block;
-    width: 100%;
-    margin-top: 10px;
-}
-}
-
-</style>
+ 
 
 <style lang="scss" scoped>
 
@@ -169,6 +159,13 @@ export default Vue.extend({
     line-height: 24px;
     padding: 0 5px;
     color: #34495e;
+    }
+}
+@media (max-width: 576px) {
+   .post-meta {
+        display: block;
+        width: 100%;
+        margin: 10px 0px;
     }
 }
 .license-tag {

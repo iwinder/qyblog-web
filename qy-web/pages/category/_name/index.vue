@@ -64,7 +64,7 @@ export default {
                              id: e.id,
                             href:  e.permaLink,
                             title: e.title,
-                            thumbnail: e.thumbnail,
+                            thumbnail: e.thumbnail?e.thumbnail:defImg,
                             tagStrings: e.tagStrings,
                             tags: e.tags,
                             category: e.category,

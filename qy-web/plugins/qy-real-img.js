@@ -2,20 +2,33 @@ import Vue from 'vue'
 Vue.directive('real-img', async function (el, binding) {//指令名称为：real-img
     let imgURL = binding.value;//获取图片地址 
     if (imgURL) {
-        let exist = await imageIsExist(imgURL); 
-        if (exist) {
-            el.setAttribute('src', imgURL);
-        } 
+        try {
+            let exist = await imageIsExist(imgURL); 
+            if (exist) {
+                el.setAttribute('src', imgURL);
+            }  else {
+                el.onerror=null;
+            } 
+        } catch(error) {
+            console.log('资源2233error', error);
+        }
     }
 })
 
 Vue.directive('real-background-img', async function (el, binding) {//指令名称为：real-img
     let imgURL = binding.value;//获取图片地址
     if (imgURL) {
-        let exist = await imageIsExist(imgURL);
-        if (exist) {
-            el.setAttribute('style', "background-image:url('"+imgURL+"');");
-        } 
+        try {
+            let exist = await imageIsExist(imgURL);
+            if (exist) {
+                el.setAttribute('style', "background-image:url('"+imgURL+"');");
+            } else {
+                el.onerror=null;
+            } 
+        } catch(error) {
+            console.log('资源22error', error);
+        }
+
     }
 })
 
@@ -33,8 +46,9 @@ let imageIsExist = function(url) {
             }
         }
         img.onerror = function () { 
+            //console.log('资源error', img);
             resolve(false);
-            img = null;
+            img = null; 
         }
         img.src = url;
     })

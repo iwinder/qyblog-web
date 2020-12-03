@@ -49,11 +49,11 @@ export default {
             if(resp.success) { 
                 result  = resp.content; 
                 if(result.type == 1) {
-                        let defImg = "/img/image-pending.gif"; 
-                    //    if(process.browser) {
-                            defImg = '/img/thumb/'+ _this.$QyServeTool().randomNum(1,32)+'.jpg';
-                    //   } 
-                      result.defImg = defImg;
+                    let defImg = "/img/image-pending.gif";  
+                    defImg = '/img/thumb/'+ _this.$QyServeTool().randomNum(1,32)+'.jpg';
+                    
+                    result.defImg = defImg;
+                    result.thumbnail =  result.thumbnail?result.thumbnail:defImg;
                 }
                 result.publishedDateMD =   moment(result.publishedDate).format('YYYY-MM-DD');
                 result.publishedDateTime =   moment(result.publishedDate).format('YYYY-MM-DD HH:mm:ss');
@@ -169,11 +169,11 @@ export default {
     width: 85%;
     margin-right: auto;
     margin-left: auto;
-        @media (max-width: 767px) {
+    @media (max-width: 992px) {
       width: 100%;
       margin: 0;
     }
-    @media (min-width: 768px){ 
+    @media (min-width: 992px){ 
       width: 85%;
       margin-right: auto;
       margin-left: auto;

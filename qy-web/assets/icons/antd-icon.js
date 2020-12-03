@@ -33,8 +33,27 @@ export {
 export {
   default as MailOutline
 } from '@ant-design/icons/lib/outline/MailOutline';
-
-
+export {
+  default as LeftOutline
+} from '@ant-design/icons/lib/outline/LeftOutline';
+export {
+  default as RightOutline
+} from '@ant-design/icons/lib/outline/RightOutline';
+export {
+  default as EllipsisOutline
+} from '@ant-design/icons/lib/outline/EllipsisOutline';
+export {
+  default as VerticalAlignTopOutline
+} from '@ant-design/icons/lib/outline/VerticalAlignTopOutline';
+export {
+  default as DoubleRightOutline
+} from '@ant-design/icons/lib/outline/DoubleRightOutline';
+export {
+  default as DoubleLeftOutline
+} from '@ant-design/icons/lib/outline/DoubleLeftOutline';
+export {
+  default as UserOutline
+} from '@ant-design/icons/lib/outline/UserOutline';
 // export {
 //   default as SmileOutline
 // } from '@ant-design/icons/lib/outline/SmileOutline';

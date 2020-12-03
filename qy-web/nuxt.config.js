@@ -52,7 +52,7 @@ export default {
     '@/plugins/qy-serve-tool',
     "@/plugins/qy-real-img",
     "@/plugins/qy-axios-cache",
-
+    {src: '@/plugins/vueLazyLoad', ssr: true }, 
     { src: '@/plugins/vue-highlight', ssr: false }, 
   ],
   router: {

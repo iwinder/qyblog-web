@@ -42,7 +42,7 @@
           </a-menu-item>
       </template>
       </a-menu>
-      <a-col  :xs="{span:3,offset:4}"  :sm="{span:3,offset: 4}"  :md="{ span: 2, offset:3}">  <a-button shape="circle" icon="search"  :loading="searchLoading"   @click="openSearch"/></a-col>
+      <a-col  :xs="{span:3,offset:4}"  :sm="{span:3,offset: 4}"  :md="{ span: 2, offset:3}"  class="search-button">  <a-button shape="circle" icon="search"  :loading="searchLoading"   @click="openSearch"/></a-col>
       </a-row>
 
       <a-modal 
@@ -232,7 +232,10 @@ export default {
     height: 64px; 
  }
  
-
+.search-button {
+      line-height: 64px;
+    float: left;
+}
 
 @media (max-width: 767px) {
   .horizontalShow {

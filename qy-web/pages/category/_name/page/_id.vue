@@ -35,6 +35,7 @@ export default Vue.extend({
         let name = _this.params.name; 
           let tagUrl = "/web/category/name/" + name;
             let res1 = {};
+            let  category =  {};
             try {
           res1 = await   _this.$axios.get('/web/articles',{ params: {
             categoryName: name,
@@ -56,7 +57,7 @@ export default Vue.extend({
                             id: e.id,
                             href:  e.permaLink,
                             title: e.title,
-                            thumbnail: e.thumbnail,
+                            thumbnail: e.thumbnail?e.thumbnail:defImg,
                             tagStrings: e.tagStrings,
                             tags: e.tags,
                             category: e.category,
@@ -88,7 +89,7 @@ export default Vue.extend({
 
             }); 
 
-            let  category = await  context.$axios.get(tagUrl).then(res => {
+            category = await  context.$axios.get(tagUrl).then(res => {
               let resp  = res.data			
                if(resp.success) {
                  return resp.content;

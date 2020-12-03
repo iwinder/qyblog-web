@@ -9,9 +9,12 @@
         <a-row class="card_site_header" >
                 <a-card-meta  :title="siteInfo.nickname" :description="siteInfo.site_desc">
                 <a-avatar
+                icon="user"
                 size="large"
                     slot="avatar"
-                    :src ="siteInfo.avatar"
+                    src ="/favicon.ico"
+                    :srcSet ="siteInfo.avatar"
+                    alt="W" 
                 />
                 </a-card-meta>
         </a-row>
@@ -38,7 +41,8 @@
                     <ul>
                         <li v-for="(link) in siteIndexLink" :key="link.id">
                                 <a :href="'//'+link.url"  :title="link.description"  target="_blank" rel="noopener">
-                                <img src="/favicon.ico" v-real-img="'//'+link.url+'/favicon.ico'"  width="18px">  
+                                <!-- <img src="/favicon.ico"     v-real-img="'//'+link.url+'/favicon.ico'"  width="18px" />  -->
+                                 <img :src="'//'+link.url+'/favicon.ico'"   @error="defImg()"    width="18px">   
                                      {{link.name}}</a>
                         </li>
                     </ul>
@@ -66,6 +70,21 @@ export default Vue.extend({
  
         }
     },
+    methods: {
+        defImg() {
+             let img = event.srcElement;
+            img.src = "/favicon.ico";
+            img.onerror = null; //防止闪图
+        },
+        loadError() {
+            console.log("event loadError", this);
+            return true;
+            //  let img = event.srcElement;
+            // img.src = "/favicon.ico";
+            // img.onerror = null; //防止闪图
+        }
+        
+    }
 })
 </script>
 
