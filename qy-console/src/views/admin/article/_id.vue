@@ -73,8 +73,8 @@ export default Vue.extend({
            
         },
         backF() {
-              let _this = this;
-                _this.$router.push("/article");
+            let _this = this;
+            _this.$router.push("/article");
         }
     }
     

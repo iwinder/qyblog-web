@@ -27,13 +27,7 @@
         components: {
             QyArticleCategoryForm
         },
-        validate ({ params }) {
-            // 必须是number类型
-            return /^\d+$/.test(params.id)
-        },
-        // asyncData ({ params }) {
-        //     return  {categoryId:params.id,categoryObj: params.obj,parentTreeObj: params.parent };
-        // },
+
         data() {
             return {
                 categoryId: null,
@@ -62,7 +56,7 @@
                     _this.$axios.get("/admin/blogCategorys/" + _this.categoryId).then(res => {
                             if(res.data.success) {
                                 _this.categoryObj =  res.data.content;
-                                  _this.parentTreeObj  = _this.categoryObj .parent;
+                                _this.parentTreeObj  = _this.categoryObj.parent;
                             }
                     });
             },

@@ -16,7 +16,7 @@
                 </a-form-model>
 
             </a-col>
-            <a-col  :xs="{span:24}"  :lg="{ span: 6, offset: 6 }" style=" margin-top: 5px;">
+            <a-col  :xs="{span:24}"  :lg="{ span: 5, offset: 7 }" style=" margin-top: 5px;">
                 <a-button  type="primary"  @click="add()">
                     新增
                 </a-button>
@@ -39,37 +39,35 @@
                  :row-selection="{ selectedRowKeys: selectedIds, onChange: onSelectChange }"
                  @change="handleTableChange"
         >
+            <template slot="status" slot-scope="text, record">
+                <template v-if="record.status==true">启用</template>
+                <template v-else>未启用</template>
+            </template>
+            <template slot="type" slot-scope="text, record">
+                <template v-if="record.type=='SYSTEM'">系统</template>
+                <template v-else-if="record.type=='USER'">自定义</template>
+                <template v-else>未知</template>
+            </template>
 
             <span slot="action" slot-scope="text, record">
-                <!-- <router-link :to="{name:'sysIpBlack-id',params:{ id: record.id }}">编辑 </router-link >
-                <a-divider type="vertical" /> -->
-
-                     <a  href="javascript:void(0)"  @click="deleted([record.id])" >删除</a>
-
+              
+                <template v-if="record.identifier!=1"> 
+                    <router-link :to="{name:'media-lib-config-id',params:{ id: record.id,obj: record, }}">配置 </router-link>
+                </template>
+                <template v-if="record.type!='SYSTEM'">
+                    <a-divider type="vertical" />
+                    <a  href="javascript:void(0)"  @click="deleted([record.id])" >删除</a>
+                </template>
             </span>
         </a-table>
 
-            <a-modal v-model="visible"  on-ok="editIp" :footer="null" @cancel="handleCancel">
-              <template slot="title">
-                   新增黑名单
-              </template>
-                  <a-form-model ref="ipForm" :model="ipForm" :rules="rules" layout="vertical">
-                            <a-form-model-item has-feedback label="IP" prop="name">
-                                   <a-textarea :rows="4" v-model="ipForm.name"   placeholder="多个IP请换行输入" /> 
-                            </a-form-model-item>
-                            <a-form-model-item :wrapper-col="{ span: 14, offset: 4 }">
-                            <a-button type="primary" :loading="editLoading" @click="editIp">
-                                保存
-                            </a-button>
-                            <a-button style="margin-left: 10px" @click="handleCancel">
-                                取消
-                            </a-button>
-                            </a-form-model-item>
-                        </a-form-model>
-         </a-modal>
+        <a-modal v-model="configVisible"  on-ok="editConfig" :footer="null" :maskClosable="false" >
+            <template slot="title">
+                配置{{targetType.name}}
+            </template>
+            
+        </a-modal>
     </div>
-
-
 </template>
 
 <script  >
@@ -77,51 +75,29 @@
     import { FormModel } from 'ant-design-vue';
     Vue.use(FormModel);
 
-    const columns = [
+    const columns = [ 
         {
-            title: 'id',
-            dataIndex: 'id',
-            key: 'id',
+            title: '媒体库名称',
+            dataIndex: 'name',
+            key: 'name',
         },
         {
-            title: '访客ip',
-            dataIndex: 'visitorIp',
-            key: 'visitorIp',
+            title: '类型标识',
+            dataIndex: 'identifier',
+            key: 'identifier',
         },
         {
-            title: '访客客户端',
-            dataIndex: 'visitorAgent',
-            key: 'visitorAgent',
-              ellipsis: true, 
+            title: '状态',
+            dataIndex: 'status',
+            key: 'status',
+            scopedSlots: { customRender: 'status' },
         },
         {
             title: '类型',
             dataIndex: 'type',
             key: 'type',
+            scopedSlots: { customRender: 'type' },
         },
-        {
-            title: '备注',
-            dataIndex: 'remarks',
-            key: 'remarks',
-            ellipsis: true, 
-        },
-        {
-            title: '被封次数',
-            dataIndex: 'blackNum',
-            key: 'blackNum',
-        },
-        {
-            title: '创建时间',
-            dataIndex: 'createdDate',
-            key: 'createdDate',
-        },
-        {
-            title: '更新时间',
-            dataIndex: 'lastModifiedDate',
-            key: 'lastModifiedDate',
-            ellipsis: true, 
-        },
- 
         {
             title: '操作',
             key: 'action',
@@ -149,16 +125,25 @@
                 },
                 editLoading: false,
                 visible: false,
-                ipForm: {
-                    name:''
+                configVisible: false,
+                editConfigLoading: false,
+                configForm: {
+                    accessKey:'',
+                    secretKey:'',
+                    bucket:'',
+                    endpoint:'',
+                    prefix:'' 
+
                 },
-                rules:  {
+                configRules:  {
                 },
-                tagObj: {},
+                targetObj: {},
                 layout: {
                     labelCol: { span: 4 },
                     wrapperCol: { span: 14 },
                 },
+                targetType:{},
+                targetConfig:{}
             };
         },
         mounted() {
@@ -185,7 +170,7 @@
                 }
 
 
-                _this.$axios.get('/admin/sysIpBlack',{ params: params
+                _this.$axios.get('admin/fileLibType',{ params: params
 
                 }).then(res => {
                     let resp  = res.data
@@ -196,7 +181,8 @@
                     _this.loading = false;
                     _this.selectedIds = [];
                 }).catch((response) => {
-                    _this.loading = false; 
+                    _this.loading = false;
+                    console.log("error：", response);
                 });
             },
             handleTableChange(pagination, filters, sorter ) {
@@ -208,14 +194,9 @@
                     page: pagination.current,
                 })
             },
-            add(obj) {
+            add() {
                 let _this = this;
-               
-                if(obj) {
-                    _this.tagObj = obj[0];
-                    _this.tagForm.name = _this.tagObj.name;
-                }
-                 _this.visible = true;
+                _this.$router.push("/fileLibType/add");
             },
             searchForm() {
                 let _this = this;
@@ -223,7 +204,8 @@
 
             },
             handleMenuClick(e) {
-                let _this = this; 
+                let _this = this;
+                console.log('click', e);
                 if(e.key === "1") {
                     if( _this.selectedIds &&  _this.selectedIds.length>0) {
                         _this.deleted(_this.selectedIds );
@@ -247,55 +229,51 @@
                 if(ids) {
                     this.$confirm({
                         title: '确认删除?',
-                        onOk() { 
-                            _this.$axios.delete("/admin/sysIpBlack/deleted", {data:  ids}).then(res => { 
+                        onOk() {
+                            console.log('OK');
+                            _this.$axios.delete("admin/fileLibType/deleted", {data:  ids}).then(res => {
+                                console.log("deleted !res", res);
                                 if(res.data.success) {
                                     _this.$message.success("删除成功",5);
                                     _this.initData();
                                 }
-                            }).catch((response) => { 
+                            }).catch((response) => {
+                                console.log("error：", response);
                             });
                         },
-                        onCancel() { 
+                        onCancel() {
+                            console.log('Cancel');
                         },
                         class: 'test',
                     });
                 }
             },
-         editIp() {
+            openConfig(obj) {
                 let _this = this;
-                  _this.editLoading = true;
-                _this.$refs.ipForm.validate(valid => {
-                    if (valid) { 
-                        _this.tagObj.visitorIp = _this.ipForm.name;
-                        
-                        _this.$axios.post('/admin/sysIpBlack/save', _this.tagObj).then(res => {
-                                _this.editLoading = false;
-                                if(res.data.success) {
-                                    this.$message.success('保存成功',5);
-                                     _this.tagObj = {}; 
-                                     _this.$refs.ipForm.resetFields();
-                                    this.visible = false;
-                                    _this.initData();
+                _this.targetConfig = {};
+                if(obj) {
+                    _this.targetType = obj;
+                    _this.$axios.get("/admin/fileLibConfig/byType/"+obj.id).then(res => {
+                            if(res.data && res.data.success) {
+                                _this.targetConfig =  res.data.content;
+                                if( _this.targetConfig) {
+                                    _this.configForm = _this.targetConfig;
+                                } else {
+                                     _this.targetConfig.typeId = obj.id;
                                 }
-                        }).catch((response) => {
-                                _this.editLoading = false; 
-                            });
-                    } else {
-                        _this.editLoading = false;
-                        return false;
-                    }
-                });
+                                _this.configVisible = true;
+                            } else {
+                                _this.$message.error('配置获取失败: ' + res.data?res.data.message:res ,5);
+                            }
+                    }).catch((response) => {
+                        _this.$message.error('配置获取失败: ' + response,5);
+                    });
+                   
+                }
+               
             },
-        handleCancel() {
-                let _this = this;
-                 _this.ipForm= {
-                     name: ""
-                 };
-                _this.$refs.ipForm.resetFields();
-                _this.visible = false;
-                _this.tagObj = {}; 
-            },
+           
+
         },
 
     })

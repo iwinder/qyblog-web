@@ -30,8 +30,8 @@ import NotFound  from './views/error/404.vue'
 import ErrorPage  from './views/error/500.vue'
 import IpBlack from './views/admin/ip-black/index.vue'
 import LoginLog from './views/admin/login-log/index.vue'
-import fileLib from './views/admin/file-lib/index.vue' 
-
+import FileLibConfig from './views/admin/file-lib/config/index.vue' 
+import FileLibConfigEdit from './views/admin/file-lib/config/_id.vue'
 // import Teacher from './views/admin/teacher.vue'
 // import File from './views/admin/file.vue'
 // import Content from './views/admin/content.vue'
@@ -211,8 +211,13 @@ const router = new Router({
         {
             path: 'media-lib-config',
             name: 'media-lib-config',
-            component: fileLib
-        }
+            component: FileLibConfig
+        },
+        {
+            path: 'media-lib-config/:id',
+            name: 'media-lib-config-id',
+            component: FileLibConfigEdit,
+        },
     ] // admin child end
     }]
 })

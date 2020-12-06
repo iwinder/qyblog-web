@@ -2,7 +2,7 @@
   <a-row class="err-body">
       <qy-error-404  v-if="error.statusCode ==  404"> </qy-error-404>
     <!-- <h1>页面不存在</h1> -->
-    <qy-error-500 v-else> </qy-error-500>
+    <qy-error-500  :errMsg="error.message" v-else > </qy-error-500>
     
     <!-- <nuxt-link to="/">返回首页</nuxt-link> -->
   </a-row>

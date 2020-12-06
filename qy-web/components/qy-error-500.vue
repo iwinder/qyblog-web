@@ -30,6 +30,7 @@
         <div class="box_description-container">
             <div class="box_description-title">服务器内部错误</div>
             <div class="box_description-text">服务器遇到错误，无法完成请求</div>
+            <div class="box_description-text">{{errMsg}}</div>
         </div>  
         <a href="javascript:void(0);" class="box_button" @click="toIndex()" >返回</a>
 
@@ -42,7 +43,10 @@
 <script  >
 import Vue from 'vue'
 export default Vue.extend({
-        data(){
+    props: {  
+        errMsg: ""
+    },
+    data(){
         return {
             pageX:0, 
             pageY:0 ,

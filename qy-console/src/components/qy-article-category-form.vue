@@ -70,13 +70,13 @@ export default {
             },
             editParentId: null,
             editLoading: false,
-             editParentData: {},
-              rules:  {},
-                categoryObj: {},
-                layout: {
-                    labelCol: { span: 4 },
-                    wrapperCol: { span: 14 },
-                },
+            editParentData: {},
+            rules:  {},
+            categoryObj: {},
+            layout: {
+                labelCol: { span: 4 },
+                wrapperCol: { span: 14 },
+            },
         }
     },
      watch: {
@@ -86,13 +86,14 @@ export default {
              _this.editParentId = val.id;
          },
          categoryObjForm(val) {
-               let _this = this;
-                 _this.categoryForm = val;
+            let _this = this;
+            _this.categoryForm = val;
+            if(val) {
                 _this.categoryObj.id = val.id;
-            
+            } 
          }
      },
-mounted() {
+    mounted() {
        let _this = this;
        if(_this.categoryObjForm) {
             _this.categoryForm = _this.categoryObjForm;
@@ -106,22 +107,22 @@ mounted() {
    },
     methods: {
         editCategory() {
-                 let _this = this;
-                  _this.editLoading = true;
-                _this.$refs.categoryForm.validate(valid => {
-                    if (valid) {
-                        _this.categoryObj.name = _this.categoryForm.name;
-                         _this.categoryObj.identifier =  _this.categoryForm.identifier;
-                        if(_this.editParentId) {
-                            _this.categoryObj.parentId = _this.editParentId;
-                        }
-                          _this.afterSubmit(_this.categoryObj);
-                        
-                    } else {
-                          _this.editLoading = false;
-                        return false;
+            let _this = this;
+            _this.editLoading = true;
+            _this.$refs.categoryForm.validate(valid => {
+                if (valid) {
+                    _this.categoryObj.name = _this.categoryForm.name;
+                    _this.categoryObj.identifier =  _this.categoryForm.identifier;
+                    if(_this.editParentId) {
+                        _this.categoryObj.parentId = _this.editParentId;
                     }
-                });
+                    _this.afterSubmit(_this.categoryObj);
+                    
+                } else {
+                        _this.editLoading = false;
+                    return false;
+                }
+            });
         },
         handleCancel() {
                 let _this = this;
