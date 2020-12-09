@@ -1,22 +1,22 @@
 <template>
-    <a-form-model ref="targetForm" :model="targetForm" :rules="targetRules" layout="vertical">
+    <a-form-model ref="targetForm" :model="targetForm" :rules="targetRules" v-bind="layout">
         <a-form-model-item has-feedback label="名称" prop="name" required >
-            <a-input v-model="targetForm.name" /> 
+            <a-input v-model="targetForm.name" :disabled="targetObj.type=='SYSTEM'"/> 
         </a-form-model-item>
         <a-form-model-item has-feedback label="标识" prop="identifier" required >
-            <a-input-number v-model="targetForm.identifier" /> 
+            <a-input-number v-model="targetForm.identifier" :disabled="targetObj.type=='SYSTEM'"/> 
         </a-form-model-item>
-        <a-form-model-item has-feedback label="是否启用" prop="status"> 
-            <a-switch  v-model="targetForm.status" checked-children="是" un-checked-children="否" default-checked />
+        <a-form-model-item has-feedback label="是否启用" prop="status" > 
+            <a-switch  v-model="targetForm.status" checked-children="是" un-checked-children="否" default-checked :disabled="targetObj.identifier==1"/>
         </a-form-model-item>
 
         <a-form-model-item :wrapper-col="{ span: 14, offset: 4 }">
         <a-button type="primary" :loading="editLoading" @click="editTarget">
             保存
         </a-button>
-        <a-button style="margin-left: 10px" @click="handleCancel">
+        <!-- <a-button style="margin-left: 10px" @click="handleCancel">
             取消
-        </a-button>
+        </a-button> -->
         </a-form-model-item>
     </a-form-model>
 </template>
@@ -67,9 +67,14 @@ export default Vue.extend({
     watch: {
         typeForm(val) {
             let _this = this;
-            _this.targetForm = val;
-            if(val) {
+            if(val) { 
+                _this.targetForm = val;
                 _this.targetObj.id = val.id;
+                _this.targetObj.type = val.type;
+                _this.targetObj.identifier = val.identifier;
+                if(_this.targetForm.identifier==1 && !_this.targetForm.status) {
+                    _this.targetForm.status = true;
+                }
             } 
         },
         tloading(val) {
@@ -86,6 +91,11 @@ export default Vue.extend({
         if(_this.typeForm) {
             _this.targetForm = _this.typeForm;
             _this.targetObj.id =  _this.typeForm.id;
+            _this.targetObj.type = _this.typeForm.type;
+            _this.targetObj.identifier = _this.typeForm.identifier;
+            if(_this.targetForm.identifier==1 && !_this.targetForm.status) {
+                _this.targetForm.status = true;
+            }
         }
     },
     methods: {

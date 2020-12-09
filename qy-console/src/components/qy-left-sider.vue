@@ -49,12 +49,19 @@
             </a-sub-menu> 
             <a-sub-menu key="media">
                 <span slot="title"><a-icon type="form" /><span>媒体管理</span></span>
+                <a-menu-item key="/media-lib">
+                    <router-link to="/media-lib">
+                        <a-icon type="snippets" />
+                        <span>媒体库</span>
+                    </router-link>
+                </a-menu-item> 
                 <a-menu-item key="/media-lib-config">
-                <router-link to="/media-lib-config">
-                    <a-icon type="snippets" />
-                    <span>媒体库配置</span>
-                </router-link>
+                    <router-link to="/media-lib-config">
+                        <a-icon type="snippets" />
+                        <span>媒体库配置</span>
+                    </router-link>
                 </a-menu-item>
+
             </a-sub-menu>
            <a-sub-menu key="system-link">
                 <span slot="title"><a-icon type="setting" /><span>链接管理</span></span>

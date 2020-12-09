@@ -88,3 +88,5 @@ sw.*
 
 # Vim swap files
 *.swp
+# 打包文件
+*.zip

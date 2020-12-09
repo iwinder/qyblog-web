@@ -58,8 +58,8 @@
                                     
                                       <a-select   
                              v-model="option.configValue"  placeholder="文件保存位置" > 
-                                    <a-select-option v-for="o in MEDIA_LIB_TYPE" :key="o.key">
-                                    {{ o.value }}
+                                    <a-select-option v-for="o in typeList" :key="o.identifier+''">
+                                    {{ o.name }}
                                     </a-select-option>
 
                              </a-select>
@@ -100,12 +100,14 @@ export default Vue.extend({
           labelCol: { span: 4 },
           wrapperCol: { span: 14 },
       }, 
+     typeList: {},
       MEDIA_LIB_TYPE:MENUS_AGENT_IDENTIFIER_ARRAY,
     };
   },
   mounted() {
     let _this = this;
     _this.list();
+    _this.initTypeList();
   },
   methods: {
     callback(key) { 
@@ -172,7 +174,19 @@ export default Vue.extend({
                 _this.$message.error('保存失败: ' + response,5);
       });
 
-    }
+    },
+    initTypeList() {
+        let _this = this; 
+        let params = {
+            status:  true, 
+        }  
+        _this.$axios.get('/admin/fileLibType/allList',
+            { params: params}).then(res => {
+            let resp  = res.data
+            _this.typeList = resp.content; 
+        }).catch((response) => { 
+        });
+    },
   },
 })
 </script>

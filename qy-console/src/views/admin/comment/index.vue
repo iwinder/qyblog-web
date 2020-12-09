@@ -75,7 +75,7 @@
              </strong>
              <br>
              <template v-if="record.authorUrl">
-            <a  :href="record.authorUrl" >{{record.authorUrl}}</a>
+            <a  :href="record.authorUrl" target="_blank">{{record.authorUrl}}</a>
             <a href="#" class="akismet_remove_url" commentid="284" title="移除此URL">x</a>
             <br>
              </template>
@@ -83,7 +83,7 @@
             <a>{{record.authorIp}}</a>
    </span>
   <span slot="content" slot-scope="text, record, index"  >
-            <a-row v-if="record.parent">
+            <a-row v-if="record.parent && record.parent.authorName">
                     回复给
                     <a>{{record.parent.authorName}}</a> 
              </a-row>        

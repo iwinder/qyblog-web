@@ -31,7 +31,9 @@ export default Vue.extend({
     },
     data()  {
         return {
-            typeObj:{},
+            typeObj:{
+                name:''
+            },
             configObj:{},
             typeLoading: false,
             configLoading: false,
@@ -41,12 +43,15 @@ export default Vue.extend({
     created() {
         let _this = this; 
         _this.typeId = parseInt(_this.$route.params.id);
-        _this.typeObj = _this.$route.params.obj; 
+        if(_this.$route.params.obj) {
+            _this.typeObj = _this.$route.params.obj; 
+        }
+        
     },
     mounted() {
         let _this = this;
         if(_this.typeId) {
-            if(!_this.typeObj) {
+            if(!_this.typeObj || !_this.typeObj.name) {
                 _this.loadTypeInfo();
             }
             _this.loadConfigInfo();
