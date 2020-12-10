@@ -8,17 +8,17 @@
         </a-form-model-item>
         <a-form-model-item has-feedback label="Bucket" prop="bucket">
             <a-input v-model="targetForm.bucket" /> 
-        </a-form-model-item> 
+        </a-form-model-item>  
+        <a-form-model-item has-feedback label="路径前缀" prop="prefix">
+                <a-input v-model="targetForm.prefix" /> 
+        </a-form-model-item>
         <a-form-model-item has-feedback label="域名" prop="domain">
             <a-input v-model="targetForm.domain" /> 
         </a-form-model-item>
         <template v-if="targetType>2">
             <a-form-model-item has-feedback label="Endpoint" prop="endpoint">
                 <a-input v-model="targetForm.endpoint" /> 
-            </a-form-model-item>
-            <a-form-model-item has-feedback label="ossPath" prop="prefix">
-                <a-input v-model="targetForm.prefix" /> 
-            </a-form-model-item>
+            </a-form-model-item> 
         </template>
         <a-form-model-item :wrapper-col="{ span: 14, offset: 4 }">
         <a-button type="primary" :loading="editLoading" @click="editTarget">
@@ -81,6 +81,9 @@ export default Vue.extend({
                     { required: true, message: '请输入域名', trigger: 'blur', whitespace:true },
                     { max: 255, message: '长度最大255', trigger: 'blur' },
                 ],
+                prefix:[
+                    {  max: 255, message: '长度最大255', trigger: 'blur' },
+                ]
             },
             targetObj: {},
             layout: {
@@ -119,10 +122,7 @@ export default Vue.extend({
                 _this.targetRules.endpoint = [
                     { required: true, message: '请输入Endpoint', trigger: 'blur', whitespace:true },
                     {  max: 255, message: '长度最大255', trigger: 'blur' },
-                ];
-                _this.targetRules. prefix = [
-                    {  max: 255, message: '长度最大255', trigger: 'blur' },
-                ];
+                ]; 
             }
         }
     },
