@@ -72,7 +72,7 @@ export default Vue.extend({
     },
     methods: {
         defImg() {
-             let img = event.srcElement;
+            let img = event.srcElement;
             img.src = "/favicon.ico";
             img.onerror = null; //防止闪图
         },
