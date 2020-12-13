@@ -12,7 +12,7 @@
             <a-col   :xs="{span:24}"  :lg="{ span: 17, offset: 1 }"   >
                 <a-row class="table-operations">
                      <a-col :xs="{span:24}"  :lg="{ span: 7}" ><h3 style=" margin: 5px; ">{{selectedTreeData.namePath || selectedTreeData.name}}</h3></a-col>
-                    <a-col    :xs="{span:24}"  :lg="{ span: 6, offset: 11 }"  style=" margin-top: 5px;">
+                    <a-col    :xs="{span:24}"  :lg="{ span: 7, offset: 10 }"  style=" margin-top: 5px;">
                         <a-button  type="primary"  @click="add()">
                             新增
                         </a-button>
@@ -319,13 +319,14 @@
     })
 </script>
 
-<style scoped>
+<style  lang="scss" scoped>
     .table-operations {
         margin-bottom: 16px;
+        button {
+            margin-right: 8px;
+        }
     }
 
-    .table-operations > button {
-        margin-right: 8px;
-    }
+    
 </style>
 

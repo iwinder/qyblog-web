@@ -279,13 +279,13 @@
     })
 </script>
 
-<style scoped>
+<style  lang="scss" scoped>
     .table-operations {
         margin-bottom: 16px;
+        button {
+            margin-right: 8px;
+        }
     }
-
-    .table-operations > button {
-        margin-right: 8px;
-    }
+ 
 </style>
 

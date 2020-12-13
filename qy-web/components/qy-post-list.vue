@@ -11,6 +11,7 @@
                                 width="272"
                                 height="170"
                                 alt="logo"
+                                src="/img/image-pending.gif"
                                 v-lazy="item.thumbnail"
                                 data-server-rendered="true"
                                 class="post-list-img lazy show"

@@ -132,7 +132,7 @@
                                 取消
                             </a-button>
                             </a-form-model-item>
-                        </a-form-model>
+                    </a-form-model>
          </a-modal>
     </div>
 </template>
@@ -419,11 +419,12 @@
 <style lang="scss"  scoped>
      .table-operations {
         margin-bottom: 16px;
+        button {
+            margin-right: 8px;
+        }
     }
 
-    .table-operations > button {
-        margin-right: 8px;
-    }
+    
    .comment-avatar{
             float: left;
     margin-right: 10px;
@@ -433,9 +434,7 @@
                       font-size: 12px;
                         line-height: 1.5em;
  }
-.select-class {
-
-} 
+ 
 </style>
 
  

@@ -16,7 +16,7 @@
                 </a-form-model>
 
             </a-col>
-            <a-col  :xs="{span:24}"  :lg="{ span: 6, offset: 6 }" style=" margin-top: 5px;">
+            <a-col  :xs="{span:24}"  :lg="{ span: 7, offset: 5 }" style=" margin-top: 5px;">
                 <a-button  type="primary"  @click="add()">
                     新增
                 </a-button>
@@ -301,13 +301,13 @@
     })
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
     .table-operations {
         margin-bottom: 16px;
+        button {
+            margin-right: 8px;
+        }
     }
-
-    .table-operations > button {
-        margin-right: 8px;
-    }
+ 
 </style>
 

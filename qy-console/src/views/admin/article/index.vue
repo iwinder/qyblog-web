@@ -8,30 +8,29 @@
                           <a-icon slot="prefix" type="search" style="color:rgba(0,0,0,.25)" />
                         </a-input>
                       </a-form-model-item>
-                      <a-form-model-item :wrapper-col="{ span: 14, offset: 4 }">
+                      <a-form-model-item :wrapper-col="{ span: 14  }">
                             <a-button type="primary"  :loading ="searchLoading"  @click="searchForm('articleForm')">
                                 搜索
                             </a-button>
                     </a-form-model-item>
               </a-form-model>
-             
           </a-col>
-          <a-col  :xs="{span:24}"  :lg="{ span: 6, offset: 6 }" style=" margin-top: 5px;">
-              <a-button  type="primary"  @click="add()">
-                新增
-              </a-button>
+          <a-col class='table-operations-right' :xs="{span:24}"  :lg="{ span: 7, offset: 5 }" style=" margin-top: 5px;">
+            <a-button  type="primary"  @click="add()">
+              新增
+            </a-button>
             <a-button  type="primary"  @click="importb()">
                导入
-              </a-button>
-               <a-dropdown>
-                    <a-menu slot="overlay" @click="handleMenuClick">
-                        <a-menu-item key="1">
-                          删除
-                        </a-menu-item>
-                     </a-menu>
-                      <a-button> 批量操作 <a-icon type="down" /> </a-button>
-                  </a-dropdown>
-            </a-col>
+            </a-button>
+            <a-dropdown >
+                <a-menu slot="overlay" @click="handleMenuClick">
+                    <a-menu-item key="1">
+                      删除
+                    </a-menu-item>
+                  </a-menu>
+                  <a-button> 批量操作 <a-icon type="down" /> </a-button>
+            </a-dropdown>
+          </a-col>
       </a-row>
         <a-table :columns="columns"
                  :data-source="data"
@@ -325,13 +324,15 @@ export default Vue.extend({
 })
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .table-operations {
   margin-bottom: 16px;
 }
 
-.table-operations > button {
-  margin-right: 8px;
+.table-operations  {
+  button {
+    margin-right: 8px;
+  }
 }
 </style>
 
