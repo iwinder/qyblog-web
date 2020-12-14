@@ -1,8 +1,8 @@
 <template>
     <div>
-            <a-form-model ref="articleForm" :model="articleForm" :rules="rules" v-bind="layout">
+            <a-form-model ref="articleForm" :model="articleForm" :rules="rules" :layout="'vertical'">
                 <a-row>
-                    <a-col :xs="24"   :lg="15"  >
+                    <a-col :xs="24"   :lg="24"  >
                         <a-form-model-item has-feedback   prop="title"> 
                             <a-input v-model="articleForm.title" type="text" autocomplete="off" placeholder="添加标题"    @blur="initPermaLink"/>
                         </a-form-model-item>
@@ -25,19 +25,26 @@
                                 <!-- </no-ssr> -->
                             </div>
                         </a-form-model-item>
-                       
-                        <a-form-model-item :wrapper-col="{ span: 14, offset: 4 }">
-                            <a-button  ref="saveButton"  type="primary"  :loading ="loading"  @click="submitForm('articleForm')">
-                                保存
-                            </a-button>
-                            <a-button v-show="!articleForm.id" style="margin-left: 10px" @click="resetForm">
-                                重置
-                            </a-button>
-                        </a-form-model-item>
-                    </a-col>
-                     <a-col :xs="24"     :lg="9"  >
                         <a-form-model-item has-feedback label="封面" prop="thumbnail">
                             <a-input v-model="articleForm.thumbnail" type="text" autocomplete="off" />
+                            <a-upload
+                                name="file"
+                                list-type="picture-card"
+                                class="thumbnail-uploader"
+                                :action = "'api/admin/fileMeta/upload'"
+                                :accept="acceptType"
+                                :show-upload-list="false" 
+                                :before-upload="beforeUpload"
+                                @change="handleThumbnailChange"
+                            >
+                                <img v-if="articleForm.thumbnail" :src="articleForm.thumbnail" alt="avatar" style="width: 100%;" />
+                                <div v-else>
+                                    <a-icon :type="thumbnailLoading ? 'loading' : 'plus'" />
+                                    <div class="ant-upload-text">
+                                        Upload
+                                    </div>
+                                </div>
+                            </a-upload>
                         </a-form-model-item>
 
                         <a-form-model-item has-feedback label="标签" prop="tags">
@@ -84,7 +91,18 @@
                                 </ul>
                             </template>
                         </a-form-model-item>
+                        <a-form-model-item :wrapper-col="{ span: 14, offset: 4 }">
+                            <a-button  ref="saveButton"  type="primary"  :loading ="loading"  @click="submitForm('articleForm')">
+                                保存
+                            </a-button>
+                            <a-button v-show="!articleForm.id" style="margin-left: 10px" @click="resetForm">
+                                重置
+                            </a-button>
+                        </a-form-model-item>
                     </a-col>
+                     <!-- <a-col :xs="24"     :lg="9"  >
+ 
+                    </a-col> -->
              </a-row>
         </a-form-model>
     </div>
@@ -120,7 +138,7 @@ export default {
         })
     },
     data() {
-         this.lastFetchId = 0;
+        this.lastFetchId = 0;
         this.fetchTags = debounce(this.fetchTags, 800);
         return {
             articleForm:  {
@@ -153,7 +171,9 @@ export default {
                     toolbarsFlag: true
                 },
                 imageNum: 0,
-                saveEndTime: null
+                saveEndTime: null,
+                acceptType: "image/*",
+                thumbnailLoading: false
         }
     },
     watch: {
@@ -267,14 +287,14 @@ export default {
             let _this = this;
             var formdata = new FormData();
             formdata.append('file', files);
-             _this.$axios.post('/admin/upload/file', formdata).then((res) => {
+             _this.$axios.post('/admin/fileMeta/upload', formdata).then((res) => {
                 let resp = res.data;
                 if (resp.success) {
                      // 第二步.将返回的url替换到文本原位置![...](0) -> ![...](url)
-                    _this.$refs.md.$img2Url(pos, resp.content.relativePath);
-                    _this. imageNum ++;
+                    _this.$refs.md.$img2Url(pos, resp.content.defUrl);
+                    _this.imageNum ++;
                     if ( _this.imageNum==1 && !_this.articleForm.thumbnail ) {
-                            _this.articleForm.thumbnail  = resp.content.relativePath;
+                            _this.articleForm.thumbnail  = resp.content.defUrl;
                     }
                 }
                
@@ -306,7 +326,30 @@ export default {
                     _this.articleForm.permaLink = resp.content;
                 }
             });
-        }
+        },
+        beforeUpload(file) {
+            const isLt2M = file.size / 1024 / 1024 < 2;
+            if (!isLt2M) {
+                this.$message.destroy();
+                this.$message.error('图片必须小于 2MB!');
+            }
+            return  isLt2M;
+
+        },
+        handleThumbnailChange(info) { 
+            if (info.file.status === 'uploading') {
+                    this.thumbnailLoading = true;
+                    return;
+                }
+                if (info.file.status === 'done') { 
+                     let resp = info.file.response;
+                     if(resp.success) {
+                         this.articleForm.thumbnail = resp.content.defUrl;
+                         
+                     }
+                      this.thumbnailLoading = false;
+                }
+        },
     }
 }
 </script>

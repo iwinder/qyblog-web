@@ -21,17 +21,20 @@
                 <span slot="title"><a-icon type="form" /><span>文章管理</span></span>
                 <a-menu-item key="/article">
                     <router-link to="/article">
-                        文章列表
+                    <a-icon type="read" />
+                        <span> 文章列表</span>
                     </router-link>
                 </a-menu-item>
                 <a-menu-item key="/category">
                     <router-link to="/category"> 
-                    分类管理
+                    <a-icon type="block" />
+                    <span>分类管理</span>
                     </router-link>
                 </a-menu-item>
                 <a-menu-item key="/tag">
                      <router-link to="/tag"> 
-                            标签管理
+                     <a-icon type="tags" />
+                      <span>标签管理</span>
                      </router-link>
                 </a-menu-item>
                <a-menu-item key="/page">
@@ -48,23 +51,23 @@
             </a-menu-item>
             </a-sub-menu> 
             <a-sub-menu key="media">
-                <span slot="title"><a-icon type="form" /><span>媒体管理</span></span>
+                <span slot="title"><a-icon type="folder" /><span>媒体管理</span></span>
                 <a-menu-item key="/media-lib">
                     <router-link to="/media-lib">
-                        <a-icon type="snippets" />
+                        <a-icon type="cloud-upload" />
                         <span>媒体库</span>
                     </router-link>
                 </a-menu-item> 
                 <a-menu-item key="/media-lib-config">
                     <router-link to="/media-lib-config">
-                        <a-icon type="snippets" />
+                        <a-icon type="cloud-server" />
                         <span>媒体库配置</span>
                     </router-link>
                 </a-menu-item>
 
             </a-sub-menu>
            <a-sub-menu key="system-link">
-                <span slot="title"><a-icon type="setting" /><span>链接管理</span></span>
+                <span slot="title"><a-icon type="link" /><span>链接管理</span></span>
             <a-menu-item key="/menus">
                <router-link to="/menus">
                 <a-icon type="apartment" />
@@ -79,21 +82,23 @@
                     </a-menu-item>
                 <a-menu-item key="/short-link">
                     <router-link to="/short-link">
-                        <a-icon type="link" />
+                        <a-icon type="paper-clip" />
                         <span>短链接管理</span>
                         </router-link>
                </a-menu-item>
            </a-sub-menu>
              <a-sub-menu key="system-safe">
-                  <span slot="title"><a-icon type="setting" /><span>安全管理</span></span>
+                  <span slot="title"><a-icon type="safety" /><span>安全管理</span></span>
                 <a-menu-item key="/ip-black">
                     <router-link to="/ip-black">
-                        IP黑名单
+                     <a-icon type="robot" />
+                         <span>IP黑名单</span>
                      </router-link>
                 </a-menu-item>
                 <a-menu-item key="/login-log">
                     <router-link to="/login-log">
-                        登录日志
+                    <a-icon type="calendar" />
+                         <span>登录日志</span>
                      </router-link>
                 </a-menu-item>
             </a-sub-menu>
@@ -101,23 +106,27 @@
                 <span slot="title"><a-icon type="setting" /><span>系统管理</span></span>
                 <a-menu-item key="/user">
                       <router-link to="/user">
-                        用户管理
+                      <a-icon type="user" />
+                        <span>用户管理</span>
                     </router-link>
                     
                 </a-menu-item>
                 <a-menu-item key="/role">
                      <router-link to="/role">
-                        角色管理
+                     <a-icon type="team" />
+                        <span> 角色管理</span>
                      </router-link>
                 </a-menu-item>
                 <a-menu-item key="/permission">
                     <router-link to="/permission">
-                        权限管理
+                    <a-icon type="solution" />
+                         <span>权限管理</span>
                      </router-link>
                 </a-menu-item>
                 <a-menu-item key="/site">
                     <router-link to="/site">
-                        站点管理
+                    <a-icon type="tool" />
+                        <span>站点管理</span>
                      </router-link>
                 </a-menu-item> 
             </a-sub-menu>

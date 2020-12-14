@@ -100,9 +100,12 @@ export default Vue.extend({
 a {
    padding-right: 10px;
 }
+.viewlinka{
+     display: inline-block;
+}
 .viewlink {
     display: inline-block;
-    max-width: 100px;
+    max-width: 200px;
     overflow-x: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;

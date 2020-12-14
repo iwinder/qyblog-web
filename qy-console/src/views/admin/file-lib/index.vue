@@ -46,7 +46,9 @@
                                 :row-selection="{ selectedRowKeys: selectedIds, onChange: onSelectChange }"
                                 @change="handleTableChange"
                                 >
-
+                                <span slot="fname" slot-scope="text, record"> 
+                                    {{targetTypeId == 1? record.originFileName:record.fname }} 
+                                </span>
                     
                                 <span slot="fsize" slot-scope="text, record"> 
                                     {{getSize(record.fsize)}}
@@ -79,6 +81,9 @@
             <a-descriptions title="" :column="1">
                 <a-descriptions-item label="文件名" class="wordBreak">
                     {{targetObj.fname}}
+                </a-descriptions-item>
+                 <a-descriptions-item label="原始文件名" class="wordBreak">
+                    {{targetObj.originFileName}}
                 </a-descriptions-item>
                <a-descriptions-item label="文件类型" class="wordBreak">
                     {{targetObj.mimeType}}
@@ -156,6 +161,7 @@ const columns = [
                             title: '文件名',
                             dataIndex: 'fname',
                             key: 'fname', 
+                            scopedSlots: { customRender: 'fname' },
                     },
                      {
                             title: '文件类型',

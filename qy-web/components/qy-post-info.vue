@@ -1,7 +1,7 @@
 <template>
      <a-row> 
          <a-row class="single-header"  >
-                <a-card    :style="{backgroundImage:'url(' + postData.defImg + ')'}"  v-real-background-img="postData.thumbnail">
+                <a-card  class="header-card"  :style="{backgroundImage:'url(' + postData.defImg + ')'}"  v-real-background-img="postData.thumbnail">
                     <a-row class="header-wrap">
                             <a-row class="header-meta">
                                     <template v-if="postData.category!=null">
@@ -88,10 +88,8 @@ export default Vue.extend({
     width: 100%;
     height: 400px;
     .header-wrap {
-        position: absolute;
-        bottom: 40px;
-        left: 0;
-        padding-right: 60px;
+        position: absolute; 
+        left: 0; 
         padding-left: 25px;
         width: 100%;
         z-index: 2;
@@ -105,7 +103,7 @@ export default Vue.extend({
     }
     .h2   {
     font-size: 2rem;
-}
+    }   
 
 }
  .ant-card-bordered::before {
@@ -156,9 +154,9 @@ export default Vue.extend({
     width: 1%;
     a{
         font-size: 1.1rem;
-    line-height: 24px;
-    padding: 0 5px;
-    color: #34495e;
+        line-height: 24px;
+        padding: 0 5px;
+        color: #34495e;
     }
 }
 @media (max-width: 576px) {
@@ -167,6 +165,23 @@ export default Vue.extend({
         width: 100%;
         margin: 10px 0px;
     }
+    .header-card {
+        height: 210px;
+    }
+    .header-wrap {
+        bottom: 0;
+        padding: 40px 20px;
+        overflow: hidden;
+    }
+}
+@media (min-width: 577px) {
+    .ant-card-bordered {
+        .header-wrap {
+            bottom: 40px;
+            padding-left: 25px;
+        }
+    }
+
 }
 .license-tag {
         margin: 2px 0;

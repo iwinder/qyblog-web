@@ -48,6 +48,7 @@ export default {
             let result = {};
             if(resp.success) { 
                 result  = resp.content; 
+                console.log("result",result);
                 if(result.type == 1) {
                     let defImg = "/img/image-pending.gif";  
                     defImg = '/img/thumb/'+ _this.$QyServeTool().randomNum(1,32)+'.jpg';
@@ -55,6 +56,17 @@ export default {
                     result.defImg = defImg;
                     result.thumbnail =  result.thumbnail?result.thumbnail:defImg;
                 }
+                let tagStrs = "";
+                if(result.tags) { 
+                    let len = result.tags.length;
+                    for(let i=0;i<len;i++) {
+                      tagStrs +=result.tags[i].name;
+                      if(i<len-1) {
+                          tagStrs +=", ";
+                      }
+                    }
+                }
+                result.tagStrings = tagStrs;
                 result.publishedDateMD =   moment(result.publishedDate).format('YYYY-MM-DD');
                 result.publishedDateTime =   moment(result.publishedDate).format('YYYY-MM-DD HH:mm:ss');
 
@@ -99,7 +111,7 @@ export default {
         return {
             title: this.postData.title + "-" + this.siteInfo.site_name,
             meta: [
-                { hid: "keywords", name: "keywords", content: this.postData. tagStrings},
+                { hid: "keywords", name: "keywords", content: this.postData.tagStrings},
                 { hid: "description", name: "description", content: this.postData. summary},
 
             ],

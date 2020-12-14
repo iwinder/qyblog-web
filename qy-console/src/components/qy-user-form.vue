@@ -30,11 +30,12 @@
         </a-form-model-item>
 
             <a-form-model-item has-feedback  label="头像"  prop="avatar"> 
+                <a-input v-model="userForm.avatar" type="text" autocomplete="off" />
                 <a-upload
                     name="file"
                     list-type="picture-card"
                     class="avatar-uploader"
-                    action = "/api/admin/upload/file"
+                    :action = "'/api/admin/fileMeta/upload'"
                     :accept="acceptType"
                     :show-upload-list="false" 
                     :before-upload="beforeUpload"
@@ -161,7 +162,7 @@ export default Vue.extend({
                 if (info.file.status === 'done') { 
                      let resp = info.file.response;
                      if(resp.success) {
-                         this.userForm.avatar = resp.content.relativePath;
+                         this.userForm.avatar = resp.content.defUrl;
                          
                      }
                       this.loading = false;
