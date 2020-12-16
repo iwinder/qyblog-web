@@ -12,7 +12,6 @@
                 icon="user"
                 size="large"
                     slot="avatar"
-                    src ="/favicon.ico"
                     :srcSet ="siteInfo.avatar"
                     alt="W" 
                 />

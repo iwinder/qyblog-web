@@ -90,7 +90,6 @@ export default Vue.extend({
     .header-wrap {
         position: absolute; 
         left: 0; 
-        padding-left: 25px;
         width: 100%;
         z-index: 2;
     }
@@ -101,9 +100,9 @@ export default Vue.extend({
     color: #fff;
     font-weight: 600;
     }
-    .h2   {
-    font-size: 2rem;
-    }   
+  
+
+    
 
 }
  .ant-card-bordered::before {
@@ -169,9 +168,15 @@ export default Vue.extend({
         height: 210px;
     }
     .header-wrap {
+        // top:0;
         bottom: 0;
         padding: 40px 20px;
         overflow: hidden;
+        .h2   {
+            font-size: 1.2rem;
+            margin: 10px 0 0;
+            padding: 10px 0 0;
+        } 
     }
 }
 @media (min-width: 577px) {
@@ -179,8 +184,13 @@ export default Vue.extend({
         .header-wrap {
             bottom: 40px;
             padding-left: 25px;
+            .h2   {
+                font-size: 2rem;
+            } 
         }
+      
     }
+    
 
 }
 .license-tag {

@@ -10,10 +10,15 @@
             >
       <a-list-item slot="renderItem" slot-scope="item, index" class="commentItem"> 
             <a-comment
-            :author="item.authorName"
-            :avatar="item.avatar"
+            :author="item.authorName" 
             :datetime="item.createdDate"
             >
+            <a-avatar
+                icon="user"
+                size="large"
+                    slot="avatar"
+                    :src="item.avatar"
+                    alt="W"/>
             <span slot="actions"> 
                 <a-row>
                 <a href="javascript:void(0)"  @click="onShow(index)">回复</a>

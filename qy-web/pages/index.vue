@@ -30,9 +30,9 @@ export default Vue.extend({
     QyPostList,
     QyPostRightSider
   },
-async fetch({ store, params }) {
-  // await store. dispatch('siteInfo/getSiteInfo'); 
-},
+  async fetch({ store, params }) {
+    // await store. dispatch('siteInfo/getSiteInfo'); 
+  },
  async  asyncData (context) {
    let _this = context;  
 
@@ -159,8 +159,25 @@ computed: {
             
         }
     },
+  mounted() { 
+      let _this = this;
+       console.log("mounted"); 
+    if(process.browser) { 
+      
+        _this.initTest();
+    }
+  },
   methods: {
     moment,
+    initTest() {
+        let _this = this;
+       _this.$axios.get('/web/mina/articles',{ params: {
+              page: 1,
+              size:  10
+         } }).then(res => { 
+              console.log("res",res); 
+          });
+    }
   }
 })
 </script>

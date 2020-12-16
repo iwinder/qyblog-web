@@ -10,10 +10,16 @@
                 item-layout="horizontal"
                 >
         <a-list-item slot="renderItem" slot-scope="item,index" class="childItem">
-                <a-comment 
-                :avatar="item.avatar"
+                <a-comment  
                 :datetime="item.createdDate"
                 >
+                <a-avatar
+                icon="user"
+                size="large"
+                    slot="avatar"
+                    :src="item.avatar"
+                    alt="W" 
+                />
                 <template slot="author">
                     <template v-if="item.user&&item.user.nickname">
                           <a-badge>
