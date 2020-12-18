@@ -74,8 +74,7 @@ export default {
   ** Nuxt.js modules
   */
   modules: [
-    '@nuxtjs/axios',
-    'nuxt-ssr-cache',
+    '@nuxtjs/axios'
   ],
   /*
   ** Build configuration
@@ -95,18 +94,6 @@ export default {
       ]
     },
     module:{
-      // rules:[
-      //   {
-      //     loader:'webpack-ant-icon-loader',
-      //     enforce: 'pre',
-      //     // options:{
-      //     //   chunkName:'antd-icons'
-      //     // },
-      //     include:[
-      //       require.resolve('@ant-design/icons/lib/dist')
-      //     ]
-      //   }
-      // ]
     },
     loaders: {
       less: {
@@ -170,47 +157,5 @@ export default {
 
   },
 
-  cache: {
-    // if you're serving multiple host names (with differing
-    // results) from the same server, set this option to true.
-    // (cache keys will be prefixed by your host name)
-    // if your server is behind a reverse-proxy, please use
-    // express or whatever else that uses 'X-Forwarded-Host'
-    // header field to provide req.hostname (actual host name)
-    useHostPrefix: false,
-    pages: [
-      // '/',
-      // these are prefixes of pages that need to be cached
-      // if you want to cache all pages, just include '/'
-      // '/page1',
-      // '/page2',
 
-      // you can also pass a regular expression to test a path
-      // /^\/page3\/\d+$/,
-
-      // to cache only root route, use a regular expression
-      // /^\/\w+((-)?\w+)+$/
-    ],
-    
-    key(route, context) {
-      // custom function to return cache key, when used previous
-      // properties (useHostPrefix, pages) are ignored. return 
-      // falsy value to bypass the cache
-    },
-
-    store: {
-      type: 'redis',
-      host: '121.36.247.59',
-      port: 6380,
-      auth_pass:"windadmin",
-      ttl: 10 * 60,
-      db: 0,
-      configure: [
-        // these values are configured
-        // on redis upon initialization
-        // ['maxmemory', '200mb'],
-        ['maxmemory-policy', 'allkeys-lru'],
-      ],
-    },
-  },
 }
