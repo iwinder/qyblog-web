@@ -47,7 +47,8 @@ head () {
 </script>
 
 <style scoped>
-.err-body {
-        height: 100vh;
-}
+  .err-body {
+    height: 100vh;
+    background: #f0f2f5;
+  }
 </style>

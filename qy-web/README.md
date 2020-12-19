@@ -28,6 +28,13 @@ npm install nuxt-ssr-cache -save
 ```
 
 ```
+.nuxt
+static
+nuxt.config.js
+package.json
+```
+
+```
 pm2 start npm --name "qy-web" -- run start
 pm2 delete qy-web
 pm2 stop qy-web

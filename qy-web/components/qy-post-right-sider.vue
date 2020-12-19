@@ -12,8 +12,8 @@
                 icon="user"
                 size="large"
                     slot="avatar"
-                    :srcSet ="siteInfo.avatar"
-                    alt="W" 
+                    :src ="siteInfo.avatar"
+                    alt="C" 
                 />
                 </a-card-meta>
         </a-row>

@@ -37,9 +37,12 @@ export default Vue.extend({
           let res1 = {};
           let tag =  {};
         try{
-          res1 = await   _this.$axios.get('/web/articles',{ params: {
-            tagName: name,
-                            page:  _this.params.id,
+            if(parseInt(_this.params.id)>2147483647) { 
+              _this.error({ statusCode: 404, message: "我们是有底线的"});
+           } else {
+             res1 = await   _this.$axios.get('/web/articles',{ params: {
+                tagName: name,
+                page:  _this.params.id,
                 size:  10
             } }).then(res => {
                 let resp  = res.data				
@@ -49,10 +52,8 @@ export default Vue.extend({
                     let data = resp.content.list; 
                     let defImg = "/img/image-pending.gif";
                     data.forEach((e,i ) => {  
-                           
-                          // if(process.browser) {
-                                defImg = '/img/thumb/'+ _this.$QyServeTool().randomNum(1,32)+'.jpg';
-                          // } 
+                        defImg = '/img/thumb/'+ _this.$QyServeTool().randomNum(1,32)+'.jpg';
+                          
                         listData.push({
                             id: e.id,
                             href:  e.permaLink,
@@ -79,35 +80,38 @@ export default Vue.extend({
                     pageSize:  resp.content.size
                     };
                 } else {
-                if(resp.code == '404') {
-                    _this.error({ statusCode: 404, message: resp.message});
-                } else  {
-                    _this.error({ statusCode: 500, message: resp.message});
-                }
+                  if(resp.code == '404') {
+                      _this.error({ statusCode: 404, message: resp.message});
+                  } else  {
+                      _this.error({ statusCode: 500, message: resp.message});
+                  }
          
-            }  
-                return result;
+              }  
+              return result;
 
             });
             tag = await  context.$axios.get(tagUrl).then(res => {
-              let resp  = res.data			
-               if(resp.success) {
-                 return resp.content;
-            } else {
-                if(resp.code == '404') {
-                    _this.error({ statusCode: 404, message: resp.message});
-                } else  {
-                    _this.error({ statusCode: 500, message: resp.message});
+                let resp  = res.data			
+                if(resp.success) {
+                  return resp.content;
+                } else {
+                  if(resp.code == '404') {
+                      _this.error({ statusCode: 404, message: resp.message});
+                  } else  {
+                      _this.error({ statusCode: 500, message: resp.message});
+                  }
                 }
-            }
-          });
-            }  catch (error) {
+            });
+
+           }
+          
+        }  catch (error) {
             if(error.status == 404)  {
                  _this.error({ statusCode: 404, message: error.message});
             } else {
                 _this.error({ statusCode: 500, message: error.message});
             }
-          }
+        }
 
 
             return{

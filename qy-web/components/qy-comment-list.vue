@@ -18,16 +18,18 @@
                 size="large"
                     slot="avatar"
                     :src="item.avatar"
-                    alt="W"/>
-            <span slot="actions"> 
-                <a-row>
-                <a href="javascript:void(0)"  @click="onShow(index)">回复</a>
-                </a-row>
-                <qy-replies-form  :ref="repliesForm[index]"   v-show="repliesFormShow[index]"   :repliesIndex="repliesIndex" :afterSubmit="repliesChildFormAfterSubmit"  :commentAgentId="agentId"  :parentCommentId="item.id"> </qy-replies-form>
-            </span>
-            <p slot="content"> 
-{{item.content}}
-            </p>
+                    alt="C"/>
+            <template slot="actions">        
+                <span > 
+                    <a-row>
+                    <a href="javascript:void(0)"  @click="onShow(index)">回复</a>
+                    </a-row>
+                    <qy-replies-form  :ref="repliesForm[index]"   v-show="repliesFormShow[index]"   :repliesIndex="repliesIndex" :afterSubmit="repliesChildFormAfterSubmit"  :commentAgentId="agentId"  :parentCommentId="item.id"> </qy-replies-form>
+                </span>
+            </template>
+                <p slot="content"> 
+                    {{item.content}}
+                </p>
             <qy-comment-child-list  v-show="item.replyCount>0"   :ref="repliesChildList[index]"   :parentId="item.id"  :commentAgentId="agentId"  :afteReplieShow="parentReplieChange"></qy-comment-child-list>
 
              </a-comment>
@@ -41,8 +43,7 @@ import Vue from 'vue'
 import  QyCommentChildList from '~/components/qy-comment-child-list.vue'
 import  QyRepliesForm from '~/components/qy-replies-form.vue'
 import   md5 from 'js-md5'
-import { Comment} from 'ant-design-vue';
-Vue.use( Comment);
+ 
 export default Vue.extend({
     props: {  
         commentAgentId: null
@@ -152,7 +153,7 @@ export default Vue.extend({
             }
         },
         repliesFormAfterSubmit(params) {
-            let _this  = this;
+            let _this  = this; 
             _this.$refs.repliesTopForm.resetForm();
             _this.initData();
 
@@ -171,9 +172,18 @@ export default Vue.extend({
 })
 </script>
 
-<style scoped>
+<style  lang="scss"  scoped>
 .commentItem {
-        line-height: 1;
+    line-height: 1;
+    /deep/ .ant-comment{
+        width: 100%;
+        .ant-comment-actions {
+            width: 100%;
+            li {
+                width: 100%;
+            }
+        }
+    }
 }
  
 </style>

@@ -36,8 +36,11 @@ export default Vue.extend({
           let tagUrl = "/web/category/name/" + name;
             let res1 = {};
             let  category =  {};
-            try {
-          res1 = await   _this.$axios.get('/web/articles',{ params: {
+    try {
+        if( parseInt(_this.params.id)>2147483647) { 
+          _this.error({ statusCode: 404, message: "我们是有底线的"});
+        } else {
+res1 = await   _this.$axios.get('/web/articles',{ params: {
             categoryName: name,
                             page:  _this.params.id,
                 size:  10
@@ -101,6 +104,8 @@ export default Vue.extend({
                 }
             }
           }); 
+        }
+          
         } catch (error) {
             if(error.status == 404)  {
                  _this.error({ statusCode: 404, message: error.message});

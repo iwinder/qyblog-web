@@ -1,24 +1,21 @@
 <template>
     <a-row>
-
-
-                <a-list
-                v-if="comments.length"
-                :data-source="comments"
-                :pagination ="pagination" 
-                :header="`${totalSize} 条评论`"
-                item-layout="horizontal"
-                >
-        <a-list-item slot="renderItem" slot-scope="item,index" class="childItem">
+        <a-list
+            v-if="comments.length"
+            :data-source="comments"
+            :pagination ="pagination" 
+            :header="`${totalSize} 条评论`"
+            item-layout="horizontal"
+            >
+            <a-list-item slot="renderItem" slot-scope="item,index" class="childItem">
                 <a-comment  
-                :datetime="item.createdDate"
-                >
+                    :datetime="item.createdDate" >
                 <a-avatar
-                icon="user"
-                size="large"
-                    slot="avatar"
-                    :src="item.avatar"
-                    alt="W" 
+                    icon="user"
+                    size="large"
+                        slot="avatar"
+                        :src="item.avatar"
+                        alt="C" 
                 />
                 <template slot="author">
                     <template v-if="item.user&&item.user.nickname">
@@ -209,12 +206,23 @@ export default Vue.extend({
 </script>
 <style   lang="scss" scoped>
 
-/deep/ .ant-list-item{
-    margin: 0;
-    padding: 0;
+
+
+// /deep/ .ant-list-item{
+   
+
+// }
+/deep/.ant-list-items {
+    .ant-list-item{
+        margin: 0;
+        padding: 0;
+   
+    }
+
 }
 .childItem {
-          line-height: 1;
+    line-height: 1;
+
 }
  
 </style>

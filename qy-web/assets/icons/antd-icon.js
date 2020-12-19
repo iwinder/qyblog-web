@@ -54,6 +54,20 @@ export {
 export {
   default as UserOutline
 } from '@ant-design/icons/lib/outline/UserOutline';
+export {
+  default as CheckCircleOutline
+} from '@ant-design/icons/lib/outline/CheckCircleOutline';
+export {
+  default as InfoCircleOutline
+} from '@ant-design/icons/lib/outline/InfoCircleOutline';
+export {
+  default as CloseCircleOutline
+} from '@ant-design/icons/lib/outline/CloseCircleOutline';
+export {
+  default as ExclamationCircleOutline
+} from '@ant-design/icons/lib/outline/ExclamationCircleOutline';
+
+
 // export {
 //   default as SmileOutline
 // } from '@ant-design/icons/lib/outline/SmileOutline';

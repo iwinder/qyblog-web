@@ -55,6 +55,9 @@ export const state = () => ({
         // let  siteInfo =   _this.$LruCache().get("qy_siteInfo"); 
         // if ( _this.$QyServeTool().isEmpty(siteInfo)) {  
             siteInfo  =  await     _this.$axios.get('/web/siteInfo/all').then(res => {
+             if(!res|| !res.data) {
+              _this.error({ statusCode: 500, message: res});
+             } 
             let resp  = res.data;	
               if(resp.success) {  
                 return resp.content;

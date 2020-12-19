@@ -137,16 +137,28 @@ export default Vue.extend({
                             _this.$refs.commentForm.submitting = false; 
                             if(res.data.success) {
                                  _this.$refs.commentForm.content = null;
-                                _this.$message.success('保存成功',15);
+                                 _this.$notification.success({
+                                    key:"coment-notif",
+                                    message: '评论提交成功',
+                                    description: '若未及时展示，可能需要等待管理员审核。',
+                                });
                                 _this.afterSubmit( _this.parentIndex);
                                             _this.isInitForm = false;
                                 _this.initCommentByCookie();
                             } else {
-                                  _this.$message.error('保存失败: ' + res.data.message,5);
+                                _this.$notification.error({
+                                    key:"coment-notif",
+                                    message: '保存失败',
+                                    description: res.data.message,
+                                }); 
                             }
                     }).catch((response) => {
-                            _this.$refs.commentForm.submitting = false;
-                            _this.$message.error('保存失败: ' + response,5);
+                        _this.$refs.commentForm.submitting = false;
+                        _this.$notification.error({
+                                key:"coment-notif",
+                                message: '保存失败',
+                                description: response,
+                        });  
                     });
                        
                 } else {

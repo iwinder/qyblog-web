@@ -147,11 +147,11 @@ export default {
           '^/api': '', //将 /api 替换掉
         },
     },
-  '/content':{
-      target: 'http://localhost:8000/content', // 代理地址
+  '/qy-content':{
+      target: 'http://localhost:8000/qy-content', // 代理地址
       changeOrigin: true,
       pathRewrite: {
-        '^/content': '', //将 /api 替换掉
+        '^/qy-content': '', //将 /api 替换掉
       },
     },
 
