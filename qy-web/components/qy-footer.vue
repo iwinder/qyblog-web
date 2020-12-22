@@ -26,7 +26,7 @@
                  <nuxt-link to="/" title="WindCoder" rel="link noopener" target="_blank"  v-else > {{siteInfo.site_name}}</nuxt-link>
                  </a-col>   
                    <!-- :xs="{span:8}"  :sm="{span:6}"  :md="{ span: 3}" -->
-            <a-col  v-if="siteInfo.site_beian"> <a href="http://www.miitbeian.gov.cn/" rel="link noopener" target="_blank">{{siteInfo.site_beian}}</a></a-col>
+            <a-col  v-if="siteInfo.site_beian"> <a href="http://beian.miit.gov.cn/" rel="link noopener" target="_blank">{{siteInfo.site_beian}}</a></a-col>
             <a-col   >  <b style="color: #ff4425;">♥</b>   Design by 
                 <a href="https://windcoder.com" title="WindCoder" rel="link noopener" target="_blank">WindCoder.</a>
                 </a-col>   

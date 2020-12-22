@@ -1,48 +1,51 @@
 <template>
-    <a-comment>
-        <a-avatar
-            slot="avatar"
-            :src="'//sdn.geekzu.org/avatar/'+commentForm.authotImg"
-            :alt="commentForm.authorName"
-            v-if="!isInitForm"
-        />
-    <div slot="content">
-            <a-form-model ref="commentForm" :model="commentForm" :rules="rules" v-bind="layout"> 
-                <a-row  v-if="isInitForm">
-                    <a-col   :xs="{span:24}"  :lg="{ span: 8}">
-                        <a-form-model-item    prop="authorName">
-                            <a-input   v-model="commentForm.authorName"   placeholder="昵称" />
+    <a-row>
+    <a-row class="commentClose"  v-if="parentId==null">  <h2>参与评论</h2> </a-row>
+        <a-comment>
+            <a-avatar
+                slot="avatar"
+                :src="'//sdn.geekzu.org/avatar/'+commentForm.authotImg"
+                :alt="commentForm.authorName"
+                v-if="!isInitForm"
+            />
+        <div slot="content">
+                <a-form-model ref="commentForm" :model="commentForm" :rules="rules" v-bind="layout"> 
+                    <a-row  v-if="isInitForm">
+                        <a-col   :xs="{span:24}"  :lg="{ span: 8}">
+                            <a-form-model-item    prop="authorName">
+                                <a-input   v-model="commentForm.authorName"   placeholder="昵称" />
+                            </a-form-model-item>
+                        </a-col>
+                        <a-col   :xs="{span:24}"  :lg="{ span: 8}">
+                        <a-form-model-item    prop="authorEmail">
+                            <a-input   v-model="commentForm.authorEmail"    placeholder="邮箱"/>
                         </a-form-model-item>
-                    </a-col>
-                    <a-col   :xs="{span:24}"  :lg="{ span: 8}">
-                    <a-form-model-item    prop="authorEmail">
-                        <a-input   v-model="commentForm.authorEmail"    placeholder="邮箱"/>
-                    </a-form-model-item>
-                    </a-col>
-                    <a-col   :xs="{span:24}"  :lg="{ span: 8}">
-                        <a-form-model-item    prop="authorUrl">
-                            <a-input   v-model="commentForm.authorUrl" placeholder="网址"/>
-                        </a-form-model-item>
-                                </a-col>
-                </a-row>
-                 <a-row  v-else style="margin-bottom: 10px;">
-                   <a-col>  <a-tooltip placement="topLeft"  :title="commentForm.authorEmail" arrow-point-at-center> {{ commentForm.authorName}}  
-                   </a-tooltip> <a-button type="dashed" @click="opneEditLink()" size="small">
-                        编辑
-            </a-button></a-col>
-                </a-row>
-                
-            <a-form-model-item has-feedback  prop="content">
-                <a-textarea :rows="4" v-model="commentForm.content"   placeholder="评论内容" />
-            </a-form-model-item>
-            <a-form-model-item>
-                <a-button html-type="submit" :loading="submitting" type="primary" @click="handleSubmit">
-                   回复
-                </a-button>
-            </a-form-model-item>
-        </a-form-model>
-    </div>
-    </a-comment>
+                        </a-col>
+                        <a-col   :xs="{span:24}"  :lg="{ span: 8}">
+                            <a-form-model-item    prop="authorUrl">
+                                <a-input   v-model="commentForm.authorUrl" placeholder="网址"/>
+                            </a-form-model-item>
+                                    </a-col>
+                    </a-row>
+                    <a-row  v-else style="margin-bottom: 10px;">
+                    <a-col>  <a-tooltip placement="topLeft"  :title="commentForm.authorEmail" arrow-point-at-center> {{ commentForm.authorName}}  
+                    </a-tooltip> <a-button type="dashed" @click="opneEditLink()" size="small">
+                            编辑
+                </a-button></a-col>
+                    </a-row>
+                    
+                <a-form-model-item has-feedback  prop="content">
+                    <a-textarea :rows="4" v-model="commentForm.content"   :placeholder="placeholderText" />
+                </a-form-model-item>
+                <a-form-model-item>
+                    <a-button html-type="submit" :loading="submitting" type="primary" @click="handleSubmit">
+                    回复
+                    </a-button>
+                </a-form-model-item>
+            </a-form-model>
+        </div>
+        </a-comment>
+    </a-row>
 </template>
 <script  >
 import Vue from 'vue'
@@ -55,6 +58,7 @@ export default Vue.extend({
             commentAgentId: null,
             parentCommentId: null,
             repliesIndex: null,
+            repliesUser: null,
             afterSubmit: {
                 type: Function,
                 default: null
@@ -77,6 +81,13 @@ export default Vue.extend({
        repliesIndex (val) {
             let _this  = this;
             _this.parentIndex = val;
+        },
+        repliesUser(val) {
+            let _this = this;
+            _this.parentUser = val;
+            if(val != null) {
+                _this.placeholderText = "回复@"+val;
+            }
         }
     },
     mounted() {
@@ -88,6 +99,9 @@ export default Vue.extend({
             if(   _this.repliesIndex) {
                 _this.parentIndex = _this.repliesIndex;
             } 
+            if(_this.repliesUser != null) {
+                _this.placeholderText = "回复@"+_this.repliesUser;
+            }
             _this.initCommentByCookie();
  
     },
@@ -98,6 +112,7 @@ export default Vue.extend({
              parentIndex : null,
              submitting: false,
              isInitForm: true,
+             parentUser: null,
              commentForm: {
                 content: '',
                 authorName: '',
@@ -122,6 +137,7 @@ export default Vue.extend({
                 labelCol: { span: 1 },
                 wrapperCol: { span: 23 },
             },
+            placeholderText: "评论内容"
          }
      },
      methods: {

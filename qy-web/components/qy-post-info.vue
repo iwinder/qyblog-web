@@ -44,9 +44,10 @@
               </a></a-row>
           </a-row>
         </a-row> 
-        <a-row class="single-comments"  v-if="siteInfo.site_comment_flag =='true' && postData.commentAgentFlag == true"> 
-                <qy-comment-list :commentAgentId= "postData.commentAgentId"></qy-comment-list>
+        <a-row class="single-comments" > 
+                <qy-comment-list :commentAgentId= "postData.commentAgentId" :site_comment_flag="siteInfo.site_comment_flag" :post_comment_flag="postData.commentAgentFlag"></qy-comment-list>
         </a-row>
+
     </a-row>
 </template>
 

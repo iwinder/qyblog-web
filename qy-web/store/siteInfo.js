@@ -48,29 +48,35 @@ export const state = () => ({
 
   export const actions = {
     async getSiteInfo({state,commit}, val) {
-      let _this  =  this; 
-   
-      // if (  _this.$QyServeTool().isEmpty(state.siteInfo) ) {
-        let  siteInfo =    {};
-        // let  siteInfo =   _this.$LruCache().get("qy_siteInfo"); 
-        // if ( _this.$QyServeTool().isEmpty(siteInfo)) {  
-            siteInfo  =  await     _this.$axios.get('/web/siteInfo/all').then(res => {
-             if(!res|| !res.data) {
-              _this.error({ statusCode: 500, message: res});
-             } 
-            let resp  = res.data;	
-              if(resp.success) {  
-                return resp.content;
-              } else {
-                  if(resp.code == '404') {
-                    _this.error({ statusCode: 404, message: resp.message});
-                  } else  {
-                      _this.error({ statusCode: 500, message: resp.message});
-                  }
-              }
-          })
+      let _this  =  this;  
+        let  siteInfo =    {}; 
+          try{ 
+              siteInfo  =  await     _this.$axios.get('/web/siteInfo/all').then(res => {
+              if(!res|| !res.data) {
+                _this.error({ statusCode: 500, message: res});
+              } 
+              let resp  = res.data;	
+                if(resp.success) {  
+                  return resp.content;
+                } else {
+                    if(resp.code == '404') {
+                      _this.error({ statusCode: 404, message: resp.message});
+                    } else  {
+                        _this.error({ statusCode: 500, message: resp.message});
+                    }
+                }
+            })
+         } catch (error) {
+            if(error.status == 404)  {
+                _this.error({ statusCode: 404, message: error.message});
+            } else {
+                _this.error({ statusCode: 500, message: error.message});
+            }
+          }
           if (siteInfo && !siteInfo.header ) {
-            let menus = await _this.$axios.get('/web/siteInfo/menus').then(res => {
+            let menus ={};
+            try{ 
+            menus  = await _this.$axios.get('/web/siteInfo/menus').then(res => {
               let resp  = res.data;	
                 if(resp.success) { 
                   return resp.content;
@@ -83,7 +89,14 @@ export const state = () => ({
                 }
             })
             siteInfo.header =  menus.header;
-            siteInfo.footer =  menus.footer;
+            siteInfo.footer =  menus.footer; 
+           } catch (error) {
+              if(error.status == 404)  {
+                  _this.error({ statusCode: 404, message: error.message});
+              } else {
+                  _this.error({ statusCode: 500, message: error.message});
+              }
+            }
           } 
           else {
             siteInfo.header = JSON.parse(siteInfo.header);
@@ -99,7 +112,7 @@ export const state = () => ({
       // if (  _this.$QyServeTool().isEmpty(state.siteGo) ) { 
         // let  siteGo=   _this.$LruCache().get("qy_siteGo"); 
         // if(_this.$QyServeTool().isEmpty(siteGo)) {
-            siteGo =   await     _this.$axios.get('/web/siteInfo/shortLinks').then(res => {
+          let  siteGo =   await     _this.$axios.get('/web/siteInfo/shortLinks').then(res => {
               let resp  = res.data;	
                 if(resp.success) {  
                   return resp.content;

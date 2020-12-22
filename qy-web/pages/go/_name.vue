@@ -15,8 +15,7 @@ export default Vue.extend({
     let _this = context;
          let old =  context.route.path; 
          let news  = old.replace("/go/", ""); 
-                _this.store. dispatch('siteInfo/getSiteGo');
-              let url  =    _this.store.getters["siteInfo/getSiteGoUrl"](news); 
+          let url  =  _this.store.getters["siteInfo/getSiteGoUrl"](news); 
         if(!url) {
  return context.redirect("/");
         }

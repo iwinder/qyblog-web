@@ -35,10 +35,9 @@
                     <a-row>
                     <a href="javascript:void(0)"  @click="onShow(index)">回复</a>
                     </a-row>
-                    <qy-replies-form   :ref="repliesChildForm[index]"  v-show="repliesFormChildShow[index]"   :commentAgentId="agentId"  :parentCommentId="item.id"   :afterSubmit="repliesFormAfterSubmit">> </qy-replies-form>
+                    <qy-replies-form   :ref="repliesChildForm[index]"  v-show="repliesFormChildShow[index]"  :repliesUser="(item.user&&item.user.nickname)?item.user.nickname:item.authorName" :commentAgentId="agentId"  :parentCommentId="item.id"   :afterSubmit="repliesFormAfterSubmit">> </qy-replies-form>
                 </span>
-                <p slot="content"> 
- 回复 <a href="javascript:void(0)"  >{{item.parent.authorName}} </a> ：{{item.content}} 
+                <p slot="content"> 回复 <a href="javascript:void(0)"  >{{item.parent.authorName}} </a> ：{{item.content}} 
                 </p>
           
 

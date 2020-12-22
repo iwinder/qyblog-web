@@ -277,7 +277,7 @@ export default Vue.extend({
                     let resp  = res.data
                     if(resp.success) {
                             _this.targetName = resp.content.name;
-                            _this.targetType =  resp.content.type;
+                            _this.targetType =  _this.targetId ;
                     }   
                 }).catch((response) => {
                     _this.loading = false; 

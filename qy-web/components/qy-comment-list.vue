@@ -1,6 +1,7 @@
 <template>
     <a-row>
-                 <qy-replies-form  ref="repliesTopForm"       :commentAgentId="agentId"  :afterSubmit="repliesFormAfterSubmit"> </qy-replies-form>
+        <qy-replies-form  ref="repliesTopForm"  v-if="siteCommentFlag == 'true' &&postCommentFlag == true"     :commentAgentId="agentId"  :afterSubmit="repliesFormAfterSubmit"> </qy-replies-form>
+       <a-row class="commentClose"  v-else>  <h2>评论已关闭</h2> </a-row>
         <a-list
             v-if="comments.length"
             :pagination ="pagination" 
@@ -24,7 +25,7 @@
                     <a-row>
                     <a href="javascript:void(0)"  @click="onShow(index)">回复</a>
                     </a-row>
-                    <qy-replies-form  :ref="repliesForm[index]"   v-show="repliesFormShow[index]"   :repliesIndex="repliesIndex" :afterSubmit="repliesChildFormAfterSubmit"  :commentAgentId="agentId"  :parentCommentId="item.id"> </qy-replies-form>
+                    <qy-replies-form  :ref="repliesForm[index]"   v-show="repliesFormShow[index]"  :repliesUser="item.authorName" :repliesIndex="repliesIndex" :afterSubmit="repliesChildFormAfterSubmit"  :commentAgentId="agentId"  :parentCommentId="item.id"> </qy-replies-form>
                 </span>
             </template>
                 <p slot="content"> 
@@ -45,8 +46,11 @@ import  QyRepliesForm from '~/components/qy-replies-form.vue'
 import   md5 from 'js-md5'
  
 export default Vue.extend({
+    
     props: {  
-        commentAgentId: null
+        commentAgentId: null,
+        site_comment_flag: false,
+        post_comment_flag:false
     },
     components: {
         QyCommentChildList,
@@ -71,18 +75,26 @@ export default Vue.extend({
               agentId: null,
               repliesFormShow: [false],
               repliesChildList:["repliesChildList0"],
-              repliesForm:["repliesForm0"]
+              repliesForm:["repliesForm0"],
+              siteCommentFlag: false,
+              postCommentFlag: false
         }
     },
     watch: {
-        // commentAgentId(val) {
-        //     let _this = this;
-        //     _this.agentId = val;
-        // }
+        site_comment_flag(val) {
+            let _this = this;
+            _this.siteCommentFlag = val;
+        },
+        post_comment_flag(val) {
+            let _this = this;
+            _this.postCommentFlag = val;
+        }
     },
     mounted() {
            let _this = this;
          _this.agentId = _this.commentAgentId;
+        _this.siteCommentFlag = _this.site_comment_flag;
+        _this.postCommentFlag = _this.post_comment_flag;
          _this.initData();
     },
     methods: {
@@ -173,6 +185,9 @@ export default Vue.extend({
 </script>
 
 <style  lang="scss"  scoped>
+.commentClose{
+    padding: 10px 0;
+}
 .commentItem {
     line-height: 1;
     /deep/ .ant-comment{
