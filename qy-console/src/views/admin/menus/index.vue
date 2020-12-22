@@ -47,7 +47,7 @@
         </template>
 
             <span slot="action" slot-scope="text, record">
-                <router-link :to="{name:'menus-id',params:{ id: record.id, name: record.name, type: record.type }}">菜单 </router-link >
+                <router-link :to="{name:'menus-id',params:{ id: record.id, name: record.name, identifier: record.identifier }}">菜单 </router-link >
                 <template v-if="record.type!='SYSTEM'">
                     <a-divider type="vertical" /> 
                     <a  href="javascript:void(0)"  @click="deleted([record.id])" >删除</a>
