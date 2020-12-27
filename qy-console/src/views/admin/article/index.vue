@@ -15,12 +15,9 @@
                     </a-form-model-item>
               </a-form-model>
           </a-col>
-          <a-col class='table-operations-right' :xs="{span:24}"  :lg="{ span: 7, offset: 5 }" style=" margin-top: 5px;">
+          <a-col class='table-operations-right' :xs="{span:24}"  :lg="{ span: 8, offset: 3 }" style=" margin-top: 5px;">
             <a-button  type="primary"  @click="add()">
               新增
-            </a-button>
-            <a-button  type="primary"  @click="importb()">
-               导入
             </a-button>
             <a-dropdown >
                 <a-menu slot="overlay" @click="handleMenuClick">
@@ -30,6 +27,18 @@
                   </a-menu>
                   <a-button> 批量操作 <a-icon type="down" /> </a-button>
             </a-dropdown>
+            <a-dropdown >
+                <a-menu slot="overlay" @click="handleSystemMenuClick">
+                    <a-menu-item key="1">
+                      导入
+                    </a-menu-item>
+                     <a-menu-item key="2">
+                      更新链接列表
+                    </a-menu-item>
+                  </a-menu>
+                  <a-button> 系统操作 <a-icon type="down" /> </a-button>
+            </a-dropdown>
+
           </a-col>
       </a-row>
         <a-table :columns="columns"
@@ -44,7 +53,9 @@
 
             <a slot="name" slot-scope="text">{{ text }}</a>
 
-            <span slot="thumbnail" slot-scope="thumbnail"><img :src="thumbnail" style=" height: 62px;   max-width: 100%;"></span>
+           <span slot="thumbnail" slot-scope="thumbnail">
+             <img :src="thumbnail" @error="defImg()"  style=" height: 62px;   max-width: 100%;">
+           </span>
           <span slot="published" slot-scope="published">
               <template v-if="published"> 已发布 </template> 
               <template v-else> 未发布 </template> 
@@ -104,6 +115,7 @@
 <script  >
 import Vue from 'vue'
 import { FormModel } from 'ant-design-vue'; 
+import { mapState } from 'vuex'
 // import VueDraggableResizable from 'vue-draggable-resizable';
 Vue.use(FormModel); 
 
@@ -176,6 +188,7 @@ export default Vue.extend({
               username: '',
               password: ''
           },
+          siteUrl:'',
           rules:  {
                 ip: [
                     {required: true,whitespace: true, message: "ip地址不可为空",  trigger:"change"}
@@ -195,8 +208,14 @@ export default Vue.extend({
           },
         };
     },
+   computed: {
+        ...mapState({
+        site: state => state.siteInfo.siteInfo
+        })
+    },
     mounted() {
-      let _this = this;
+      let _this = this; 
+      _this.siteUrl = _this.site.site_url.endsWith('/')?_this.site.site_url:_this.site.site_url+'/';
       _this.initData();
     },
     methods: {
@@ -224,6 +243,11 @@ export default Vue.extend({
           }).then(res => {
             let resp  = res.data				
             _this.data = resp.content.list;
+             let defImg = "";
+            _this.data.forEach(e  => {
+                defImg = _this.siteUrl+'img/thumb/'+ QyTool.randomNum(1,32)+'.jpg';
+                e.thumbnail= e.thumbnail?e.thumbnail:defImg;
+            });
             _this.pagination.total =   resp.content.total;
             _this.pagination.current =   resp.content.page;
             _this.pagination.pageSize =   resp.content.size;
@@ -318,7 +342,30 @@ export default Vue.extend({
                     return false;
                 }
             });
-      }
+      },
+      refreshLink() {
+        let _this = this;
+         _this.$axios.post("/admin/articles/refreshLink").then(res => {
+          if(res.data.success) {
+            _this.$message.success("更新成功",5);  
+          }
+        });
+      },
+      handleSystemMenuClick(e) {
+        let _this = this;
+        if(e.key === "1") {
+          _this.importb(); 
+        } else if(e.key === "2") {
+          _this.refreshLink();
+        }
+      },
+      defImg() {
+        let _this = this;
+        let defImg = _this.siteUrl+'img/thumb/'+ QyTool.randomNum(1,32)+'.jpg';
+        let img = event.srcElement;
+        img.src = defImg;
+        img.onerror = null; //防止闪图
+      },
     },
 
 })

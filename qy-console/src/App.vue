@@ -16,7 +16,10 @@ created() {
   _this.site  = QyTool.getSiteInfoBase();
   if(QyTool.isNotEmpty( _this.site)) {
     QyTool.refreshSiteInfoBase( _this.site);
-  }
+  } else {
+     document.title = "WindCoder";
+  } 
+  _this.initEndWithF();
 
   },
   data() {
@@ -25,7 +28,13 @@ created() {
     }
   },
   methods:  {
-  
+      initEndWithF() { 
+        if (typeof String.prototype.endsWith != 'function') {
+            String.prototype.endsWith = function (str){
+                return this.slice(-str.length) == str;
+            };
+        }
+    }
   }
 }
 </script>

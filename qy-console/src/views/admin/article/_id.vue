@@ -48,6 +48,7 @@ export default Vue.extend({
             _this.$axios.get("/admin/articles/" + _this.articleId).then(res => {
                     if(res.data.success) {
                             _this.articleObj = res.data.content;
+                            _this.articleObj.oldUrl = _this.articleObj.permaLink; 
                                         // 定时自动保存
                                     _this.saveContentInterval = setInterval(function() {
                                     _this.$refs.articleForm.$refs.saveButton.$emit('click');

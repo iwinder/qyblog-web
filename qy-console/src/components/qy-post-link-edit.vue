@@ -2,8 +2,8 @@
     <a-row> 
          <template v-if="!editLinkShow"> 
             永久链接： 
-            <a-tooltip placement="topLeft"  :title="siteInfo.site_url+'/'+oldLink" arrow-point-at-center>
-            <a  :href="siteInfo.site_url+'/'+oldLink" class="viewlinka" target="_blank" > {{siteInfo.site_url}}/<span class="viewlink">{{oldLink}}</span> 
+            <a-tooltip placement="topLeft"  :title="siteInfo.site_url.endsWith('/')?siteInfo.site_url+oldLink:siteInfo.site_url+'/'+oldLink" arrow-point-at-center>
+            <a  :href="siteInfo.site_url.endsWith('/')?siteInfo.site_url+oldLink:siteInfo.site_url+'/'+oldLink" class="viewlinka" target="_blank" > {{siteInfo.site_url.endsWith('/')?siteInfo.site_url:siteInfo.site_url+'/'}}<span class="viewlink">{{oldLink}}</span> 
                 </a>   </a-tooltip>
                 <a-button type="dashed" @click="opneEditLink(oldLink)">
                         编辑
@@ -60,6 +60,9 @@ export default Vue.extend({
         siteInfo: state => state.siteInfo.siteInfo
         })
     },
+    mounted() { 
+        let _this  =  this;
+    },
      methods: {
         opneEditLink(val) {
             let _this  =  this;
@@ -91,7 +94,8 @@ export default Vue.extend({
         checkAndGetNewLink(params) {
              let _this = this;
 
-        }
+        },
+
      }
 })
 </script>
