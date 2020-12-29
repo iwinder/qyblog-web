@@ -137,7 +137,7 @@ computed: {
      _this.pagination.onChange= function(page) { 
                 let url = "/page/"+page;
                 if(_this.isSearchFlag) {
-                  url = url +"?searchText="+searchText;
+                  url = url +"?searchText="+_this.searchText;
                 }
                 _this.$router.push(url); 
       };

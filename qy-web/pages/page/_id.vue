@@ -142,7 +142,7 @@ export default Vue.extend({
                         } 
                         let url  = baseUrl;  
                         if(_this.isSearchFlag) {
-                            url = url +"?searchText="+searchText;
+                            url = url +"?searchText="+_this.searchText;
                           } 
                               _this.$router.push(url); 
                       };
