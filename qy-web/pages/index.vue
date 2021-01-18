@@ -31,7 +31,6 @@ export default Vue.extend({
     QyPostRightSider
   },
   async fetch({ store, params }) {
-    // await store. dispatch('siteInfo/getSiteInfo'); 
   },
  async  asyncData (context) {
    let _this = context;  
@@ -99,7 +98,7 @@ export default Vue.extend({
                 _this.error({ statusCode: 500, message: error.message});
             }
       }
-
+      const now = new Date().getTime();
       return {
             listData : res1.listData, 
             searchText: searchText,
@@ -108,7 +107,9 @@ export default Vue.extend({
                 total:  res1.total,
                 current : res1.current ,
                 pageSize : res1.pageSize, 
-                 showLessItems: true, 
+                showLessItems: true, 
+                timestamp: now
+
               }
           };
         
@@ -132,17 +133,15 @@ computed: {
   })
 },
   created() {
-    let _this  =  this; 
-    if(process.browser) {
-     _this.pagination.onChange= function(page) { 
+
+        let _this  =  this;  
+     _this.pagination.onChange= function(page) {  
                 let url = "/page/"+page;
                 if(_this.isSearchFlag) {
                   url = url +"?searchText="+_this.searchText;
                 }
                 _this.$router.push(url); 
       };
-    } 
-
   },
   watchQuery: ['searchText'],
   head () {
@@ -163,7 +162,8 @@ computed: {
       let _this = this; 
     if(process.browser) { 
        
-    }
+    } 
+
   },
   methods: {
     moment,

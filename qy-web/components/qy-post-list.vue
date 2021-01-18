@@ -1,5 +1,5 @@
 <template>
-    <a-list item-layout="vertical" size="large" :pagination="pagination" :data-source="listData" data-server-rendered="true">
+    <a-list item-layout="vertical" size="large" :pagination="paginationObj" :data-source="listData" data-server-rendered="true">
         <a-list-item slot="renderItem" key="item.title" slot-scope="item">
         
             <template   slot="extra" style="width:272px"> 
@@ -85,14 +85,20 @@ export default Vue.extend({
 
     },
     watch: {
+        pagination(val){
+            // let _this = this;
+            // _this.paginationObj = val;
+        }
 
     },
     mounted() {
+        let _this = this;
+        _this.paginationObj = _this.pagination;
 
     },
     data() {
         return {
- 
+            paginationObj:{}
         }
     },
     methods: {
