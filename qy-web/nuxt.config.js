@@ -1,4 +1,4 @@
-
+const webpack = require('webpack')
 export default {
   debug:false,
   dev:false, 
@@ -102,6 +102,9 @@ export default {
         }
       }
     },
+    plugins: [
+      new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
+    ],
     extend(config, ctx) {
       const Timestamp = new Date().getTime();
       config.output.filename = `js/[name].${Timestamp}.js` // 每次构建打包时给文件名加上时间戳，保证版本更新时与上版本文件名不一样

@@ -16,7 +16,7 @@
 import Vue from 'vue'
 import QyPostList from '~/components/qy-post-list.vue'
 import QyPostRightSider from '~/components/qy-post-right-sider.vue'
-  import { mapState } from 'vuex'
+import { mapState } from 'vuex'
 import moment from 'moment';
 export default Vue.extend({
       components: { 
