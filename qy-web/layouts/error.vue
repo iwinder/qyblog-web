@@ -11,7 +11,7 @@
 <script>
 import QyError404 from '~/components/qy-error-404.vue'
 import QyError500 from '~/components/qy-error-500.vue'
- import { mapState } from 'vuex'
+import { mapState } from 'vuex'
 
 export default {
   props: ["error"],

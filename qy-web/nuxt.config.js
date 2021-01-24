@@ -48,7 +48,7 @@ export default {
   ** https://nuxtjs.org/guide/plugins
   */
   plugins: [
-    '@/plugins/antd-ui',
+    {src:'@/plugins/antd-ui', ssr: true},
     '@/plugins/qy-serve-tool',
     "@/plugins/qy-real-img",
     "@/plugins/qy-axios-cache",
@@ -88,9 +88,10 @@ export default {
       plugins: [
         ['import',{
             libraryName: 'ant-design-vue',
-            libraryDirectory: 'es',
+            libraryDirectory: 'lib',
             style: true,
-          }]
+          },
+          "ant-design-vue"]
       ]
     },
     module:{

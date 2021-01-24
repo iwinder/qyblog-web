@@ -26,11 +26,10 @@ import QyHeader from '~/components/qy-header.vue'
 import QyFooter from '~/components/qy-footer.vue'
 import QyLeftSider from '~/components/qy-left-sider.vue'
 import Vue from 'vue'
-import { ConfigProvider,Menu,Drawer,Card,Tag,Popover,Input,Avatar,List,Pagination,Button,BackTop,Notification,Message,Comment    } from 'ant-design-vue';
- import zh_CN from 'ant-design-vue/lib/locale-provider/zh_CN';
-  import moment from 'moment';
-  import 'moment/locale/zh-cn';
-Vue.use( ConfigProvider,Menu,Drawer,Card,Tag,Popover,Input,Avatar,List,Pagination,Button,BackTop,Notification,Message,Comment  );
+import zh_CN from 'ant-design-vue/lib/locale-provider/zh_CN';
+import moment from 'moment';
+import 'moment/locale/zh-cn';
+
 moment.locale('zh-cn');
 import { mapState } from 'vuex'
 

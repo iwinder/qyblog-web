@@ -29,9 +29,11 @@
                     </a-row>
                     <a-row  v-else style="margin-bottom: 10px;">
                     <a-col>  <a-tooltip placement="topLeft"  :title="commentForm.authorEmail" arrow-point-at-center> {{ commentForm.authorName}}  
-                    </a-tooltip> <a-button type="dashed" @click="opneEditLink()" size="small">
-                            编辑
-                </a-button></a-col>
+                    </a-tooltip> 
+                    <a-button type="dashed" @click="opneEditLink()" size="small">
+                    编辑
+                    </a-button>
+                    </a-col>
                     </a-row>
                     
                 <a-form-model-item has-feedback  prop="content">
