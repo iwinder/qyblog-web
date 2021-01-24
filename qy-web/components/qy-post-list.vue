@@ -85,14 +85,14 @@ export default Vue.extend({
 
     },
     watch: {
-        pagination(val){
-            // let _this = this;
-            // _this.paginationObj = val;
+        pagination(val){  
+            let _this = this;
+            _this.paginationObj = val;
         }
 
     },
     mounted() {
-        let _this = this;
+        let _this = this; 
         _this.paginationObj = _this.pagination;
 
     },

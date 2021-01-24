@@ -190,6 +190,8 @@ export default {
             // debugger
            _this.handleCancel() ;
           _this.$router.push("/?searchText="+searchText);
+ _this.$router.push({path: "/",query: {searchText:searchText }});
+          
 
 
         }

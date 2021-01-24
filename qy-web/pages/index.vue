@@ -30,22 +30,23 @@ export default Vue.extend({
     QyPostList,
     QyPostRightSider
   },
-  async fetch({ store, params }) {
-  },
- async  asyncData (context) {
-   let _this = context;  
-
-  let searchText =  _this.query.searchText; 
+  
+  watchQuery: ['searchText'],
+ async asyncData (context) {
+   let _this = context;   
+  let asearchText =  _this.query.searchText; 
   let isSearchFlag = false;
-  if(_this.$QyServeTool().isNotEmpty(searchText)) {
+  if(_this.$QyServeTool().isNotEmpty(asearchText)) {
     isSearchFlag = true;
+  }else {
+    asearchText = "";
   }
   let res1 = {};
         try{
      res1 = await     _this.$axios.get('/web/articles',{ params: {
               page: 1,
               size:  10,
-              searchText: searchText
+              searchText: asearchText
          } }).then(res => {
             let resp  = res.data				
             let result = {};
@@ -53,11 +54,8 @@ export default Vue.extend({
             if(resp.success) {
                 let data = resp.content.list;
                 let defImg = "/img/image-pending.gif"; 
-                data.forEach(e  => {
-                      // if(process.browser) {
-                            defImg = '/img/thumb/'+ _this.$QyServeTool().randomNum(1,32)+'.jpg';
-                      // } 
-                    
+                data.forEach(e  => { 
+                    defImg = '/img/thumb/'+ _this.$QyServeTool().randomNum(1,32)+'.jpg'; 
                     listData.push({
                       id: e.id,
                       href:  e.permaLink,
@@ -98,18 +96,16 @@ export default Vue.extend({
                 _this.error({ statusCode: 500, message: error.message});
             }
       }
-      const now = new Date().getTime();
+      // const now = new Date().getTime();
       return {
             listData : res1.listData, 
-            searchText: searchText,
+            searchText: asearchText,
             isSearchFlag: isSearchFlag,
             pagination:{
                 total:  res1.total,
                 current : res1.current ,
                 pageSize : res1.pageSize, 
-                showLessItems: true, 
-                timestamp: now
-
+                showLessItems: true 
               }
           };
         
@@ -126,15 +122,37 @@ export default Vue.extend({
           
         },
     }
-  },
+  }, 
+watch: {
+    '$route'(to, from) {
+      let _this = this; 
+      if (to.fullPath !== from.fullPath) {
+        this.$nextTick(() => { // 不加this.$nextTick时，路由跳转后还是上一次的数据，所以需要加上
+           // 需要执行的方法 
+           if(!to.query.searchText) {
+              _this.isSearchFlag = false;
+           }
+           _this.searchText = to.query.searchText;
+          if(_this.pagination) {
+            _this.pagination.onChange= function(page) {  
+                let url = "/page/"+page;
+                if(_this.isSearchFlag) {
+                  url = url +"?searchText="+_this.searchText;
+                }
+                _this.$router.push(url); 
+            };
+          }
+        })
+      }
+    }
+},
 computed: {
   ...mapState({
     siteInfo: state => state.siteInfo.siteInfo
   })
 },
-  created() {
-
-        let _this  =  this;  
+ created() {  
+    let _this  =  this;  
      _this.pagination.onChange= function(page) {  
                 let url = "/page/"+page;
                 if(_this.isSearchFlag) {
@@ -143,7 +161,6 @@ computed: {
                 _this.$router.push(url); 
       };
   },
-  watchQuery: ['searchText'],
   head () {
         return {
            title:   this.isSearchFlag? "搜索 "+ this.searchText +" - "+ this.siteInfo.site_name: this.siteInfo.site_name,
@@ -159,10 +176,7 @@ computed: {
         }
     },
   mounted() { 
-      let _this = this; 
-    if(process.browser) { 
-       
-    } 
+      let _this = this;   
 
   },
   methods: {

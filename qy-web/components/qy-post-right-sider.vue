@@ -74,15 +74,7 @@ export default Vue.extend({
             let img = event.srcElement;
             img.src = "/favicon.ico";
             img.onerror = null; //防止闪图
-        },
-        loadError() {
-            console.log("event loadError", this);
-            return true;
-            //  let img = event.srcElement;
-            // img.src = "/favicon.ico";
-            // img.onerror = null; //防止闪图
-        }
-        
+        } 
     }
 })
 </script>
