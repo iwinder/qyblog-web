@@ -4,7 +4,7 @@
       collapsed-width="0"
  @breakpoint="onBreakpoint"
        :style="{ }">
-        <div class="logo" >       <img  :src="site.site_small_logo" alt="logo">  </div>
+        <div class="logo" >  <a  :href="site.site_url" class="viewlinka" target="_blank" >     <img  :src="site.site_small_logo" alt="logo"> </a>  </div>
         <a-menu theme="dark" mode="inline"  
             :defaultSelectedKeys="[$route.path]"
              :defaultOpenKeys="['blog']">
@@ -121,6 +121,12 @@
                     <router-link to="/permission">
                     <a-icon type="solution" />
                          <span>权限管理</span>
+                     </router-link>
+                </a-menu-item>
+                <a-menu-item key="/job">
+                    <router-link to="/job">
+                    <a-icon type="solution" />
+                         <span>任务管理</span>
                      </router-link>
                 </a-menu-item>
                 <a-menu-item key="/site">

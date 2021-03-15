@@ -41,13 +41,11 @@ export default Vue.extend({
     },
     destroyed: function() {
       let _this = this; 
-      clearInterval(_this.saveContentInterval);
+      _this.clear();
     },
     mounted() {
-            let _this = this;
-            _this.saveContentInterval = setInterval(function() {
-                                    _this.$refs.articleForm.$refs.saveButton.$emit('click');
-           }, 15000);
+         let _this = this;
+         _this.submitFormRefreh();
     },
     methods: {
         submitForm(article) {
@@ -76,6 +74,21 @@ export default Vue.extend({
                        id: e
                    }
                });
+        },
+        submitFormRefreh() {
+            let _this = this;
+            if( _this.saveContentInterval!=null) {
+                return;
+            }
+            _this.saveContentInterval = setInterval(function() {
+                                    _this.$refs.articleForm.$refs.saveButton.$emit('click');
+           }, 180000);
+        },
+        // 停止定时器
+        clear() {
+            let _this = this; 
+            clearInterval(_this.saveContentInterval);
+            _this.saveContentInterval = null; 
         }
     },
 })

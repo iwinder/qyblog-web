@@ -18,32 +18,12 @@
           <a-col class='table-operations-right' :xs="{span:24}"  :lg="{ span: 8, offset: 3 }" style=" margin-top: 5px;">
             <a-button  type="primary"  @click="add()">
               新增
-            </a-button>
-            <a-dropdown >
-                <a-menu slot="overlay" @click="handleMenuClick">
-                    <a-menu-item key="1">
-                      删除
-                    </a-menu-item>
-                  </a-menu>
-                  <a-button> 批量操作 <a-icon type="down" /> </a-button>
-            </a-dropdown>
-            <a-dropdown >
-                <a-menu slot="overlay" @click="handleSystemMenuClick">
-                    <a-menu-item key="1">
-                      导入
-                    </a-menu-item>
-                     <a-menu-item key="2">
-                      更新链接列表
-                    </a-menu-item>
-                  </a-menu>
-                  <a-button> 系统操作 <a-icon type="down" /> </a-button>
-            </a-dropdown>
-
+            </a-button> 
           </a-col>
       </a-row>
         <a-table :columns="columns"
                  :data-source="data"
-                 :rowKey = "record => record.id"
+                 :rowKey = "record => record.jobName + '-' + record.jobGroup "
                 :pagination="pagination"
                  :loading="loading"
                  :scroll = "{ x:  800}"
@@ -53,54 +33,77 @@
 
             <a slot="name" slot-scope="text">{{ text }}</a>
 
-           <span slot="thumbnail" slot-scope="thumbnail">
+           <!-- <span slot="thumbnail" slot-scope="thumbnail">
              <img :src="thumbnail" @error="defImg(this)"  style=" height: 62px;   max-width: 100%;">
-           </span>
-          <span slot="published" slot-scope="published">
+           </span> -->
+          <!-- <span slot="published" slot-scope="published">
               <template v-if="published"> 已发布 </template> 
               <template v-else> 未发布 </template> 
-          </span>
-            <span slot="tags" slot-scope="tags">
-                <a-tag
-                v-for="tag in tags"
-                :key="tag"
-                :color="tag === 'loser' ? 'volcano' : tag.length > 5 ? 'geekblue' : 'green'"
-                >
-                {{ tag.toUpperCase() }}
-                </a-tag>
+          </span> -->
+            <span slot="cronFlag" slot-scope="cronFlag">
+                <template v-if="cronFlag">
+                    Cron任务类型
+                </template>
+                <template v-else>
+                    简单任务类型
+                </template>
             </span>
 
             <span slot="action" slot-scope="text, record"> 
-                <router-link :to="{name:'article-id',params:{ id: record.id }}">编辑 </router-link>
+                <a  href="javascript:void(0)"  @click="deleted([record.id])" >详情 </a>
                 <a-divider type="vertical" />
- 
-                     <a  href="javascript:void(0)"  @click="deleted([record.id])" >删除</a>
-                 
+                <a  href="javascript:void(0)"  @click="deleted([record.id])" >编辑</a>
+                <a-divider type="vertical" /> 
+                <a  href="javascript:void(0)"  @click="deleted([record.id])" >删除</a> 
             </span>
         </a-table>
 
-        <a-modal v-model="visible"  on-ok="editImport" :footer="null" @cancel="handleCancel" :maskClosable="false">
+        <a-modal v-model="visible"  on-ok="editData" :footer="null" @cancel="handleCancel" :maskClosable="false">
               <template slot="title">
-                   从WordPress导入
+                  <template v-if="dataForm.jobName"> 
+                        编辑任务
+                  </template>
+                   <template v-else> 
+                       新增任务
+                  </template>
               </template>
-                  <a-form-model ref="importForm" :model="importForm" :rules="rules" layout="vertical">
-                            <a-form-model-item has-feedback label="IP/地址" prop="name">
-                                   <a-input v-model="importForm.ip"   placeholder="ip地址" /> 
+                  <a-form-model ref="dataForm" :model="dataForm" :rules="rules" layout="vertical">
+                            <a-form-model-item has-feedback label="任务名称" prop="jobName">
+                                   <a-input v-model="dataForm.jobName"   placeholder="任务名称" /> 
                             </a-form-model-item>
-                          <a-form-model-item has-feedback label="端口号" prop="port">
-                                   <a-input-number v-model="importForm.port"   placeholder="端口号" /> 
+                          <a-form-model-item has-feedback label="任务组" prop="jobGroup">
+                                   <a-input v-model="dataForm.jobGroup"   placeholder="任务组" /> 
                             </a-form-model-item>
-                          <a-form-model-item has-feedback label="数据库名称" prop="database">
-                                   <a-input v-model="importForm.database"   placeholder="数据库名称" /> 
+                          <a-form-model-item has-feedback label="任务描述" prop="description">
+                                <a-input v-model="dataForm.description"   placeholder="任务描述" /> 
+                          </a-form-model-item>
+                          <a-form-model-item has-feedback label="任务执行类" prop="jobClass">
+                                   <a-input v-model="dataForm.jobClass"   placeholder="任务执行类" /> 
+                          </a-form-model-item>
+                           <a-form-model-item has-feedback label="任务类型" prop="cronFlag">
+                                <a-radio-group  v-model="dataForm.cronFlag"  :default-value="true">
+                                    <a-radio :value="true"  name="cronFlag">  Cron任务类型 </a-radio>
+                                    <a-radio :value="false"  name="cronFlag">  简单任务类型 </a-radio>
+                                </a-radio-group>
                             </a-form-model-item>
-                           <a-form-model-item has-feedback label="用户名" prop="username">
-                                   <a-input v-model="importForm.username"   placeholder="用户名" /> 
-                            </a-form-model-item>
-                          <a-form-model-item has-feedback label="密码" prop="password">
-                                   <a-input v-model="importForm.password"   placeholder="密码" /> 
-                            </a-form-model-item>
+                             <template v-if="dataForm.cronFlag"> 
+                                <a-form-model-item has-feedback label="任务运行时间表达式" prop="cronExpression">
+                                        <a-input v-model="dataForm.cronExpression"   placeholder="任务运行时间表达式" /> 
+                                </a-form-model-item>
+                             </template>
+                            <template v-else>
+                                <a-form-model-item has-feedback label="开始时间" prop="startTime">
+                                        <a-input v-model="dataForm.startTime"   /> 
+                                </a-form-model-item>
+                            <a-form-model-item has-feedback label="结束时间" prop="endTime">
+                                    <a-input v-model="dataForm.endTime"   /> 
+                                </a-form-model-item>
+                                <a-form-model-item has-feedback label="任务循环间隔" prop="interval">
+                                    <a-input v-model="dataForm.interval"  placeholder="单位：分钟" /> 
+                                </a-form-model-item>
+                            </template>
                             <a-form-model-item :wrapper-col="{ span: 14, offset: 4 }">
-                            <a-button type="primary" :loading="editLoading" @click="editImport">
+                            <a-button type="primary" :loading="editLoading" @click="editData">
                                 保存
                             </a-button>
                             <a-button style="margin-left: 10px" @click="handleCancel">
@@ -122,42 +125,40 @@ Vue.use(FormModel);
 
 
 
-const columns = [
-                        {
-                              title: '所略图',
-                              dataIndex: 'thumbnail',
-                              key: 'thumbnail',
-                              scopedSlots: { customRender: 'thumbnail' },
-                        },
-                        {
-                          title: '标题',
-                          dataIndex: 'title',
-                          key: 'title',
-                        },
-                        {
-                          title: '作者',
-                          dataIndex: 'user',
-                          key: 'user',
-                        },
-                        {
-                          title: '发布状态',
-                          dataIndex: 'published',
-                          key: 'published',
-                          scopedSlots: { customRender: 'published' },
-                        },
-
-                        {
-                          title: '标签',
-                          key: 'tagStrings',
-                          dataIndex: 'tagStrings',
-                          scopedSlots: { customRender: 'tags' },
-                        },
-                        {
-                          title: '操作',
-                          key: 'action',
-                          scopedSlots: { customRender: 'action' },
-                        },
-            ];
+const columns = [ 
+            {
+                title: '任务名称',
+                dataIndex: 'jobName',
+                key: 'jobName',
+            },
+            {
+                title: '任务组',
+                dataIndex: 'jobGroup',
+                key: 'jobGroup',
+            }, 
+            {
+                title: '任务描述',
+                dataIndex: 'description',
+                key: 'description', 
+            },  
+            {
+                title: '任务状态',
+                dataIndex: 'status',
+                key: 'status',
+                scopedSlots: { customRender: 'status' },
+            },
+            {
+                title: '任务类型',
+                key: 'cronFlag',
+                dataIndex: 'cronFlag',
+                scopedSlots: { customRender: 'cronFlag' },
+            },
+            {
+                title: '操作',
+                key: 'action',
+                scopedSlots: { customRender: 'action' },
+            },
+        ];
  
 
 export default Vue.extend({
@@ -181,30 +182,26 @@ export default Vue.extend({
             },
             editLoading: false,
             visible: false,
-          importForm: {
-              ip: '',
-              port: 3306,
-              database: '',
-              username: '',
-              password: ''
+            jobModelType: 1,
+          dataForm: {
+              jobName: '',
+              jobGroup: '',
+              description: '',
+              jobClass: '',
+              startTime: null,
+              interval: 0,
+              endTime: null,
+              cronExpression: '',
+              cronFlag: true
           },
           siteUrl:'',
           rules:  {
-                ip: [
-                    {required: true,whitespace: true, message: "ip地址不可为空",  trigger:"change"}
+                jobName: [
+                    {required: true,whitespace: true, message: "任务名称不可为空",  trigger:"change"}
                 ],
-                port: [
-                    {required: true,whitespace: true, type: 'number', message: "端口号不可为空",  trigger:"change"}
-                ],
-                database: [
-                    {required: true,whitespace: true, message: "数据库名称不可为空",  trigger:"change"}
-                ],
-                username: [
-                    {required: true,whitespace: true, message: "用户名不可为空",  trigger:"change"}
-                ],
-                password: [
-                    {required: true,whitespace: true, message: "密码不可为空",  trigger:"change"}
-                ]
+                jobClass: [
+                    {required: true,whitespace: true, message: "任务执行类不可为空",  trigger:"change"}
+                ], 
           },
         };
     },
@@ -238,21 +235,16 @@ export default Vue.extend({
         }
 
        
-        _this.$axios.get('/admin/articles',{ params: params
+        _this.$axios.get('/admin/jobInfo',{ params: params
             
           }).then(res => {
             let resp  = res.data				
-            _this.data = resp.content.list;
-             let defImg = "";
-            _this.data.forEach(e  => {
-                defImg = _this.siteUrl+'img/thumb/'+ QyTool.randomNum(1,32)+'.jpg';
-                e.thumbnail= e.thumbnail?e.thumbnail:defImg;
-            });
+            _this.data = resp.content.list; 
             _this.pagination.total =   resp.content.total;
             _this.pagination.current =   resp.content.page;
             _this.pagination.pageSize =   resp.content.size;
             _this.loading = false;
-             _this.selectedIds = [];
+            _this.selectedIds = [];
           });
       },
       handleTableChange(pagination, filters, sorter ) {
@@ -266,15 +258,16 @@ export default Vue.extend({
       },
       add() {
         let _this = this;
-        _this.$router.push("/article/add");
+        _this.jobInfo
+        _this.importb(); 
       },
       importb() {
-              let _this = this; 
-                _this.visible = true;
+            let _this = this; 
+            _this.visible = true;
       },
       handleCancel() {
                 let _this = this; 
-                _this.$refs.importForm.resetFields();
+                _this.$refs.dataForm.resetFields();
                 _this.visible = false; 
       },
       searchForm() {
@@ -321,12 +314,12 @@ export default Vue.extend({
             });
         }
       },
-      editImport() {  
+      editData() {  
           let  _this = this;
             _this.editLoading = true;
-            _this.$refs.importForm.validate(valid => {
+            _this.$refs.dataForm.validate(valid => {
                 if (valid) {
-                      _this.$axios.post('/admin/blogMove/save',_this.importForm).then(res => { 
+                      _this.$axios.post('/admin/jobInfo/save',_this.dataForm).then(res => { 
                               _this.editLoading= false;
                               if(res.data.success) { 
                                   _this.$message.destroy();
@@ -360,11 +353,14 @@ export default Vue.extend({
         }
       },
       defImg() {
-        let _this = this; 
+        let _this = this;
+        console.log("img event", event);
         let defImg = _this.siteUrl+'img/thumb/'+ QyTool.randomNum(1,32)+'.jpg';
         let img =   event.target || event.srcElement;
-        img.src = defImg; 
-        img.onerror = null; //防止闪图 
+        img.src = defImg;
+        console.log("img event2", event);
+        img.onerror = null; //防止闪图
+           console.log("img event3", event);
       },
     },
 
