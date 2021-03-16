@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <a-row>
         <a-row class="table-operations">
            <a-col :xs="{span:24}"  :lg="{ span: 12}" >
               <a-form-model layout="inline" :model="searchFrom"    >
@@ -21,25 +21,14 @@
             </a-button> 
           </a-col>
       </a-row>
-        <a-table :columns="columns"
+      <a-table :columns="columns"
                  :data-source="data"
                  :rowKey = "record => record.jobName + '-' + record.jobGroup "
                 :pagination="pagination"
                  :loading="loading"
-                 :scroll = "{ x:  800}"
-                  :row-selection="{ selectedRowKeys: selectedIds, onChange: onSelectChange }"
-                @change="handleTableChange"
-                 >
+                 :scroll = "{ x:  800}"  >
 
-            <a slot="name" slot-scope="text">{{ text }}</a>
-
-           <!-- <span slot="thumbnail" slot-scope="thumbnail">
-             <img :src="thumbnail" @error="defImg(this)"  style=" height: 62px;   max-width: 100%;">
-           </span> -->
-          <!-- <span slot="published" slot-scope="published">
-              <template v-if="published"> 已发布 </template> 
-              <template v-else> 未发布 </template> 
-          </span> -->
+            <a slot="name" slot-scope="text">{{ text }}</a> 
             <span slot="cronFlag" slot-scope="cronFlag">
                 <template v-if="cronFlag">
                     Cron任务类型
@@ -50,69 +39,116 @@
             </span>
 
             <span slot="action" slot-scope="text, record"> 
-                <a  href="javascript:void(0)"  @click="deleted([record.id])" >详情 </a>
+                <a  href="javascript:void(0)"  @click="showInfo(record)" >详情 </a>
                 <a-divider type="vertical" />
                 <a  href="javascript:void(0)"  @click="deleted([record.id])" >编辑</a>
                 <a-divider type="vertical" /> 
-                <a  href="javascript:void(0)"  @click="deleted([record.id])" >删除</a> 
+                <a  href="javascript:void(0)"  @click="deleted(record.jobName,record.jobGroup)" >删除</a> 
             </span>
-        </a-table>
+      </a-table>
 
-        <a-modal v-model="visible"  on-ok="editData" :footer="null" @cancel="handleCancel" :maskClosable="false">
-              <template slot="title">
-                  <template v-if="dataForm.jobName"> 
-                        编辑任务
-                  </template>
-                   <template v-else> 
-                       新增任务
-                  </template>
+      <a-modal v-model="visible"  on-ok="editData" :footer="null" @cancel="handleCancel" :maskClosable="false">
+          <template slot="title">
+              <template v-if="dataForm.jobName"> 
+                    编辑任务
               </template>
-                  <a-form-model ref="dataForm" :model="dataForm" :rules="rules" layout="vertical">
-                            <a-form-model-item has-feedback label="任务名称" prop="jobName">
-                                   <a-input v-model="dataForm.jobName"   placeholder="任务名称" /> 
-                            </a-form-model-item>
-                          <a-form-model-item has-feedback label="任务组" prop="jobGroup">
-                                   <a-input v-model="dataForm.jobGroup"   placeholder="任务组" /> 
-                            </a-form-model-item>
-                          <a-form-model-item has-feedback label="任务描述" prop="description">
-                                <a-input v-model="dataForm.description"   placeholder="任务描述" /> 
-                          </a-form-model-item>
-                          <a-form-model-item has-feedback label="任务执行类" prop="jobClass">
-                                   <a-input v-model="dataForm.jobClass"   placeholder="任务执行类" /> 
-                          </a-form-model-item>
-                           <a-form-model-item has-feedback label="任务类型" prop="cronFlag">
-                                <a-radio-group  v-model="dataForm.cronFlag"  :default-value="true">
-                                    <a-radio :value="true"  name="cronFlag">  Cron任务类型 </a-radio>
-                                    <a-radio :value="false"  name="cronFlag">  简单任务类型 </a-radio>
-                                </a-radio-group>
-                            </a-form-model-item>
-                             <template v-if="dataForm.cronFlag"> 
-                                <a-form-model-item has-feedback label="任务运行时间表达式" prop="cronExpression">
-                                        <a-input v-model="dataForm.cronExpression"   placeholder="任务运行时间表达式" /> 
-                                </a-form-model-item>
-                             </template>
-                            <template v-else>
-                                <a-form-model-item has-feedback label="开始时间" prop="startTime">
-                                        <a-input v-model="dataForm.startTime"   /> 
-                                </a-form-model-item>
-                            <a-form-model-item has-feedback label="结束时间" prop="endTime">
-                                    <a-input v-model="dataForm.endTime"   /> 
-                                </a-form-model-item>
-                                <a-form-model-item has-feedback label="任务循环间隔" prop="interval">
-                                    <a-input v-model="dataForm.interval"  placeholder="单位：分钟" /> 
-                                </a-form-model-item>
-                            </template>
-                            <a-form-model-item :wrapper-col="{ span: 14, offset: 4 }">
-                            <a-button type="primary" :loading="editLoading" @click="editData">
-                                保存
-                            </a-button>
-                            <a-button style="margin-left: 10px" @click="handleCancel">
-                                取消
-                            </a-button>
-                            </a-form-model-item>
-                        </a-form-model>
-         </a-modal>
-    </div>
+                <template v-else> 
+                    新增任务
+              </template>
+          </template>
+          <a-form-model ref="dataForm" :model="dataForm" :rules="rules" layout="vertical">
+              <a-form-model-item has-feedback label="任务名称" prop="jobName">
+                      <a-input v-model="dataForm.jobName"   placeholder="任务名称" /> 
+              </a-form-model-item>
+              <a-form-model-item has-feedback label="任务组" prop="jobGroup">
+                        <a-input v-model="dataForm.jobGroup"   placeholder="任务组" /> 
+                </a-form-model-item>
+              <a-form-model-item has-feedback label="任务描述" prop="description">
+                        <a-input v-model="dataForm.description"   placeholder="任务描述" /> 
+              </a-form-model-item>
+              <a-form-model-item has-feedback label="任务执行类" prop="jobClass">
+                        <a-input v-model="dataForm.jobClass"   placeholder="任务执行类" /> 
+              </a-form-model-item>
+              <a-form-model-item has-feedback label="任务类型" prop="cronFlag">
+                  <a-radio-group  v-model="dataForm.cronFlag"  :default-value="true">
+                      <a-radio :value="true"  name="cronFlag">  Cron任务类型 </a-radio>
+                      <a-radio :value="false"  name="cronFlag">  简单任务类型 </a-radio>
+                  </a-radio-group>
+              </a-form-model-item>
+              <template v-if="dataForm.cronFlag"> 
+                <a-form-model-item has-feedback label="Cron时间表达式" prop="cronExpression">
+                        <a-input v-model="dataForm.cronExpression"   placeholder="任务运行时间表达式" /> 
+                </a-form-model-item>
+              </template>
+              <template v-else>
+                  <a-form-model-item has-feedback label="开始时间" prop="startTime">
+                          <a-input v-model="dataForm.startTime"   /> 
+                  </a-form-model-item>
+              <a-form-model-item has-feedback label="结束时间" prop="endTime">
+                      <a-input v-model="dataForm.endTime"   /> 
+                  </a-form-model-item>
+                  <a-form-model-item has-feedback label="任务循环间隔" prop="interval">
+                      <a-input v-model="dataForm.interval"  placeholder="单位：分钟" /> 
+                  </a-form-model-item>jobName
+              </template>
+              <a-form-model-item :wrapper-col="{ span: 14, offset: 4 }">
+              <a-button type="primary" :loading="editLoading" @click="editData">
+                  保存
+              </a-button>
+              <a-button style="margin-left: 10px" @click="handleCancel">
+                  取消
+              </a-button>
+              </a-form-model-item>
+          </a-form-model>
+      </a-modal>
+      <a-drawer  placement="right" :closable="false" :visible="infoVisible" @close="onInfoClose">
+          <template slot="title">
+             任务详情
+          </template>
+          <a-row>
+            <a-descriptions
+                title="" 
+                :column="1"
+              >
+              <a-descriptions-item label="任务名称">
+                {{dataObj.jobName}}
+              </a-descriptions-item>
+               <a-descriptions-item label="任务组">
+                {{dataObj.jobGroup}}
+              </a-descriptions-item>
+               <a-descriptions-item label="任务描述">
+                 {{dataObj.description}}
+              </a-descriptions-item>
+              <a-descriptions-item label="任务执行类">
+                <span style="margin-right: 10px;" class="wordBreak"> {{dataObj.jobClass}}</span>
+              </a-descriptions-item>
+              <a-descriptions-item label="任务类型"> 
+                <a-radio-group  v-model="dataObj.cronFlag" disabled :default-value="true">
+                      <a-radio :value="true"  name="cronFlag">  Cron任务类型 </a-radio>
+                      <a-radio :value="false"  name="cronFlag">  简单任务类型 </a-radio>
+                  </a-radio-group>
+              </a-descriptions-item>
+              <template v-if="dataObj.cronFlag">
+                  {{dataObj.jobGroup}}   
+                <a-descriptions-item label="Cron时间表达式">
+                  <span style="margin-right: 10px;" class="wordBreak">  {{dataObj.cronExpression}}</span>
+                </a-descriptions-item> 
+              </template>
+              <template v-else>
+                <a-descriptions-item label="开始时间">
+                  {{dataObj.startTime}}
+                </a-descriptions-item> 
+                <a-descriptions-item label="结束时间">
+                  {{dataObj.endTime}}
+                </a-descriptions-item>
+                <a-descriptions-item label="任务循环间隔(分钟)">
+                  {{dataObj.interval}}
+                </a-descriptions-item>
+              </template>
+            </a-descriptions>
+          </a-row>
+      </a-drawer>
+    </a-row>
 </template>
 
 <script  >
@@ -167,23 +203,34 @@ export default Vue.extend({
     },
      data() {
         return {
-            columns,
-            loading: false,
-            searchLoading: false,
-            searchFrom: {
-              searchText: null
-            },
-            selectedIds:[],
-            data: [],
-            pagination: {
-              pageSize: 10,
-              current: 1,
-              total: 0
-            },
-            editLoading: false,
-            visible: false,
-            jobModelType: 1,
+          columns,
+          loading: false,
+          searchLoading: false,
+          searchFrom: {
+            searchText: null
+          }, 
+          data: [],
+          pagination: {
+            pageSize: 10,
+            current: 1,
+            total: 0
+          },
+          editLoading: false,
+          visible: false,
+          infoVisible: false,
+          jobModelType: 1,
           dataForm: {
+              jobName: '',
+              jobGroup: '',
+              description: '',
+              jobClass: '',
+              startTime: null,
+              interval: 0,
+              endTime: null,
+              cronExpression: '',
+              cronFlag: true
+          },
+          dataObj: {
               jobName: '',
               jobGroup: '',
               description: '',
@@ -243,8 +290,7 @@ export default Vue.extend({
             _this.pagination.total =   resp.content.total;
             _this.pagination.current =   resp.content.page;
             _this.pagination.pageSize =   resp.content.size;
-            _this.loading = false;
-            _this.selectedIds = [];
+            _this.loading = false; 
           });
       },
       handleTableChange(pagination, filters, sorter ) {
@@ -274,34 +320,18 @@ export default Vue.extend({
         let _this = this;
         _this.initData();
 
-      },
-      handleMenuClick(e) {
+      },    
+      deleted(jobName,jobGroup) {
         let _this = this;
-        if(e.key === "1") {
-          if( _this.selectedIds &&  _this.selectedIds.length>0) {
-            _this.deleted(_this.selectedIds );
-          } else {
-              this.$message.warning("请选择要删除项",5); 
-              return false;
-          }
-           
-        }
-      },
-      onSelectChange(selectedRowKeys) {
-        let _this = this;
-          _this.selectedIds = selectedRowKeys;
-      },   
-      confirmDeleted(e) {
-          let _this = this;
-          _this.deleted(e);
-      },
-       deleted(ids) {
-        let _this = this;
-      if(ids) {
+        if(jobName) {
           this.$confirm({
               title: '确认删除?',
               onOk() { 
-                _this.$axios.delete("/admin/articles", {data:  ids}).then(res => {
+                let param = {
+                  jobName: jobName,
+                  jobGroup: jobGroup
+                }
+                _this.$axios.delete("/admin/jobInfo/deleteOne", {data:param}).then(res => {
                   if(res.data.success) {
                     _this.$message.success("删除成功",5); 
                     _this.initData();
@@ -322,46 +352,30 @@ export default Vue.extend({
                       _this.$axios.post('/admin/jobInfo/save',_this.dataForm).then(res => { 
                               _this.editLoading= false;
                               if(res.data.success) { 
-                                  _this.$message.destroy();
-                                   _this.$message.success('导入成功',5);
+                                _this.$message.destroy();
+                                _this.$message.success('保存成功',5);
+                                _this.handleCancel(); 
                               }
                       }).catch((response) => {
                               _this.editLoading = false;
                               _this.$message.destroy();
-                              _this.$message.error('导入失败: ' + response,5);
+                              _this.$message.error('保存失败: ' + response,5);
                       }); 
                 } else {
                     _this.editLoading= false;
                     return false;
                 }
             });
-      },
-      refreshLink() {
+      },  
+      showInfo(obj) {
         let _this = this;
-         _this.$axios.post("/admin/articles/refreshLink").then(res => {
-          if(res.data.success) {
-            _this.$message.success("更新成功",5);  
-          }
-        });
+        _this.infoVisible = true;
+        _this.dataObj = obj;
       },
-      handleSystemMenuClick(e) {
-        let _this = this;
-        if(e.key === "1") {
-          _this.importb(); 
-        } else if(e.key === "2") {
-          _this.refreshLink();
-        }
-      },
-      defImg() {
-        let _this = this;
-        console.log("img event", event);
-        let defImg = _this.siteUrl+'img/thumb/'+ QyTool.randomNum(1,32)+'.jpg';
-        let img =   event.target || event.srcElement;
-        img.src = defImg;
-        console.log("img event2", event);
-        img.onerror = null; //防止闪图
-           console.log("img event3", event);
-      },
+      onInfoClose() {
+        let _this = this
+        _this.infoVisible = false;
+      }
     },
 
 })
@@ -376,6 +390,10 @@ export default Vue.extend({
   button {
     margin-right: 8px;
   }
+}
+.wordBreak{
+    word-break:break-all;  
+    word-wrap:break-word; 
 }
 </style>
 

@@ -360,11 +360,15 @@ export default Vue.extend({
         }
       },
       defImg() {
-        let _this = this; 
+        let _this = this;  
         let defImg = _this.siteUrl+'img/thumb/'+ QyTool.randomNum(1,32)+'.jpg';
-        let img =   event.target || event.srcElement;
-        img.src = defImg; 
-        img.onerror = null; //防止闪图 
+        let tImg = new Image();
+        tImg.src = defImg;
+        if(tImg.filesize>0||(tImg.width>0&&tImg.height>0)) {
+          let img =    window.event.target ||  window.event.srcElement;
+          img.src = defImg;  
+          img.onerror = null; //防止闪图,无效
+        } 
       },
     },
 

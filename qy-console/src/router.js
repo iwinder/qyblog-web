@@ -70,7 +70,7 @@ const router = new Router({
         redirect: '/404',
     },{
         path: '',
-        redirect: '/article',
+        redirect: '/dashboard',
     }, {
         path: '/login',
         component: Login
@@ -214,6 +214,11 @@ const router = new Router({
             path: 'media-lib',
             name: 'media-lib',
             component: FileLib
+        },
+        {
+            path: 'media-lib-config',
+            name: 'media-lib-config',
+            component: FileLibConfig
         },
         {
             path: 'media-lib-config/:id',

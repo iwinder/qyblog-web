@@ -118,7 +118,7 @@ export default Vue.extend({
                           let loginToken = resp.content.token;
                           QyTool.setLoginToken(loginToken);
                           _this.$message.success('登录成功',5);
-                          	_this.$router.push("/article");
+                          	_this.$router.push("/");
                     } else {
                         _this.state.loginBtn= false;
                         _this.$message.error('登录失败2: ' + resp.message,5);
