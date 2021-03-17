@@ -8,9 +8,11 @@
         <a-menu theme="dark" mode="inline"  
             :defaultSelectedKeys="[$route.path]"
              :defaultOpenKeys="['blog']">
-            <a-menu-item key="dashboard">
-                <a-icon type="dashboard" />
-                <span>仪表盘</span>
+            <a-menu-item key="/dashboard">
+                <router-link to="/dashboard">
+                    <a-icon type="/dashboard" />
+                    <span>仪表盘</span>
+                </router-link>
             </a-menu-item>
 
         

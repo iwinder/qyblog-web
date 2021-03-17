@@ -22,7 +22,7 @@ import Vue from 'vue'
 import QyLeftSider from '../../components/qy-left-sider.vue'
 import QyHeader from '../../components/qy-header.vue'
 import QyFooter from '../../components/qy-footer.vue'
- import { mapState } from 'vuex'
+import { mapState } from 'vuex'
 
 export default Vue.extend({
   components: {
@@ -33,7 +33,6 @@ export default Vue.extend({
   data() {
     return {
       collapsed: false,
-   
     };
   },
       computed: {

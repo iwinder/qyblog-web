@@ -41,7 +41,7 @@
             <span slot="action" slot-scope="text, record"> 
                 <a  href="javascript:void(0)"  @click="showInfo(record)" >详情 </a>
                 <a-divider type="vertical" />
-                <a  href="javascript:void(0)"  @click="deleted([record.id])" >编辑</a>
+                <a  href="javascript:void(0)"  @click="editInfo(record)" >编辑</a>
                 <a-divider type="vertical" /> 
                 <a  href="javascript:void(0)"  @click="deleted(record.jobName,record.jobGroup)" >删除</a> 
             </span>
@@ -81,15 +81,15 @@
                 </a-form-model-item>
               </template>
               <template v-else>
-                  <a-form-model-item has-feedback label="开始时间" prop="startTime">
-                          <a-input v-model="dataForm.startTime"   /> 
+                  <a-form-model-item has-feedback label="开始时间" prop="startTime"> 
+                    <a-date-picker show-time placeholder="Select Time" v-model="dataForm.startTime" format="YYYY/MM/DD HH:mm:ss"/>
                   </a-form-model-item>
-              <a-form-model-item has-feedback label="结束时间" prop="endTime">
-                      <a-input v-model="dataForm.endTime"   /> 
+              <a-form-model-item has-feedback label="结束时间" prop="endTime"> 
+                       <a-date-picker show-time placeholder="Select Time" v-model="dataForm.endTime" format="YYYY/MM/DD HH:mm:ss"/>
                   </a-form-model-item>
-                  <a-form-model-item has-feedback label="任务循环间隔" prop="interval">
-                      <a-input v-model="dataForm.interval"  placeholder="单位：分钟" /> 
-                  </a-form-model-item>jobName
+                  <a-form-model-item has-feedback label="任务循环间隔(秒)" prop="interval">
+                      <a-input v-model="dataForm.interval"  placeholder="单位：秒" /> 
+                  </a-form-model-item>
               </template>
               <a-form-model-item :wrapper-col="{ span: 14, offset: 4 }">
               <a-button type="primary" :loading="editLoading" @click="editData">
@@ -157,7 +157,7 @@ import { FormModel } from 'ant-design-vue';
 import { mapState } from 'vuex'
 // import VueDraggableResizable from 'vue-draggable-resizable';
 Vue.use(FormModel); 
-
+import moment from 'moment';
 
 
 
@@ -179,9 +179,9 @@ const columns = [
             },  
             {
                 title: '任务状态',
-                dataIndex: 'status',
-                key: 'status',
-                scopedSlots: { customRender: 'status' },
+                dataIndex: 'statusStr',
+                key: 'statusStr',
+                scopedSlots: { customRender: 'statusStr' },
             },
             {
                 title: '任务类型',
@@ -225,7 +225,7 @@ export default Vue.extend({
               description: '',
               jobClass: '',
               startTime: null,
-              interval: 0,
+              interval: null,
               endTime: null,
               cronExpression: '',
               cronFlag: true
@@ -250,6 +250,7 @@ export default Vue.extend({
                     {required: true,whitespace: true, message: "任务执行类不可为空",  trigger:"change"}
                 ], 
           },
+           moment,
         };
     },
    computed: {
@@ -304,7 +305,7 @@ export default Vue.extend({
       },
       add() {
         let _this = this;
-        _this.jobInfo
+        _this.jobModelType = 1;
         _this.importb(); 
       },
       importb() {
@@ -312,14 +313,41 @@ export default Vue.extend({
             _this.visible = true;
       },
       handleCancel() {
-                let _this = this; 
-                _this.$refs.dataForm.resetFields();
-                _this.visible = false; 
+        let _this = this; 
+        _this.$refs.dataForm.resetFields();
+        _this.visible = false; 
+        _this.dataForm = {
+              jobName: '',
+              jobGroup: '',
+              description: '',
+              jobClass: '',
+              startTime: null,
+              interval: null,
+              endTime: null,
+              cronExpression: '',
+              cronFlag: true  
+        }
       },
       searchForm() {
         let _this = this;
         _this.initData();
 
+      },
+      editInfo(obj) {
+        let _this = this;
+        _this.dataForm = {
+              jobName: obj.jobName,
+              jobGroup: obj.jobGroup,
+              description: obj.description,
+              jobClass: obj.jobClass,
+              startTime: _this.moment(obj.startTime),
+              interval: obj.interval?obj.interval/1000.0:null,
+              endTime: obj.endTime?_this.moment(obj.endTime):null,
+              cronExpression: obj.cronExpression,
+              cronFlag: obj.cronFlag
+        }
+        _this.jobModelType = 2;
+        _this.importb(); 
       },    
       deleted(jobName,jobGroup) {
         let _this = this;
@@ -349,18 +377,33 @@ export default Vue.extend({
             _this.editLoading = true;
             _this.$refs.dataForm.validate(valid => {
                 if (valid) {
-                      _this.$axios.post('/admin/jobInfo/save',_this.dataForm).then(res => { 
-                              _this.editLoading= false;
-                              if(res.data.success) { 
-                                _this.$message.destroy();
-                                _this.$message.success('保存成功',5);
-                                _this.handleCancel(); 
-                              }
-                      }).catch((response) => {
-                              _this.editLoading = false;
-                              _this.$message.destroy();
-                              _this.$message.error('保存失败: ' + response,5);
-                      }); 
+                  let param = JSON.parse(JSON.stringify(_this.dataForm));
+                  if(param.startTime) {
+                    param.startTime = new Date(param.startTime).getTime();
+                  }
+                   if(param.endTime) {
+                      param.endTime = new Date(param.startTime).getTime();
+                   }
+                   if(param.interval==0) {
+                     param.interval = null;
+                   }
+                  let url = _this.jobModelType == 1 ? '/admin/jobInfo/save': '/admin/jobInfo/update';
+                  _this.$axios.post(url,param).then(res => { 
+                          _this.editLoading= false;
+                          if(res.data.success) { 
+                            _this.$message.destroy();
+                            _this.$message.success('保存成功',5);
+                            _this.handleCancel(); 
+                            _this.initData();
+                          } else {
+                             _this.$message.destroy();
+                            _this.$message.error('保存失败: ' + response,5);
+                          }
+                  }).catch((response) => {
+                          _this.editLoading = false;
+                          _this.$message.destroy();
+                          _this.$message.error('保存失败: ' + response,5);
+                  }); 
                 } else {
                     _this.editLoading= false;
                     return false;
