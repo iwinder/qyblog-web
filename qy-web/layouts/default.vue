@@ -48,18 +48,56 @@ export default  {
     }
   },
   head () {
-        return {
-            title: this.siteInfo.name,
-            meta: [
-                { hid: "keywords", name: "keywords", content: this.siteInfo. site_key},
-                { hid: "description", name: "description", content: this.siteInfo. site_description},
-
-            ],
-            link: [
-                {rel:"stylesheet" ,type:"text/css", href:"/css/github-markdown.css"}
-            ],
-            
+    let scriptArry = []; 
+    let scripTag = {};
+    if(this.siteInfo.site_head_script_code) {
+      let reg = /<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/g;
+      let scriptStrArry =  this.siteInfo.site_head_script_code.match(reg);   
+      let reg2 =/<script.*?>/;
+      let scnum = 0;
+      for(let str of scriptStrArry) {
+        let preStr = str.match(reg2)[0]; 
+        let mindStr = str.substring(preStr.length,str.indexOf("<\/script>"));
+        let preStr2 = preStr.substring(7,preStr.length-1).replace("[\\s]+"," "); 
+        let scriptObj = {}; 
+        scnum++;
+        if(preStr2.length>0) {
+          let preArry = preStr2.split(" ");
+          for(let apre of preArry) {
+            let preArr2 = apre.split("="); 
+            if(preArr2.length==2) {
+              scriptObj[preArr2[0]] = preArr2[1].substring(1,preArr2[1].length-1);
+            } else {
+              if(preArr2[0]!='') { 
+                scriptObj[preArr2[0]] = true;
+              }
+            }
+          }
         }
+        if(mindStr.length>0) {
+          scriptObj.innerHTML = mindStr; 
+          scriptObj['hid'] =  'script-'+scnum;
+          scripTag['script-'+scnum] = ['innerHTML'];
+        }
+        scriptArry.push(scriptObj);
+      }
+      
+    }
+    return {
+        title: this.siteInfo.name,
+        meta: [
+            { hid: "keywords", name: "keywords", content: this.siteInfo. site_key},
+            { hid: "description", name: "description", content: this.siteInfo. site_description},
+
+        ],
+        script: scriptArry,
+        style:[],
+        __dangerouslyDisableSanitizersByTagID: scripTag,
+        link: [
+            {rel:"stylesheet" ,type:"text/css", href:"/css/github-markdown.css"}
+        ],
+        
+  }
 },
   computed: {
     ...mapState({

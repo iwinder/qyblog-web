@@ -58,11 +58,11 @@ export const state = () => ({
                 }
             })
          } catch (error) {
-            if(error.status == 404)  {
-                _this.error({ statusCode: 404, message: error.message});
-            } else {
-                _this.error({ statusCode: 500, message: error.message});
-            }
+            // if(error.status == 404)  {
+            //     _this.error({ statusCode: 404, message: error.message});
+            // } else {
+            //    error({ statusCode: 500, message: error.message});
+            // }
           }
           if (siteInfo && !siteInfo.header ) {
             let menus ={};
