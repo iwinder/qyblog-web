@@ -118,6 +118,8 @@ export default {
   axios: {
     // baseURL: 'http://localhost:8000/api/admin',
     // or other axios configs.
+    // baseURL:"https://windcoder.com/api/",
+    // proxy: false,
     proxy: true,
     prefix: '/api/',
     withCredentials: true,

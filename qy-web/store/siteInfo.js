@@ -50,19 +50,19 @@ export const state = () => ({
                 if(resp.success) {  
                   return resp.content;
                 } else {
-                    if(resp.code == '404') {
-                      _this.error({ statusCode: 404, message: resp.message});
-                    } else  {
-                        _this.error({ statusCode: 500, message: resp.message});
-                    }
+                  if(resp.code == '404') {
+                    return  Promise.reject( createError(404,resp.message)); 
+                  } else  {
+                    return  Promise.reject( createError(500,resp.message));
+                  }
                 }
             })
          } catch (error) {
-            // if(error.status == 404)  {
-            //     _this.error({ statusCode: 404, message: error.message});
-            // } else {
-            //    error({ statusCode: 500, message: error.message});
-            // }
+            if(error.code == '404') {
+              return  Promise.reject( createError(404,error.message)); 
+            } else  {
+              return  Promise.reject( createError(500,error.message));
+            }
           }
           if (siteInfo && !siteInfo.header ) {
             let menus ={};
@@ -73,19 +73,19 @@ export const state = () => ({
                   return resp.content;
                 } else {
                   if(resp.code == '404') {
-                    _this.error({ statusCode: 404, message: resp.message});
+                    return  Promise.reject( createError(404,resp.message)); 
                   } else  {
-                      _this.error({ statusCode: 500, message: resp.message});
+                    return  Promise.reject( createError(500,resp.message));
                   }
                 }
             })
             siteInfo.header =  menus.header;
             siteInfo.footer =  menus.footer; 
-           } catch (error) {
-              if(error.status == 404)  {
-                  _this.error({ statusCode: 404, message: error.message});
-              } else {
-                  _this.error({ statusCode: 500, message: error.message});
+           } catch (error) { 
+              if(error.code == '404') {
+                return  Promise.reject( createError(404,error.message)); 
+              } else  {
+                return  Promise.reject( createError(500,error.message));
               }
             }
           } 
@@ -107,9 +107,9 @@ export const state = () => ({
                   return resp.content;
                 } else {
                   if(resp.code == '404') {
-                    _this.error({ statusCode: 404, message: resp.message});
+                    return  Promise.reject( createError(404,resp.message)); 
                   } else  {
-                      _this.error({ statusCode: 500, message: resp.message});
+                    return  Promise.reject( createError(500,resp.message));
                   }
                 }
             });  
@@ -119,14 +119,17 @@ export const state = () => ({
     let _this  =  this;
     let  siteIndexLink=  {}; 
     siteIndexLink =   await     _this.$axios.get('/web/siteInfo/indexlinks').then(res => {
+        if(!res) { 
+            return;
+        }
         let resp  = res.data;	
           if(resp.success) {  
             return resp.content;
           } else {
             if(resp.code == '404') {
-              _this.error({ statusCode: 404, message: resp.message});
+              return  Promise.reject( createError(404,resp.message)); 
             } else  {
-                _this.error({ statusCode: 500, message: resp.message});
+              return  Promise.reject( createError(500,resp.message));
             }
           }
       });  

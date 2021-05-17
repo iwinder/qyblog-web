@@ -28,8 +28,9 @@ import ShortLink from './views/admin/short-link/index.vue'
 import Dashboard from './views/admin/dashboard/index.vue'
 import NotFound  from './views/error/404.vue'
 import ErrorPage  from './views/error/500.vue'
-import IpBlack from './views/admin/ip-black/index.vue'
-import LoginLog from './views/admin/login-log/index.vue'
+import IpBlack from './views/admin/safe/ip-black.vue'
+import LoginLog from './views/admin/safe/login-log.vue'
+import LIpWhilte from './views/admin/safe/ip-whilte.vue'
 import FileLib from './views/admin/file-lib/index.vue' 
 import FileLibConfig from './views/admin/file-lib/config/index.vue' 
 import FileLibConfigEdit from './views/admin/file-lib/config/_id.vue' 
@@ -201,14 +202,19 @@ const router = new Router({
             component: ShortLink,
         },
         {
-            path: 'ip-black',
+            path: 'safe/ip-black',
             name: 'ip-black',
             component: IpBlack,
         },
         {
-            path: 'login-log',
+            path: 'safe/login-log',
             name: 'login-log',
             component: LoginLog,
+        },
+        {
+            path: 'safe/ip-whilte',
+            name: 'ip-whilte',
+            component: LIpWhilte,
         },
         {
             path: 'media-lib',

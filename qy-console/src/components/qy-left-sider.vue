@@ -90,15 +90,21 @@
                </a-menu-item>
            </a-sub-menu>
              <a-sub-menu key="system-safe">
-                  <span slot="title"><a-icon type="safety" /><span>安全管理</span></span>
+                <span slot="title"><a-icon type="safety" /><span>安全管理</span></span>
+                <a-menu-item key="/ip-whilte">
+                    <router-link to="/safe/ip-whilte">
+                     <a-icon type="robot" />
+                         <span>IP白名单</span>
+                     </router-link>
+                </a-menu-item>
                 <a-menu-item key="/ip-black">
-                    <router-link to="/ip-black">
+                    <router-link to="/safe/ip-black">
                      <a-icon type="robot" />
                          <span>IP黑名单</span>
                      </router-link>
                 </a-menu-item>
                 <a-menu-item key="/login-log">
-                    <router-link to="/login-log">
+                    <router-link to="/safe/login-log">
                     <a-icon type="calendar" />
                          <span>登录日志</span>
                      </router-link>
