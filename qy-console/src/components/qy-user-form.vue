@@ -2,7 +2,7 @@
      <a-form-model ref="userForm" :model="userForm" :rules="rules" v-bind="layout">
 
            <a-row>
-                    <a-col :xs="24"   :lg="{ span: 15, offset: 3 }"  >
+            <a-col :xs="24"   :lg="{ span: 15, offset: 3 }"  >
             <a-form-model-item has-feedback  label="用户名"  prop="username"> 
                 <a-input v-model="userForm.username"  :disabled="usernameDisable"  type="text" autocomplete="off" placeholder="用户名" />
             </a-form-model-item>
