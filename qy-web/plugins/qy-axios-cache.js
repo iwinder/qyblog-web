@@ -3,7 +3,7 @@ import { cacheAdapterEnhancer } from 'axios-extensions'
 import LRUCache from 'lru-cache'
 import createError from 'http-errors'
 let cacheCfg = new LRUCache({
-  maxAge: 1000 * 10, //有效期10s
+  maxAge: 1000 * 60*5, //有效期5m
   max: 1000 // 最大缓存数量
 });
 // let createError = require('http-errors');

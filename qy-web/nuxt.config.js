@@ -1,4 +1,5 @@
 const webpack = require('webpack')
+const LRUCache = require('lru-cache')
 export default {
   debug:false,
   dev:false, 
@@ -83,6 +84,9 @@ export default {
   */
   build: {
     analyze: true,
+    assetFilter: function(assetFilename) {	    		
+      return assetFilename.endsWith('.js');	    	
+    },
     telemetry:false,
     transpile: ['ant-design-vue'],
     babel: {
@@ -125,7 +129,14 @@ export default {
     withCredentials: true,
     
   },
-
+  render: {
+    bundleRenderer: {
+      cache: new LRUCache({
+        max: 1000,
+        maxAge: 1000 * 60 * 30
+      })
+    }
+  },
   proxy: {
     '/api': {
         target: 'http://localhost:8000/api', // 代理地址

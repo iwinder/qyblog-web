@@ -50,6 +50,11 @@
  import  QyToUrl from '~/components/qy-to-url.vue'
 
 export default {
+    name: 'qy-web-footer',
+        serverCacheKey () {
+        // Will change every 10 secondes
+        return 'qy-web-footer'+Math.floor(Date.now() / 10000)
+    },
     computed: {
         ...mapState({
         siteInfo: state => state.siteInfo.siteInfo

@@ -21,9 +21,9 @@
                 <a-col :span="4" v-if=" $QyServeTool().isNotEmpty( siteInfo.site_qq) " >   <a class="fts-qq"    :href="'http://wpa.qq.com/msgrd?v=3&amp;uin='+siteInfo.site_qq+'&amp;site=qq&amp;menu=yes'" title="QQ聊天" target="_blank" rel="noopener"> <a-icon type="qq" /> </a> </a-col>
                 <a-col  :span="4" v-if="$QyServeTool().isNotEmpty(siteInfo.site_qq_group)"  >    <a class="fts-qq-group"    :href="'https://shang.qq.com/wpa/qunwpa?idkey='+siteInfo.site_qq_group "  title="点击加入QQ群" target="_blank" rel="noopener">    <a-icon type="team" /> </a></a-col>
                 <a-col  :span="4"  v-if="$QyServeTool().isNotEmpty(siteInfo.site_weixin_qr)"  >   
-                        <a-popover  >
+                        <a-popover  v-lazy-container="{ selector: 'img' }">
                             <template slot="content">
-                            <img  :src="siteInfo.site_weixin_qr" alt="" style="width: 121px;">
+                            <img  :data-src="siteInfo.site_weixin_qr" :data-loading="'/img/image-pending.gif'" alt=""   v-lazy="siteInfo.site_weixin_qr" style="width: 121px;">
                             </template>
                         <a class="fts-wechat"    href="javascript:void(0);" rel="noopener"> <a-icon type="wechat"   /> </a>
                         </a-popover> 
@@ -38,10 +38,10 @@
        
                 <a-row class="card_site_index_url" >
                     <ul>
-                        <li v-for="(link) in siteIndexLink" :key="link.id">
+                        <li v-for="(link) in siteIndexLink" :key="link.id"  v-lazy-container="{ selector: 'img' }">
                                 <a :href="'//'+link.url"  :title="link.description"  target="_blank" rel="noopener">
                                 <!-- <img src="/favicon.ico"     v-real-img="'//'+link.url+'/favicon.ico'"  width="18px" />  -->
-                                 <img :src="'//'+link.url+'/favicon.ico'"   @error="defImg()"    width="18px">   
+                                 <img :data-src="'//'+link.url+'/favicon.ico'"  :data-error="'/favicon.ico'" :data-loading="'/favicon.ico'"       width="18px">   
                                      {{link.name}}</a>
                         </li>
                     </ul>
@@ -56,7 +56,7 @@
 
 <script >
 import Vue from 'vue'
- import { mapState } from 'vuex'
+import { mapState } from 'vuex'
 export default Vue.extend({
     computed: {
             ...mapState({
@@ -70,11 +70,7 @@ export default Vue.extend({
         }
     },
     methods: {
-        defImg() {
-            let img = event.srcElement;
-            img.src = "/favicon.ico";
-            img.onerror = null; //防止闪图
-        } 
+ 
     }
 })
 </script>

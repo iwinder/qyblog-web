@@ -42,40 +42,40 @@ export const state = () => ({
       let _this  =  this;  
         let  siteInfo =    {}; 
           try{ 
-              siteInfo  =  await     _this.$axios.get('/web/siteInfo/all',{useCache: true}).then(res => {
-              if(!res|| !res.data) {
-                _this.error({ statusCode: 500, message: res});
+              siteInfo  =  await  _this.$axios.get('/web/siteInfo/all',{useCache: true}).then(res => {
+              if(!res|| !res.data) { 
+                Promise.reject({ statusCode: 500, message: res});
               } 
               let resp  = res.data;	
                 if(resp.success) {  
                   return resp.content;
                 } else {
                   if(resp.code == '404') {
-                    return  Promise.reject( createError(404,resp.message)); 
+                    return  Promise.reject( { statusCode: 404, message: resp.message} ); 
                   } else  {
-                    return  Promise.reject( createError(500,resp.message));
+                    return  Promise.reject( { statusCode: 500, message: resp.message});
                   }
                 }
             })
          } catch (error) {
             if(error.code == '404') {
-              return  Promise.reject( createError(404,error.message)); 
+              return  Promise.reject( { statusCode: 404, message: error.message} ); 
             } else  {
-              return  Promise.reject( createError(500,error.message));
+              return  Promise.reject({ statusCode: 500, message: error.message} );
             }
           }
           if (siteInfo && !siteInfo.header ) {
             let menus ={};
             try{ 
-            menus  = await _this.$axios.get('/web/siteInfo/menus').then(res => {
+            menus  = await _this.$axios.get('/web/siteInfo/menus',{useCache: true}).then(res => {
               let resp  = res.data;	
                 if(resp.success) { 
                   return resp.content;
                 } else {
                   if(resp.code == '404') {
-                    return  Promise.reject( createError(404,resp.message)); 
+                    return  Promise.reject(resp); 
                   } else  {
-                    return  Promise.reject( createError(500,resp.message));
+                    return  Promise.reject(resp);
                   }
                 }
             })
@@ -83,9 +83,9 @@ export const state = () => ({
             siteInfo.footer =  menus.footer; 
            } catch (error) { 
               if(error.code == '404') {
-                return  Promise.reject( createError(404,error.message)); 
+                return  Promise.reject( { statusCode: 404, message: error.message}); 
               } else  {
-                return  Promise.reject( createError(500,error.message));
+                return  Promise.reject({ statusCode: 500, message: error.message});
               }
             }
           } 
@@ -101,15 +101,15 @@ export const state = () => ({
     },
     async getSiteGo({state, commit}, val)  {
       let _this  =  this; 
-          let  siteGo =   await     _this.$axios.get('/web/siteInfo/shortLinks').then(res => {
+          let  siteGo =   await     _this.$axios.get('/web/siteInfo/shortLinks',{useCache: true}).then(res => {
               let resp  = res.data;	
                 if(resp.success) {  
                   return resp.content;
                 } else {
                   if(resp.code == '404') {
-                    return  Promise.reject( createError(404,resp.message)); 
+                    return  Promise.reject({ statusCode: 404, message: resp.message}); 
                   } else  {
-                    return  Promise.reject( createError(500,resp.message));
+                    return  Promise.reject( { statusCode: 500, message: resp.message});
                   }
                 }
             });  
@@ -118,7 +118,7 @@ export const state = () => ({
   async getSiteIndexLink({state, commit}, val)  {
     let _this  =  this;
     let  siteIndexLink=  {}; 
-    siteIndexLink =   await     _this.$axios.get('/web/siteInfo/indexlinks').then(res => {
+    siteIndexLink =   await     _this.$axios.get('/web/siteInfo/indexlinks',{useCache: true}).then(res => {
         if(!res) { 
             return;
         }
@@ -127,9 +127,9 @@ export const state = () => ({
             return resp.content;
           } else {
             if(resp.code == '404') {
-              return  Promise.reject( createError(404,resp.message)); 
+              return  Promise.reject({ statusCode: 404, message: resp.message}); 
             } else  {
-              return  Promise.reject( createError(500,resp.message));
+              return  Promise.reject( { statusCode: 500, message: resp.message});
             }
           }
       });  
