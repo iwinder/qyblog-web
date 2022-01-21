@@ -34,7 +34,13 @@
 
             </a-row> 
             <a-row class="" v-highlight> 
-                    <div  class="markdown-body"   v-html="postData.contentHtml" style="white-space: pre-wrap;"></div>
+                    <div  class="markdown-body"   v-html="postData.contentHtml" style="white-space: pre-wrap;" v-lazy-container="{ selector: 'img',loading: '/img/image-pending.gif' }" @click="previewPicture($event)"></div>
+            </a-row>
+            <a-row >
+                   <a-modal :visible="previewVisible" title="预览" :footer="null" @cancel="handleCancel" key="preview"  width="80%">
+                         <a-icon type="close-circle" slot="closeIcon"/>  
+                        <img alt="example" style="width: 100%" :src="previewImage"  />
+                    </a-modal>
             </a-row>
 
             <a-row class="single-copyright"> 
@@ -59,16 +65,35 @@ export default Vue.extend({
     components: {
         QyCommentList
     },
-      props: { 
-          postData: {
-              default: {}
-          }
-      },
-        computed: {
-            ...mapState({
+    props: { 
+        postData: {
+            default: {}
+        }
+    },
+    computed: {
+        ...mapState({
             siteInfo: state => state.siteInfo.siteInfo
-    })
-  },
+        })
+    },
+    data() {
+        return {
+            previewVisible:false,
+            previewImage:""
+
+        }
+    },
+    methods: {
+        previewPicture: function(e) {  
+            if (e.target.tagName == 'IMG') {
+                this.previewImage = e.target.src;
+                this.previewVisible = true;
+            }
+        },
+        handleCancel: function(){
+            this.previewVisible = false;
+            this.previewImage = "/img/image-pending.gif";
+        }
+    }
 })
 </script>
  

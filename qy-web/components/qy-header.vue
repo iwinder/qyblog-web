@@ -24,7 +24,7 @@
              首页
           </a-menu-item>
            <!-- {{  siteInfo.header}} -->
-      <template  v-for="(menu) in  siteInfo.header"  v-show="siteInfo.header">  
+      <template  v-for="(menu) in  siteInfo.header"  >  
         <!-- <qy-header-menus :menu="menu"  :key="menu.url" > </qy-header-menus>
          -->
               <a-sub-menu  v-if="menu.children && menu.children.length>0 " :key="menu.url" @titleClick="titleClick">

@@ -120,7 +120,7 @@ export default {
     }
   }, 
   axios: {
-    // baseURL: 'http://localhost:8000/api/admin',
+    baseURL: 'http://localhost:8000/api/admin',
     // or other axios configs.
     // baseURL:"https://windcoder.com/api/",
     // proxy: false,
@@ -137,23 +137,23 @@ export default {
       })
     }
   },
-  proxy: {
-    '/api': {
-        target: 'http://localhost:8000/api', // 代理地址
-        changeOrigin: true,
-        pathRewrite: {
-          '^/api': '', //将 /api 替换掉
-        },
-    },
-  '/qy-content':{
-      target: 'http://localhost:8000/qy-content', // 代理地址
-      changeOrigin: true,
-      pathRewrite: {
-        '^/qy-content': '', //将 /api 替换掉
-      },
-    },
+  // proxy: {
+  //   '/api': {
+  //       target: 'http://localhost:8000/api', // 代理地址
+  //       changeOrigin: true,
+  //       pathRewrite: {
+  //         '^/api': '', //将 /api 替换掉
+  //       },
+  //   },
+  // '/qy-content':{
+  //     target: 'http://localhost:8000/qy-content', // 代理地址
+  //     changeOrigin: true,
+  //     pathRewrite: {
+  //       '^/qy-content': '', //将 /api 替换掉
+  //     },
+  //   },
 
-  },
+  // },
 
 
 }

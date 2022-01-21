@@ -68,7 +68,7 @@ export default {
                 result.tagStrings = tagStrs;
                 result.publishedDateMD =   moment(result.publishedDate).format('YYYY-MM-DD');
                 result.publishedDateTime =   moment(result.publishedDate).format('YYYY-MM-DD HH:mm:ss');
-
+                result.contentHtml=result.contentHtml.replace(/src/g,"data-src")
             } else {
                 if(resp.code == '404') {
                     _this.error({ statusCode: 404, message: resp.message});

@@ -41,7 +41,7 @@
                         <li v-for="(link) in siteIndexLink" :key="link.id"  v-lazy-container="{ selector: 'img' }">
                                 <a :href="'//'+link.url"  :title="link.description"  target="_blank" rel="noopener">
                                 <!-- <img src="/favicon.ico"     v-real-img="'//'+link.url+'/favicon.ico'"  width="18px" />  -->
-                                 <img :data-src="'//'+link.url+'/favicon.ico'"  :data-error="'/favicon.ico'" :data-loading="'/favicon.ico'"       width="18px">   
+                                 <img :data-src="'//'+link.url+'/favicon.ico'"  data-error="/favicon.ico" data-loading="/favicon.ico"       width="18px">   
                                      {{link.name}}</a>
                         </li>
                     </ul>

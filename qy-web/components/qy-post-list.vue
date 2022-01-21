@@ -101,13 +101,7 @@ export default Vue.extend({
             paginationObj:{}
         }
     },
-    methods: {
-        defImg: function(defImg) {  
-              let img= event.srcElement; 
-              img.src = defImg;
-              img.onerror = null;  
-        }
-    }
+
     
 })
 </script>
