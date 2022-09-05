@@ -17,4 +17,6 @@ Done. Now run:
 $ cd qy-console
 $ npm install
 $ npm run dev
+
+$ npm i --save ant-design-vue
 ```
