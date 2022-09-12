@@ -1,7 +1,7 @@
 <template>
-  <a-form   id="formLogin" layout="horizontal" :model="loginForm"   @submit.native.prevent>
+  <a-form   id="formLogin" layout="horizontal" :model="loginForm"   @submit="handleSubmit">
     <a-form-item>
-      <a-input v-model="loginForm.username" placeholder="用户名">
+      <a-input v-model:value="loginForm.username" placeholder="用户名">
 <!--        <a-icon slot="prefix" type="user" style="color:rgba(0,0,0,.25)" />-->
         <template #prefix>
           <UserOutlined class="site-form-item-icon" />
@@ -10,7 +10,7 @@
     </a-form-item>
 
     <a-form-item>
-      <a-input v-model="loginForm.password" type="password" placeholder="密码">
+      <a-input v-model:value="loginForm.password" type="password" placeholder="密码">
 <!--        <a-icon slot="prefix" type="lock" style="color:rgba(0,0,0,.25)" />-->'
         <template #prefix>
           <LockOutlined class="site-form-item-icon" />
@@ -33,7 +33,7 @@
                 htmlType="submit"
                 class="login-button"
                 :loading="loginState.loginBtn"
-                :disabled="loginState.loginBtn"
+                :disabled="loginState.disabled"
       >确定</a-button>
     </a-form-item>
   </a-form>
@@ -44,16 +44,21 @@
 //   name: "Login"
 // }
 
-import { reactive } from 'vue'
+import {   ref,computed} from 'vue'
+import { useRouter } from "vue-router";
 import { UserOutlined, LockOutlined } from '@ant-design/icons-vue';
-const loginForm = reactive({ username: "ddd",
-  password:"xxx",
+const loginForm = ref({ username: "",
+  password:"",
 });
-const loginState = reactive({ loginBtn: false,
+const loginState = ref({ loginBtn: false,
+  disabled: computed(() => {
+    return !(loginForm.value.username && loginForm.value.password);
+  }),
 });
+const router = useRouter();
 const handleSubmit = () => {
-
-
+alert("haha")
+   router.push("/")
 };
 
 

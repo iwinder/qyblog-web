@@ -1,10 +1,10 @@
 <template>
-<div>404</div>
+新增角色
 </template>
 
 <script>
 export default {
-  name: "404"
+  name: "add"
 }
 </script>
 

@@ -1,6 +1,5 @@
 import Vue from 'vue'
 import { createI18n } from 'vue-i18n'
-import moment from 'moment'
 import zhCN from './lang/zh-CN'
 
 

@@ -13,9 +13,9 @@ const locale = ref(zhCN.locale);
 
 <template>
   <a-config-provider :locale="zhCN">
-    <div id="app">
+<!--    <div id="app">-->
       <router-view/>
-    </div>
+<!--    </div>-->
   </a-config-provider>
 </template>
 
