@@ -1,89 +1,144 @@
 <template>
-  <a-layout>
-    <a-layout-sider v-model:collapsed="collapsed" :trigger="null" collapsible>
-      <div class="logo" />
-      <a-menu v-model:selectedKeys="selectedKeys" theme="dark" mode="inline">
-        <template  v-for="item in testRouterMap">
-         <RouterMenusItem :item="item"></RouterMenusItem>
-        </template>
-<!--        <template  v-for="item in testRouterMap">-->
-<!--          <template  v-if="item.children && item.children.length>0">-->
-
-<!--          </template>-->
-<!--          <template v-else>-->
-
-<!--          </template>-->
-<!--        </template>-->
-<!--        <a-menu-item key="dashboard">-->
-<!--          <router-link to="/dashboard">-->
-<!--            <user-outlined />-->
-<!--            <span>仪表盘</span>-->
-<!--          </router-link>-->
-<!--        </a-menu-item>-->
-<!--        <a-menu-item key="2">-->
-<!--          <video-camera-outlined />-->
-<!--          <span>nav 2</span>-->
-<!--        </a-menu-item>-->
-<!--        <a-menu-item key="3">-->
-<!--          <upload-outlined />-->
-<!--          <span>nav 3</span>-->
-<!--        </a-menu-item>-->
-      </a-menu>
-    </a-layout-sider>
+  <a-layout id="components-layout-custom-trigger"  >
+    <LayLeftSider  :isCollapsed="collapsed"  :openKeys="openKeys" @onOpenTab="doOpenTab" ref='leftSiderRef'></LayLeftSider>
     <a-layout>
-      <a-layout-header style="background: #fff; padding: 0">
-        <menu-unfold-outlined
-            v-if="collapsed"
-            class="trigger"
-            @click="() => (collapsed = !collapsed)"
-        />
-        <menu-fold-outlined v-else class="trigger" @click="() => (collapsed = !collapsed)" />
-      </a-layout-header>
-      <a-layout-content
-          :style="{ margin: '24px 16px', padding: '24px', background: '#fff', minHeight: '280px' }"
-      >
-        <router-view />
-      </a-layout-content>
+      <LayHeader  :isCollapsed="collapsed" @onCollapsed="doCollapsed"></LayHeader>
+      <LayTabs ref='tabsRef' @onChange="doChange"></LayTabs>
+      <LayContent></LayContent>
+      <LayFooter></LayFooter>
     </a-layout>
   </a-layout>
 </template>
 
 <script  setup  lang="ts">
-// import {
-//   UserOutlined,
-//   VideoCameraOutlined,
-//   UploadOutlined,
-//   MenuUnfoldOutlined,
-//   MenuFoldOutlined,
-// } from '@ant-design/icons-vue';
-import {  ref } from 'vue';
-import {testRouterMap} from "../config/router.config";
-import RouterMenusItem from "@/components/RouterMenusItem.vue"
+import {  ref, onMounted} from 'vue';
+import LayLeftSider from "@/components/LayLeftSider.vue"
+import LayHeader  from "@/components/LayHeader.vue"
+import LayTabs from "../components/LayTabs.vue";
+import LayContent from "../components/LayContent.vue";
+import LayFooter from "../components/LayFooter.vue";
+import {useRouter} from "vue-router";
+import {initTabsMap, tabsKeyMap} from "../config/tabs.config";
 
-const selectedKeys= ref<string[]>(['dashboard']);
-const   collapsed = ref<boolean>(false);
+const collapsed = ref<boolean>(false);
+const router = useRouter();
+const openKeys = ref<string[]>([]);
+let leftSiderRef=ref(null);
+let tabsRef=ref(null);
+
+
+onMounted(() => {
+   let allkey:string = "";
+   if (router.currentRoute.value.name) {
+     allkey  = router.currentRoute.value.name.toString();
+   }
+   const idx = allkey.indexOf("-list");
+   let key  = allkey;
+   if (idx>0) {
+     key = allkey.substring(0,idx);
+   }
+  initTabsMap(tabsKeyMap);
+  tabsRef.value.doOpenTab(key)
+
+})
+
+// trigger 切换事件
+const doCollapsed=(val:boolean)=> {
+      collapsed.value = val;
+};
+
+// tab页切换
+const doOpenTab = (key:string) => {
+  tabsRef.value.doOpenTab(key)
+}
+
+// 菜单切换
+const doChange = (activeKey:string,keys:string[]) => {
+  openKeys.value =keys;
+  leftSiderRef.value.doSelect(activeKey);
+}
+
+
 </script>
 
-<style scoped>
+<style  lang="less" scoped>
 
-  .trigger{
-    font-size: 18px;
-    line-height: 64px;
-    padding: 0 24px;
-    cursor: pointer;
-    transition: color 0.3s;
-  }
-  .trigger:hover {
-    color: #1890ff;
-  }
-  .logo {
-    height: 32px;
-    background: rgba(255, 255, 255, 0.3);
-    margin: 16px;
+  html {
+    font-family: 'Source Sans Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI',
+    Roboto, 'Helvetica Neue', Arial, sans-serif;
+    font-size: 16px;
+    word-spacing: 1px;
+    -ms-text-size-adjust: 100%;
+    -webkit-text-size-adjust: 100%;
+    -moz-osx-font-smoothing: grayscale;
+    -webkit-font-smoothing: antialiased;
+    box-sizing: border-box;
   }
 
+  *,
+  *:before,
+  *:after {
+    box-sizing: border-box;
+    margin: 0;
+  }
 
+  .button--green {
+    display: inline-block;
+    border-radius: 4px;
+    border: 1px solid #3b8070;
+    color: #3b8070;
+    text-decoration: none;
+    padding: 10px 30px;
+  }
 
+  .button--green:hover {
+    color: #fff;
+    background-color: #3b8070;
+  }
 
+  .button--grey {
+    display: inline-block;
+    border-radius: 4px;
+    border: 1px solid #35495e;
+    color: #35495e;
+    text-decoration: none;
+    padding: 10px 30px;
+    margin-left: 15px;
+  }
+
+  .button--grey:hover {
+    color: #fff;
+    background-color: #35495e;
+  }
+
+  #components-layout-custom-trigger  {
+      min-height: 100vh;
+    :deep( .trigger){
+        font-size: 18px;
+        line-height: 64px;
+        padding: 0 24px;
+        cursor: pointer;
+        transition: color 0.3s;
+      }
+    :deep(.trigger:hover) {
+        color: #1890ff;
+      }
+    :deep(.logo){
+        height: 32px;
+        background: rgba(255, 255, 255, 0.8);
+        margin: 16px;
+        text-align: center;
+      }
+    :deep(.ant-tabs){
+      margin: 0px;
+      padding-top: 6px;
+      width: 100%;
+      background: #fff;
+      .ant-tabs-nav{
+        padding-left: 16px;
+      }
+    }
+
+  }
 
 </style>
