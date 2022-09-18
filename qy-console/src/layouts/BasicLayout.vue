@@ -53,9 +53,14 @@ const doOpenTab = (key:string) => {
 }
 
 // 菜单切换
-const doChange = (activeKey:string,keys:string[]) => {
+const doChange = (activeKey:string,pkey:string,keys:string[]) => {
   openKeys.value =keys;
-  leftSiderRef.value.doSelect(activeKey);
+  if (pkey!=null&&pkey.trim().length>0) {
+    leftSiderRef.value.doSelect(pkey);
+  } else {
+    leftSiderRef.value.doSelect(activeKey);
+  }
+
 }
 
 
@@ -139,6 +144,9 @@ const doChange = (activeKey:string,keys:string[]) => {
       }
     }
 
+    :deep(.ant-btn) {
+      margin-right: 8px;
+    }
   }
 
 </style>

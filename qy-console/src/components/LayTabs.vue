@@ -71,7 +71,7 @@ const doOpenTab = (key:string) => {
 // 菜单栏切换事件
 const doChange = (activeKey:string) => {
   const tab = getValue(activeKey);
-  emit('onChange',activeKey,tab.parent);
+  emit('onChange',activeKey,tab.pkey,tab.parent);
   getRouterList(tab);
   router.push(tab.path);
 }
