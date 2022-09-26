@@ -34,7 +34,8 @@ const router = useRouter();
 const  routerNowList: any[] = [];
 const pageInfo = reactive({ title: "",
   subTitle:"",
-  routes: routerNowList
+  routes: routerNowList,
+  routeParm:null
 });
 
 const panes = ref<{ title: string;   key: string; closable?: boolean }[]>([
@@ -43,8 +44,9 @@ const panes = ref<{ title: string;   key: string; closable?: boolean }[]>([
 const activeKey = ref("");
 
 // 切换 tab 标签页
-const doOpenTab = (key:string) => {
+const doOpenTab = (key:string,param:any) => {
   const tab = getValue(key);
+  pageInfo.routeParm = param;
   if (!tab||tab==null) {
     return;
   }
@@ -63,7 +65,7 @@ const doOpenTab = (key:string) => {
       panes.value[0].closable = true;
     }
   } else {
-    panes.value.push({title:tab.title,key:tab.key})
+    panes.value.push({title:tab.title,key:tab.key});
   }
   activeKey.value = key;
   doChange(key);
@@ -73,7 +75,12 @@ const doChange = (activeKey:string) => {
   const tab = getValue(activeKey);
   emit('onChange',activeKey,tab.pkey,tab.parent);
   getRouterList(tab);
-  router.push(tab.path);
+  if ( pageInfo.routeParm!=null ) {
+    router.push({name:tab.key,params:pageInfo.routeParm});
+  } else {
+    router.push(tab.path);
+  }
+
 }
 
 // 面包屑菜单点击事件
@@ -95,7 +102,7 @@ const doEdit = (targetKey: string | MouseEvent, action: string) => {
 const getRouterList = (tab:TabsObj) => {
   let parent = testRouterMap[0];
   routerNowList.length=0;
-  routerNowList.push(new BreadcrumbRoute(parent.name,parent.breadcrumbName));
+  routerNowList.push({path:parent.name,breadcrumbName:parent.breadcrumbName});
   getRouterChild(parent,tab);
 }
 // 获取面包屑子集
@@ -110,12 +117,12 @@ const getRouterChild = (obj: any,tab:TabsObj):boolean => {
       if (!flag) {
         for (let j in tab.parent) {
           if (chid.name == tab.parent[j]) {
-            routerNowList.push(new BreadcrumbRoute(chid.path,chid.breadcrumbName));
+            routerNowList.push({path:chid.path,breadcrumbName:chid.breadcrumbName});
           }
         }
       }
       if (chid.name==tab.key) {
-        routerNowList.push(new BreadcrumbRoute(chid.path,chid.breadcrumbName));
+        routerNowList.push({path:chid.path,breadcrumbName:chid.breadcrumbName});
         flag = true;
         break;
       }

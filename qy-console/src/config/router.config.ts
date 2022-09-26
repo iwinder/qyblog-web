@@ -2,13 +2,9 @@ import {UserLayout,BasicLayout,RouteViewLayout} from "@/layouts";
 
 import {RouteRecordRaw} from 'vue-router'
 
-export class BreadcrumbRoute {
+export interface BreadcrumbRoute {
     path: string;
     breadcrumbName: string;
-    constructor(path:string,breadcrumbName:string) {
-        this.path = path;
-        this.breadcrumbName = breadcrumbName;
-    }
 }
 
 export const constantRouterMap= [
@@ -78,7 +74,7 @@ export const testRouterMap=  [
                                 component:  () => import('@/views/user/add.vue'),
                             },
                             {
-                                path: '/user/:id',
+                                path: '/system/user/:id',
                                 name: 'user-update',
                                 meta: { title: '编辑用户', type:2  },
                                 component:  () => import('@/views/user/_id.vue'),
@@ -112,6 +108,70 @@ export const testRouterMap=  [
                                 component:  () => import('@/views/role/_id.vue'),
                             },
                         ]
+                    },
+                    {
+                        path: '/system/menusAdmin/',
+                        name: 'menusAdmin',
+                        redirect: "/system/menusAdmin/list",
+                        breadcrumbName:'菜单管理',
+                        meta: { title: '菜单管理', icon: 'TeamOutlined',type:1  },
+                        component: RouteViewLayout,
+                        children:[
+                            {
+                                path: '/system/menusAdmin/list',
+                                name: 'menusAdmin-list',
+                                meta: { title: '菜单列表', type:2  },
+                                component:  () => import('@/views/menusAdmin/index.vue'),
+                            },
+                            {
+                                path: '/system/role/add',
+                                name: 'menusAdmin-add',
+                                meta: { title: '新增菜单', type:2  },
+                                component:  () => import('@/views/menusAdmin/add.vue'),
+                            },
+                            {
+                                path: '/system/menusAdmin/:id',
+                                name: 'menusAdmin-update',
+                                meta: { title: '编辑菜单', type:2  },
+                                component:  () => import('@/views/menusAdmin/_id.vue'),
+                            },
+                        ]
+                    },
+                    {
+                        path: '/system/apis/',
+                        name: 'apis',
+                        redirect: "/system/apis/list",
+                        breadcrumbName:'Api管理',
+                        meta: { title: 'Api管理', icon: 'TeamOutlined',type:1  },
+                        component: RouteViewLayout,
+                        children:[
+                            {
+                                path: '/system/apis/list',
+                                name: 'apis-list',
+                                meta: { title: 'Api列表', type:2  },
+                                component:  () => import('@/views/apis/index.vue'),
+                            },
+                            {
+                                path: '/system/role/add',
+                                name: 'apis-add',
+                                meta: { title: '新增Api', type:2  },
+                                component:  () => import('@/views/apis/add.vue'),
+                            },
+                            {
+                                path: '/system/apis/:id',
+                                name: 'apis-update',
+                                meta: { title: '编辑Api', type:2  },
+                                component:  () => import('@/views/apis/_id.vue'),
+                            },
+                        ]
+                    },
+                    {
+                        path: '/system/site',
+                        name: 'site',
+                        redirect: "/system/site",
+                        breadcrumbName:'站点管理',
+                        meta: { title: '站点管理', icon: 'TeamOutlined',type:1  },
+                        component:  () => import('@/views/site/index.vue'),
                     },
                 ]
             },

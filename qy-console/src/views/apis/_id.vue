@@ -1,11 +1,9 @@
 <template>
-新增角色
+
 </template>
 
-<script>
-export default {
-  name: "add"
-}
+<script setup lang="ts">
+
 </script>
 
 <style scoped>

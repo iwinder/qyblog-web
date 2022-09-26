@@ -1,11 +1,9 @@
 <template>
-编辑角色
+
 </template>
 
-<script>
-export default {
-  name: "_id"
-}
+<script setup lang="ts">
+
 </script>
 
 <style scoped>

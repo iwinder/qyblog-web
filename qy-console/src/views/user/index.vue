@@ -1,149 +1,224 @@
 <template>
   <div class="main">
-    <a-row class="table-operations">
-      <a-col :xs="{span:24}"  :lg="{ span: 12}">
-        <a-form layout="inline" :model="searchFrom"    >
-          <a-form-item>
-            <a-input v-model="searchFrom.searchText" placeholder="请输入关键字">
-              <template #prefix>
-                <search-outlined  style="color:rgba(0,0,0,.25)"/>
+    <div class="table-form" >
+      <a-form :model="searchForm"    ref="formRef" >
+        <a-row :gutter="24">
+          <a-col :span="8">
+            <a-form-item  label="用户名"  name="username">
+              <a-input v-model:value="searchForm.username" placeholder="请输入关键字"></a-input>
+            </a-form-item>
+          </a-col>
+          <a-col :span="8">
+            <a-form-item  label="昵称" name="nickname">
+              <a-input v-model:value="searchForm.nickname" placeholder="请输入关键字"></a-input>
+            </a-form-item>
+          </a-col>
+            <a-col :span="8">
+            <a-form-item  label="邮箱" name="email">
+              <a-input v-model:value="searchForm.email" placeholder="请输入关键字"></a-input>
+            </a-form-item>
+          </a-col>
+        </a-row>
+        <a-row :gutter="24">
+          <a-col :span="8" v-show="expand">
+            <a-form-item  label="状态" name="statusFlag">
+              <a-select
+                  v-model:value="searchForm.statusFlag"
+                  style="width: 100%"
+                  placeholder="请选择状态"
+                  :options="UserStates"
+              ></a-select>
+            </a-form-item>
+          </a-col>
+        </a-row>
+        <a-row>
+          <a-col :span="24" style="text-align: right">
+            <a-button type="primary" html-type="submit"  :loading ="listInfo.searchLoading"  @click="doSearchForm">搜索</a-button>
+            <a-button style="margin: 0 8px" @click="()=>formRef.resetFields()">重置</a-button>
+            <a style="font-size: 12px" @click="expand = !expand">
+              <template v-if="expand">
+                <UpOutlined />
               </template>
-            </a-input>
-          </a-form-item>
-          <a-form-item :wrapper-col="{ span: 14, offset: 4 }">
-            <a-button type="primary"  :loading ="searchLoading"  @click="searchForm">
-              搜索
+              <template v-else>
+                <DownOutlined />
+              </template>
+              Collapse
+            </a>
+          </a-col>
+        </a-row>
+      </a-form>
+    </div>
+
+    <div class="table-operations">
+      <a-row >
+        <a-col  :xs="{span:24}"  :lg="{ span: 24 }" style=" margin-top: 5px;">
+          <a-button  type="primary"  @click="doAdd()">
+            新增
+          </a-button>
+          <a-dropdown>
+            <template #overlay>
+              <a-menu @click="doMenuClick">
+                <a-menu-item key="1">
+                  删除
+                </a-menu-item>
+              </a-menu>
+            </template>
+            <a-button>
+              批量操作
+              <DownOutlined />
             </a-button>
-          </a-form-item>
-        </a-form>
-      </a-col>
-      <a-col  :xs="{span:24}"  :lg="{ span: 5, offset: 7 }" style=" margin-top: 5px;">
-        <a-button  type="primary"  @click="add()">
-          新增
-        </a-button>
-        <a-dropdown>
-          <template #overlay>
-            <a-menu @click="handleMenuClick">
-              <a-menu-item key="1">
-                删除
-              </a-menu-item>
-            </a-menu>
+          </a-dropdown>
+        </a-col>
+      </a-row>
+    </div>
+    <div class="table-main">
+      <a-table :columns="UserCcolumns"
+               :data-source="listInfo.items"
+               :rowKey = "record => record.id"
+               :pagination="listInfo.pageInfo"
+               :scroll = "{ x:  800}"
+               :loading="listInfo.loading"
+               :row-selection="{ selectedRowKeys:  listInfo.selectedIds, onChange: doSelectChange }"
+               @change="doTableChange"
+      >
+
+        <template #bodyCell="{ text, record, index, column}">
+
+          <template v-if="column.dataIndex === 'roles'">
+            <template v-if="text.length>0">
+              <template v-for="item in text">
+                <a-tag>{{item.name}}</a-tag>
+              </template>
+            </template>
+            <template v-else>暂无</template>
           </template>
-          <a-button> 批量操作   <DownOutlined /> </a-button>
-        </a-dropdown>
-      </a-col>
-    </a-row>
 
-    <a-table :columns="columns"
-             :data-source="dataSource"
-             :rowKey = "record => record.id"
-             :pagination="pagination"
-             :scroll = "{ x:  800}"
-             :loading="loading"
-             :row-selection="{ selectedRowKeys: selectedIds, onChange: onSelectChange }"
-             @change="handleTableChange"
-    >
+          <template v-if="column.dataIndex === 'statusFlag'">
+            <template v-if="text==1"> 启用 </template>
+            <template v-else-if="text==2"> 禁用 </template>
+            <template v-else-if="text==3"> 删除 </template>
+            <template v-else> 未知  </template>
+          </template>
 
-            <span slot="disable" slot-scope="disable">
-                <template v-if="disable"> 已禁用 </template>
-                <template v-else> 正常 </template>
-            </span>
+          <template v-if="column.dataIndex === 'action'">
+            <router-link :to="{name:'user-update',params:{ id: record.id }}">编辑 </router-link>
+            <a-divider type="vertical" />
+            <a-popconfirm title="确定要删除所选项吗？"  @confirm="doDeleted([record.id])">
+              <a  href="javascript:void(0)"  >删除</a>
+            </a-popconfirm>
+          </template>
 
-      <span slot="action" slot-scope="text, record">
-                <router-link :to="{name:'user-id',params:{ id: record.id }}">编辑 </router-link>
-                <a-divider type="vertical" />
+        </template>
 
-                     <a  href="javascript:void(0)"  @click="deleted([record.id])" >删除</a>
-
-            </span>
-    </a-table>
+      </a-table>
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
 import {useRouter} from "vue-router";
-import {reactive, ref,computed} from "vue";
+import {reactive, ref,computed,onMounted} from "vue";
+import {UserCcolumns,UserStates} from "@/config/tableConfigs/qy_user";
+import {Delete, List} from "@/api/user";
+import {PageInfo} from "@/api/common";
+import {FormInstance, message, notification} from "ant-design-vue";
 const router = useRouter();
-const searchFrom = reactive({ searchText: "",
+const searchForm = reactive({ username: "",
+  nickname: "",
+  email: "",
+  statusFlag: -1,
 });
-const searchLoading = ref<boolean>(false);
-const loading = ref<boolean>(false);
+const expand = ref(false);
+const formRef = ref<FormInstance>();
+type Key = string | number;
 
-const  selectedIds = [];
-const columns = [
-  {
-    title: '用户名',
-    dataIndex: 'username',
-    key: 'username',
-  },
-  {
-    title: '昵称',
-    dataIndex: 'nickname',
-    key: 'nickname',
-  },
 
-  {
-    title: '邮箱',
-    dataIndex: 'email',
-    key: 'email',
+const listInfo = reactive({
+  pageInfo: {
+    current: 1,
+    pageSize: 10,
+    total: 0,
+    pages: 1,
+    firstFlag: true,
+    LastFlag: false,
   },
+  items:[],
+  selectedIds:[],
+  loading: false,
+  searchLoading: false,
+});
 
-  {
-    title: '账户状态',
-    dataIndex: 'disable',
-    key: 'disable',
-    scopedSlots: { customRender: 'disable' },
-  },
 
-  {
-    title: '创建时间',
-    dataIndex: 'createdDate',
-    key: 'createdDate',
-  },
-  {
-    title: '更新时间',
-    dataIndex: 'lastModifiedDate',
-    key: 'lastModifiedDate',
-  },
-  {
-    title: '操作',
-    key: 'action',
-    scopedSlots: { customRender: 'action' },
-  },
-
-];
-const dataSource = [];
-const current = ref();
-const pageSize = ref();
-const pagination = computed(() => ({
-  total: 200,
-  current: current.value,
-  pageSize: pageSize.value,
-}));
-function add() {
+function doAdd() {
   router.push("/system/user/add");
 }
 
+onMounted(() => {
+  doSearchForm();
+})
 
-function searchForm() {
-  // let _this = this;
-  // _this.initData();
+function initData() {
+  doList({
+    current: 1,
+    pageSize: 2,
+  });
+}
+async function doList(pageInfo:PageInfo) {
+  listInfo.loading = true;
+  var param = {
+    ...searchForm,
+    ...pageInfo
+  }
+  await List(param).then(res => {
+    if(res.pageInfo.current<=0) {
+      res.pageInfo.current = 1;
+    }
+    listInfo.pageInfo = res.pageInfo;
+    listInfo.items =  res.items;
 
+  }).catch(err => { console.error("List error",err);
+  }).finally(() => {
+    listInfo.loading = false;
+    listInfo.searchLoading = false;
+  });
 }
-function handleMenuClick() {
-  
-}
-function handleTableChange() {
 
+function doTableChange(pagination:any, filters:any, sorter:any) {
+  doList(pagination);
 }
-function deleted(ids:bigint[]){
+function doSearchForm() {
+  listInfo.searchLoading = true;
+  initData();
+}
 
+function doMenuClick(e:any) {
+  if (e.key=="1") {
+    if( listInfo.selectedIds &&  listInfo.selectedIds.length>0) {
+      doDeleted(listInfo.selectedIds);
+    } else {
+      message.warning('请选择要删除项',5);
+    }
+  }
 }
-function onSelectChange() {
 
+function doDeleted(ids:string[]){
+  Delete(ids).then(res=>{
+    notification.success({
+      message: '成功',
+      description: "删除"
+    });
+    initData();
+  }).catch(err=>{console.error("Delete error",err);});
 }
+
+function doSelectChange(selectedRowKeys: Key[]) {
+  listInfo.selectedIds = selectedRowKeys;
+}
+
 </script>
 
-<style scoped>
-
+<style scoped lang="less">
+.table-operations {
+  margin: 10px 0;
+}
 </style>

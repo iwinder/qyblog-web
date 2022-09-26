@@ -29,6 +29,7 @@ let tabsRef=ref(null);
 
 onMounted(() => {
    let allkey:string = "";
+
    if (router.currentRoute.value.name) {
      allkey  = router.currentRoute.value.name.toString();
    }
@@ -38,7 +39,7 @@ onMounted(() => {
      key = allkey.substring(0,idx);
    }
   initTabsMap(tabsKeyMap);
-  tabsRef.value.doOpenTab(key)
+  tabsRef.value.doOpenTab(key,  router.currentRoute.value.params)
 
 })
 
@@ -49,7 +50,7 @@ const doCollapsed=(val:boolean)=> {
 
 // tab页切换
 const doOpenTab = (key:string) => {
-  tabsRef.value.doOpenTab(key)
+  tabsRef.value.doOpenTab(key);
 }
 
 // 菜单切换

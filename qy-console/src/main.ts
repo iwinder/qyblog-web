@@ -5,8 +5,11 @@ import Antd from 'ant-design-vue';
 import 'ant-design-vue/dist/antd.less';
 import router from "./router";
 //导入组件库
-import * as antIcons from '@ant-design/icons-vue'
+import * as antIcons from '@ant-design/icons-vue';
+import { createPinia } from 'pinia';
+
 const app = createApp(App);
+
 const antIconsList: any = antIcons;
 // 注册组件
 for (const key in antIconsList) {
@@ -14,6 +17,8 @@ for (const key in antIconsList) {
 }
 
 
+const pinia = createPinia();
+
 // 添加到全局
 app.config.globalProperties.qantIcons = antIcons;
-app.use(Antd).use(router).mount('#app')
+app.use(Antd).use(router).use(pinia).mount('#app')

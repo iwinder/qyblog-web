@@ -1,5 +1,5 @@
 <template>
-  <a-form   id="formLogin" layout="horizontal" :model="loginForm"   @submit="handleSubmit">
+  <a-form   id="formLogin" layout="horizontal" :model="loginForm"   @submit="doLogin">
     <a-form-item>
       <a-input v-model:value="loginForm.username" placeholder="用户名">
 <!--        <a-icon slot="prefix" type="user" style="color:rgba(0,0,0,.25)" />-->
@@ -44,21 +44,48 @@
 //   name: "Login"
 // }
 
-import {   ref,computed} from 'vue'
+import { reactive,   computed} from 'vue'
 import { useRouter } from "vue-router";
 import { UserOutlined, LockOutlined } from '@ant-design/icons-vue';
-const loginForm = ref({ username: "",
+import {Login} from "@/api/login";
+import {timeFix} from "@/utils/util";
+import {notification} from "ant-design-vue";
+import {Session} from "@/utils/cache";
+import {ACCESS_TOKEN} from "@/utils/constants";
+import {Md5} from "ts-md5";
+const md5 = new Md5();
+const loginForm = reactive({ username: "",
   password:"",
 });
-const loginState = ref({ loginBtn: false,
+const loginState = reactive({ loginBtn: false,
   disabled: computed(() => {
-    return !(loginForm.value.username && loginForm.value.password);
+    return !(loginForm.username && loginForm.password);
   }),
 });
 const router = useRouter();
-const handleSubmit = () => {
-alert("haha")
-   router.push("/")
+const doLogin = async () => {
+  loginState.loginBtn = true;
+  if (loginForm.password) {
+    const newPas = md5.appendStr(loginForm.password).end();
+    if (newPas) {
+      loginForm.password = newPas.toString() ;
+    }
+  }
+  await Login(loginForm).then(res=>{
+    const token = "Bearer "+res.token;
+    Session.set(ACCESS_TOKEN,token);
+    router.push("/")
+    // 延迟 1 秒显示欢迎信息
+    setTimeout(() => {
+      notification.success({
+        message: '欢迎',
+        description: `${timeFix()}，欢迎回来`
+      })
+    }, 1000)
+  }).catch(err=>{
+  }).finally(()=>{
+    loginState.loginBtn = false
+  });
 };
 
 
