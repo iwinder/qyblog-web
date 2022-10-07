@@ -4,20 +4,36 @@ import {RoleType} from "@/api/role";
 
 export interface MenusAdminType {
     id:string,
+    path?:string,
+    redirect?:string,
     name: string;
     identifier?: string;
-    menusAdmin?:any;
+    component?: string;
+    level?: number;
+    sort?: number;
+    breadcrumbName?: string,
+    icon?: string,
+    type?: number,
+    parentId?:string;
+    statusFlag?:number,
+    children?: MenusAdminType[],
+}
+
+export interface MenusAdminPageInfo extends PageInfo{
+    type?: number,
+    hasChildren?:boolean
+    parentId?:string;
 }
 
 const menusAdminApi = {
-    list: '/api/admin/v1/menusAdmin',
-    add: '/api/admin/v1/menusAdmin',
-    update: '/api/admin/v1/menusAdmin',
-    delete: '/api/admin/v1/menusAdmin',
-    getOne: '/api/admin/v1/menusAdmin/',
+    list: '/admin/v1/menusAdmin',
+    add: '/admin/v1/menusAdmin',
+    update: '/admin/v1/menusAdmin',
+    delete: '/admin/v1/menusAdmin',
+    getOne: '/admin/v1/menusAdmin/',
 }
 
-export function List (parameter:PageInfo) {
+export function List (parameter:MenusAdminPageInfo) {
     return request.get(menusAdminApi.list,{
         params: parameter
     })
@@ -37,6 +53,6 @@ export function Delete (ids:string[]) {
         }
     })
 }
-export function GetOne (id:bigint) {
+export function GetOne (id:string) {
     return request.get(menusAdminApi.getOne+id)
 }

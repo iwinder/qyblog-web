@@ -7,7 +7,7 @@ import router from "./router";
 //导入组件库
 import * as antIcons from '@ant-design/icons-vue';
 import { createPinia } from 'pinia';
-
+import piniaPluginPersistedstate from 'pinia-plugin-persistedstate'
 const app = createApp(App);
 
 const antIconsList: any = antIcons;
@@ -18,7 +18,7 @@ for (const key in antIconsList) {
 
 
 const pinia = createPinia();
-
+pinia.use(piniaPluginPersistedstate)
 // 添加到全局
 app.config.globalProperties.qantIcons = antIcons;
 app.use(Antd).use(router).use(pinia).mount('#app')

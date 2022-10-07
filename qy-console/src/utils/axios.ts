@@ -2,6 +2,8 @@ import axios, {AxiosError} from 'axios'
 import {notification} from "ant-design-vue";
 import {Session} from "@/utils/cache/index"
 import {ACCESS_TOKEN} from "@/utils/constants";
+import {useUserInfo} from "@/store/userInfo";
+const userStore =useUserInfo();
 // 创建 axios 实例
 const request = axios.create({
     // API 请求的默认前缀
@@ -16,7 +18,7 @@ const errorHandler = (error: AxiosError) => {
     if (error.response) {
         const data = error.response.data
         // 从 localstorage 获取 token
-        const token = Session.get(ACCESS_TOKEN)
+        const token = userStore.token;
         if (error.response.status === 403) {
             notification.error({
                 message: 'Forbidden',
@@ -27,13 +29,9 @@ const errorHandler = (error: AxiosError) => {
                 message: 'Unauthorized',
                 description: 'Authorization verification failed'
             });
-            // if (token) {
-            //     Session.dispatch('Logout').then(() => {
-            //         setTimeout(() => {
-            //             window.location.reload()
-            //         }, 1500)
-            //     })
-            // }
+            if (token) {
+                userStore.token = "";
+            }
         } else {
             notification.error({
                 message: '请求异常',
@@ -49,7 +47,7 @@ const errorHandler = (error: AxiosError) => {
 
 // request interceptor
 request.interceptors.request.use(config => {
-    const token = Session.get(ACCESS_TOKEN);
+    const token = userStore.token;
     // 如果 token 存在
     // 让每个请求携带自定义 token 请根据实际情况自行修改
     if (token) {

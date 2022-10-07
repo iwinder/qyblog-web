@@ -51,21 +51,26 @@ const doOpenTab = (key:string,param:any) => {
     return;
   }
   let flag = false;
+  let akey = key;
+  if (tab.pkey&&tab.pkey.length>0) {
+    akey = tab.pkey
+  }
+
   for (let a in panes.value) {
-    if (panes.value[a].key==key) {
-      activeKey.value = key;
+    if (panes.value[a].key==akey) {
+      activeKey.value = akey;
       doChange(key);
       flag = true;
       return;
     }
   }
   if (panes.value.length==0||key=="dashboard") {
-    panes.value.push({title:tab.title,key:tab.key,closable: false})
+    panes.value.push({title:tab.title,key:akey,closable: false})
     if (key=="dashboard"&&panes.value[0].key!="dashboard") {
       panes.value[0].closable = true;
     }
   } else {
-    panes.value.push({title:tab.title,key:tab.key});
+    panes.value.push({title:tab.title,key:akey});
   }
   activeKey.value = key;
   doChange(key);

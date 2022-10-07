@@ -5,9 +5,29 @@ export const MenusAdminColumns = [
     //     key: 'id',
     // },
     {
-        title: '角色名称',
+        title: '展示名称',
         dataIndex: 'name',
         key: 'name',
+    },
+    {
+        title: '标签页名称',
+        dataIndex: 'breadcrumbName',
+        key: 'breadcrumbName',
+    },
+    {
+        title: '图标',
+        dataIndex: 'icon',
+        key: 'icon',
+    },
+    {
+        title: '路由名称',
+        dataIndex: 'identifier',
+        key: 'identifier',
+    },
+    {
+        title: '路由Path',
+        dataIndex: 'path',
+        key: 'path',
     },
     {
         title: '操作',
@@ -17,3 +37,15 @@ export const MenusAdminColumns = [
     },
 
 ];
+
+
+export const MenusAdminTypeOptions = [
+    {
+        value:1,
+        name: "菜单",
+    },
+    {
+        value:2,
+        name: "按钮",
+    },
+]

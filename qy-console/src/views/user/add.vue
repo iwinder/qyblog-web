@@ -5,7 +5,7 @@
       @back="doBack"
   />
 
-    <QyUserForm ref="formRef" @onAfterSubmit="doSave" @onAfterCancel="doBack"></QyUserForm>
+  <QyUserForm ref="formRef" @onAfterSubmit="doSave" @onAfterCancel="doBack"></QyUserForm>
 
 
 
@@ -21,7 +21,7 @@ import {notification} from "ant-design-vue";
 import {ref} from "vue";
 const router = useRouter();
 const md5 = new Md5();
-let formRef=ref(null);
+let formRef=ref();
 const doSave = (user:UserType) => {
   if (user.password) {
     const newPas = md5.appendStr(user.password).end();

@@ -20,7 +20,7 @@ const router = useRouter();
 let formRef=ref(null);
 onMounted(() => {
   const id = router.currentRoute.value.params.id as string;
-  formRef.value.initUser(id);
+  formRef.value.InitData(id);
 })
 const doSave = (user:UserType) => {
   const nid =  BigInt(user.id as string);

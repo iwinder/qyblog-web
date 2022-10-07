@@ -1,20 +1,29 @@
 import {PageInfo} from "@/api/common";
 import request from "@/utils/axios";
-import {UserType} from "@/api/user";
+import {ApisType} from "@/api/apis";
 
 export interface RoleType {
     id:string,
     name: string;
     identifier?: string;
-    menusAdmin?:any;
+    menusIDs?:string[];
+    apiIDs?:string[];
+}
+export interface RoleMenusApisType {
+    id?:string,
+    menusIDs?: string[];
+    apis?: ApisType[];
+    apiIDs?: string[];
 }
 
 const roleApi = {
-    list: '/api/admin/v1/role',
-    add: '/api/admin/v1/role',
-    update: '/api/admin/v1/role',
-    delete: '/api/admin/v1/role',
-    getOne: '/api/admin/v1/role/',
+    list: '/admin/v1/role',
+    add: '/admin/v1/role',
+    update: '/admin/v1/role',
+    delete: '/admin/v1/role',
+    getOne: '/admin/v1/role/',
+    saveRoleMenus: '/admin/v1/role-menus',
+    saveRoleApis: '/admin/v1/role-apis',
 }
 
 export function List (parameter:PageInfo) {
@@ -37,6 +46,12 @@ export function Delete (ids:string[]) {
         }
     })
 }
-export function GetOne (id:bigint) {
+export function GetOne (id:string) {
     return request.get(roleApi.getOne+id)
+}
+export function SaveRoleMenus (parameter:RoleMenusApisType) {
+    return request.post(roleApi.saveRoleMenus,parameter)
+}
+export function SaveRoleApis (parameter:RoleMenusApisType) {
+    return request.post(roleApi.saveRoleApis,parameter)
 }

@@ -24,25 +24,24 @@ export const tabsKeyMap=  [
     },
     {
         key:"user-list",
+        breadcrumbName:'用户管理',
+        title: '用户管理',
         pkey:"user",
-        breadcrumbName:'用户列表',
-        title: '用户列表',
         path:"/system/user/list",
         parent:["system"]
     },
     {
         key:"user-add",
+        breadcrumbName:'用户管理',
+        title: '用户管理',
         pkey:"user",
-        breadcrumbName:'用户新增',
-        title: '用户新增',
         path:"/system/user/add",
         parent:["system","user"]
     },
     {
         key:"user-update",
         pkey:"user",
-        breadcrumbName:'用户新增',
-        title: '用户新增',
+        title: '用户管理',
         path:"/system/user/:id",
         parent:["system","user"]
     },
@@ -61,11 +60,33 @@ export const tabsKeyMap=  [
         parent:["system"]
     },
     {
+        key:"menusAdmin-add",
+        title: '菜单管理',
+        pkey:"menusAdmin",
+        path:"/system/menusAdmin/add",
+        parent:["system","menusAdmin"]
+    },
+    {
+        key:"menusAdmin-update",
+        pkey:"menusAdmin",
+        title: '菜单管理',
+        path:"/system/menusAdmin/:id",
+        parent:["system","menusAdmin"]
+    },
+    {
         key:"apis",
         breadcrumbName:'Api管理',
         title: 'Api管理',
         path:"/system/apis",
         parent:["system"]
+    },
+    {
+        key:"apis-list",
+        pkey:"apis",
+        breadcrumbName:'Api管理',
+        title: 'Api管理',
+        path:"/system/apis/list",
+        parent:["system","apis"]
     },
     {
         key:"site",

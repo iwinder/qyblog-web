@@ -36,12 +36,13 @@ export const testRouterMap=  [
         redirect: "/dashboard",
         breadcrumbName:'首页',
         meta: { title: '仪表盘', icon: 'DashboardOutlined'},
-        hidden: true,
+        statusFlag: 2,
         children: [
             {
                 path: '/dashboard',
                 name: 'dashboard',
                 breadcrumbName:'仪表盘',
+                statusFlag: 1,
                 meta: { title: '仪表盘', icon: 'DashboardOutlined',type:1},
                 component:  () => import('@/views/dashboard/Workplace.vue'),
             },
@@ -51,6 +52,7 @@ export const testRouterMap=  [
                 redirect: "/system/user/list",
                 component: RouteViewLayout,
                 breadcrumbName:'系统管理',
+                statusFlag: 1,
                 meta: { title: '系统管理', icon: 'SettingOutlined',type:1 },
                 children: [
                     {
@@ -58,13 +60,15 @@ export const testRouterMap=  [
                         name: 'user',
                         redirect: "/system/user/list",
                         breadcrumbName:'用户管理',
+                        statusFlag: 1,
                         meta: { title: '用户管理', icon: 'UserOutlined',type:1  },
                         component: RouteViewLayout,
                         children:[
                             {
                                 path: '/system/user/list',
                                 name: 'user-list',
-                                meta: { title: '用户列表', type:2  },
+                                statusFlag: 2,
+                                meta: { title: '用户列表', type:2 },
                                 component:  () => import('@/views/user/index.vue'),
                             },
                             {
@@ -82,9 +86,10 @@ export const testRouterMap=  [
                         ]
                     },
                     {
-                        path: '/system/role/',
+                        path: '/system/role',
                         name: 'role',
                         redirect: "/system/role/list",
+                        statusFlag: 1,
                         breadcrumbName:'角色管理',
                         meta: { title: '角色管理', icon: 'TeamOutlined',type:1  },
                         component: RouteViewLayout,
@@ -110,10 +115,11 @@ export const testRouterMap=  [
                         ]
                     },
                     {
-                        path: '/system/menusAdmin/',
+                        path: '/system/menusAdmin',
                         name: 'menusAdmin',
                         redirect: "/system/menusAdmin/list",
                         breadcrumbName:'菜单管理',
+                        statusFlag: 1,
                         meta: { title: '菜单管理', icon: 'TeamOutlined',type:1  },
                         component: RouteViewLayout,
                         children:[
@@ -124,7 +130,7 @@ export const testRouterMap=  [
                                 component:  () => import('@/views/menusAdmin/index.vue'),
                             },
                             {
-                                path: '/system/role/add',
+                                path: '/system/menusAdmin/add',
                                 name: 'menusAdmin-add',
                                 meta: { title: '新增菜单', type:2  },
                                 component:  () => import('@/views/menusAdmin/add.vue'),
@@ -138,21 +144,25 @@ export const testRouterMap=  [
                         ]
                     },
                     {
-                        path: '/system/apis/',
+                        path: '/system/apis',
                         name: 'apis',
                         redirect: "/system/apis/list",
                         breadcrumbName:'Api管理',
+                        statusFlag: 1,
                         meta: { title: 'Api管理', icon: 'TeamOutlined',type:1  },
                         component: RouteViewLayout,
                         children:[
                             {
                                 path: '/system/apis/list',
                                 name: 'apis-list',
+                                breadcrumbName:'Api列表',
+                                statusFlag: 1,
                                 meta: { title: 'Api列表', type:2  },
                                 component:  () => import('@/views/apis/index.vue'),
+
                             },
                             {
-                                path: '/system/role/add',
+                                path: '/system/apis/add',
                                 name: 'apis-add',
                                 meta: { title: '新增Api', type:2  },
                                 component:  () => import('@/views/apis/add.vue'),
@@ -163,12 +173,19 @@ export const testRouterMap=  [
                                 meta: { title: '编辑Api', type:2  },
                                 component:  () => import('@/views/apis/_id.vue'),
                             },
+                            // {
+                            //     path: '/system/apisGroup/list',
+                            //     name: 'apis-group-list',
+                            //     breadcrumbName:'Api分组管理',
+                            //     statusFlag: 1,
+                            //     meta: { title: 'Api分组列表', type:1  },
+                            //     component:  () => import('@/views/apisGroup/index.vue'),
+                            // }
                         ]
                     },
                     {
                         path: '/system/site',
                         name: 'site',
-                        redirect: "/system/site",
                         breadcrumbName:'站点管理',
                         meta: { title: '站点管理', icon: 'TeamOutlined',type:1  },
                         component:  () => import('@/views/site/index.vue'),

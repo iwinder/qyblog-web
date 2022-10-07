@@ -1,6 +1,6 @@
 <template>
-  <div class="main">
-    <div class="table-form" >
+  <LayTableInfo>
+    <template #searchForm>
       <a-form :model="searchForm"    ref="formRef" >
         <a-row :gutter="24">
           <a-col :span="8">
@@ -8,19 +8,17 @@
               <a-input v-model:value="searchForm.username" placeholder="请输入关键字"></a-input>
             </a-form-item>
           </a-col>
-          <a-col :span="8">
+          <a-col :span="8" v-show="listInfo.expand">
             <a-form-item  label="昵称" name="nickname">
               <a-input v-model:value="searchForm.nickname" placeholder="请输入关键字"></a-input>
             </a-form-item>
           </a-col>
-            <a-col :span="8">
+          <a-col :span="8" v-show="listInfo.expand">
             <a-form-item  label="邮箱" name="email">
               <a-input v-model:value="searchForm.email" placeholder="请输入关键字"></a-input>
             </a-form-item>
           </a-col>
-        </a-row>
-        <a-row :gutter="24">
-          <a-col :span="8" v-show="expand">
+          <a-col :span="8" v-show="listInfo.expand">
             <a-form-item  label="状态" name="statusFlag">
               <a-select
                   v-model:value="searchForm.statusFlag"
@@ -35,21 +33,20 @@
           <a-col :span="24" style="text-align: right">
             <a-button type="primary" html-type="submit"  :loading ="listInfo.searchLoading"  @click="doSearchForm">搜索</a-button>
             <a-button style="margin: 0 8px" @click="()=>formRef.resetFields()">重置</a-button>
-            <a style="font-size: 12px" @click="expand = !expand">
-              <template v-if="expand">
+            <a style="font-size: 12px" @click="listInfo.expand = !listInfo.expand">
+              <template v-if="listInfo.expand">
                 <UpOutlined />
               </template>
               <template v-else>
                 <DownOutlined />
               </template>
-              Collapse
+              更多
             </a>
           </a-col>
         </a-row>
       </a-form>
-    </div>
-
-    <div class="table-operations">
+    </template>
+    <template #operations>
       <a-row >
         <a-col  :xs="{span:24}"  :lg="{ span: 24 }" style=" margin-top: 5px;">
           <a-button  type="primary"  @click="doAdd()">
@@ -70,8 +67,8 @@
           </a-dropdown>
         </a-col>
       </a-row>
-    </div>
-    <div class="table-main">
+    </template>
+    <template #content>
       <a-table :columns="UserCcolumns"
                :data-source="listInfo.items"
                :rowKey = "record => record.id"
@@ -106,37 +103,58 @@
             <a-popconfirm title="确定要删除所选项吗？"  @confirm="doDeleted([record.id])">
               <a  href="javascript:void(0)"  >删除</a>
             </a-popconfirm>
+            <a-divider type="vertical" />
+              <a  href="javascript:void(0)"  @click="doOpenChangePassword(record)">重置密码</a>
           </template>
 
         </template>
 
       </a-table>
-    </div>
-  </div>
+    </template>
+  </LayTableInfo>
+
+  <a-modal v-model:visible="modalInfo.visible" :title="modalInfo.title"  >
+    <a-form ref="passForm" :model="modalInfo.userInfo" :footer="null" @cancel="doCancel" >
+      <a-form-item has-feedback label="新密码" name="name">
+        <a-input v-model:value="modalInfo.userInfo.password" placeholder="请输入新密码"></a-input>
+      </a-form-item>
+      <a-form-item :wrapper-col="{ span: 14, offset: 4 }">
+        <a-button type="primary" :loading="modalInfo.editLoading" @click="doChangePassword">
+          保存
+        </a-button>
+        <a-button style="margin-left: 10px" @click="doCancel">
+          取消
+        </a-button>
+      </a-form-item>
+    </a-form>
+  </a-modal>
 </template>
 
 <script setup lang="ts">
+import LayTableInfo from '@/components/LayTableInfo.vue'
 import {useRouter} from "vue-router";
 import {reactive, ref,computed,onMounted} from "vue";
 import {UserCcolumns,UserStates} from "@/config/tableConfigs/qy_user";
-import {Delete, List} from "@/api/user";
+import {ChangePassword, Delete, List, UserType} from "@/api/user";
 import {PageInfo} from "@/api/common";
+import {DEFAULT_PAGESIZE} from "@/utils/constants";
 import {FormInstance, message, notification} from "ant-design-vue";
+import {Md5} from "ts-md5";
 const router = useRouter();
 const searchForm = reactive({ username: "",
   nickname: "",
   email: "",
   statusFlag: -1,
 });
-const expand = ref(false);
 const formRef = ref<FormInstance>();
+const passForm = ref<FormInstance>();
 type Key = string | number;
-
+const md5 = new Md5();
 
 const listInfo = reactive({
   pageInfo: {
     current: 1,
-    pageSize: 10,
+    pageSize: DEFAULT_PAGESIZE,
     total: 0,
     pages: 1,
     firstFlag: true,
@@ -146,8 +164,18 @@ const listInfo = reactive({
   selectedIds:[],
   loading: false,
   searchLoading: false,
+  expand: false,
 });
 
+const modalInfo = reactive({
+  visible:false,
+  editLoading: false,
+  title: "重置密码",
+  userInfo:{
+    id:"",
+    password:""
+  }
+})
 
 function doAdd() {
   router.push("/system/user/add");
@@ -160,7 +188,7 @@ onMounted(() => {
 function initData() {
   doList({
     current: 1,
-    pageSize: 2,
+    pageSize: listInfo.pageInfo.pageSize,
   });
 }
 async function doList(pageInfo:PageInfo) {
@@ -205,7 +233,7 @@ function doDeleted(ids:string[]){
   Delete(ids).then(res=>{
     notification.success({
       message: '成功',
-      description: "删除"
+      description: "删除成功"
     });
     initData();
   }).catch(err=>{console.error("Delete error",err);});
@@ -215,6 +243,43 @@ function doSelectChange(selectedRowKeys: Key[]) {
   listInfo.selectedIds = selectedRowKeys;
 }
 
+function doOpenChangePassword(user:UserType) {
+  modalInfo.title = "重置用户【"+user.nickname+"】的密码";
+  modalInfo.userInfo.id = user.id;
+  modalInfo.visible = true;
+}
+
+function doChangePassword() {
+  modalInfo.editLoading = true;
+  passForm.value.validate().then((res:any) => {
+    const newPas = md5.appendStr(modalInfo.userInfo.password).end();
+    if (!newPas) {
+      notification.error({
+        message: '失败',
+        description: "密码加密异常"
+      });
+      return
+    }
+    const param = {
+      id :modalInfo.userInfo.id,
+      password: newPas.toString()
+    }
+
+    ChangePassword(param).then(ares=>{
+      notification.success({
+        message: '成功',
+        description: "保存成功"
+      });
+      modalInfo.visible = false;
+    }).catch(aerr=>{}).finally(()=>{
+      modalInfo.editLoading = false;
+    })
+  }).catch((err:any) => {
+    modalInfo.visible = false;
+    modalInfo.editLoading = false;
+  });
+
+}
 </script>
 
 <style scoped lang="less">

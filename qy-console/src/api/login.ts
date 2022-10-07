@@ -1,8 +1,8 @@
 import request from "@/utils/axios";
 
 const loginApi = {
-    Login: '/api/admin/v1/login',
-    Logout: '/api/admin/v1/logout',
+    Login: '/admin/v1/login',
+    Logout: '/admin/v1/logout',
 }
 
 export interface LoginReqForm {

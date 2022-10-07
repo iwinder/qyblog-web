@@ -3,7 +3,7 @@
     <template #operations>
       <a-row >
         <a-col  :xs="{span:24}"  :lg="{ span: 24 }" style=" margin-top: 5px;">
-          <a-button  type="primary"  @click="doAdd()">
+          <a-button  type="primary"  @click="doAdd('0')">
             新增
           </a-button>
           <a-dropdown>
@@ -36,7 +36,12 @@
         <template #bodyCell="{ text, record, index, column}">
 
           <template v-if="column.dataIndex === 'action'">
-            <a  href="javascript:void(0)"  @click="doUpdate(record)">编辑</a>
+            <template v-if="record.type==1">
+              <a  href="javascript:void(0)"  @click="doAdd(record.id)">添加子菜单</a>
+<!--              <router-link :to="{name:'menusAdmin-add',params:{ pid: record.id }}">添加子菜单 </router-link>-->
+              <a-divider type="vertical" />
+            </template>
+            <router-link :to="{name:'menusAdmin-update',params:{ id: record.id }}">编辑 </router-link>
             <a-divider type="vertical" />
             <a-popconfirm title="确定要删除所选项吗？"  @confirm="doDeleted([record.id])">
               <a  href="javascript:void(0)"  >删除</a>
@@ -51,18 +56,22 @@
 </template>
 
 <script setup lang="ts">
-import {reactive} from "vue";
+import LayTableInfo from '@/components/LayTableInfo.vue'
+import {onMounted, reactive} from "vue";
 import {useRouter} from "vue-router";
 import {PageInfo} from "@/api/common";
-import {Delete, List} from "@/api/user";
+import {Delete, List} from "@/api/menus_admin";
 import {MenusAdminColumns} from "@/config/tableConfigs/qy_menus_admin";
 import {message, notification} from "ant-design-vue";
+import {useParamsStore} from "@/store/params";
+import {DEFAULT_PAGESIZE} from "@/utils/constants";
 type Key = string | number;
 const router = useRouter();
+const state = useParamsStore()
 const listInfo = reactive({
   pageInfo: {
     current: 1,
-    pageSize: 10,
+    pageSize: DEFAULT_PAGESIZE,
     total: 0,
     pages: 1,
     firstFlag: true,
@@ -74,8 +83,12 @@ const listInfo = reactive({
   searchLoading: false,
 });
 
-function doAdd() {
-  router.push("/system/user/add");
+onMounted(() => {
+  initData();
+})
+function doAdd(pid:string) {
+  state.menusParentId = pid
+  router.push("/system/menusAdmin/add");
 }
 function initData() {
   doList({
@@ -86,7 +99,9 @@ function initData() {
 async function doList(pageInfo:PageInfo) {
   listInfo.loading = true;
   var param = {
-    ...pageInfo
+    ...pageInfo,
+    parentId:"0",
+    hasChildren: true
   }
   await List(param).then(res => {
     if(res.pageInfo.current<=0) {
@@ -129,6 +144,7 @@ function doDeleted(ids:string[]){
 function doSelectChange(selectedRowKeys: Key[]) {
   listInfo.selectedIds = selectedRowKeys;
 }
+
 
 </script>
 

@@ -50,6 +50,7 @@ import { UserOutlined, LockOutlined } from '@ant-design/icons-vue';
 import {Login} from "@/api/login";
 import {timeFix} from "@/utils/util";
 import {notification} from "ant-design-vue";
+import {useUserInfo} from "@/store/userInfo";
 import {Session} from "@/utils/cache";
 import {ACCESS_TOKEN} from "@/utils/constants";
 import {Md5} from "ts-md5";
@@ -63,6 +64,7 @@ const loginState = reactive({ loginBtn: false,
   }),
 });
 const router = useRouter();
+const userStore =useUserInfo();
 const doLogin = async () => {
   loginState.loginBtn = true;
   if (loginForm.password) {
@@ -73,12 +75,15 @@ const doLogin = async () => {
   }
   await Login(loginForm).then(res=>{
     const token = "Bearer "+res.token;
-    Session.set(ACCESS_TOKEN,token);
+    userStore.token = token;
+    userStore.myInfo.nickname = res.nickname;
+    userStore.myInfo.roleNames = res.roleNames
+    // Session.set(ACCESS_TOKEN,token);
     router.push("/")
     // 延迟 1 秒显示欢迎信息
     setTimeout(() => {
       notification.success({
-        message: '欢迎',
+        message: '欢迎 '+res.nickname,
         description: `${timeFix()}，欢迎回来`
       })
     }, 1000)

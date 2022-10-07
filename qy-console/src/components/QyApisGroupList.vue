@@ -4,16 +4,32 @@
       <a-form :model="searchForm"    ref="formRef" v-bind="formItemLayout">
         <a-row :gutter="24">
           <a-col :span="8">
-            <a-form-item  label="角色名称"  name="username">
+            <a-form-item  label="分组名称"  name="path">
               <a-input v-model:value="searchForm.name" placeholder="请输入关键字"></a-input>
             </a-form-item>
           </a-col>
-          <a-col :span="8" style="text-align: right">
-            <a-button type="primary" html-type="submit"  :loading ="listInfo.searchLoading"  @click="doSearchForm">搜索</a-button>
-            <a-button style="margin: 0 8px" @click="()=>formRef.resetFields()">重置</a-button>
+          <a-col :span="8"  v-show="listInfo.expand">
+            <a-form-item  label="分组标识" name="apiGroup">
+              <a-input v-model:value="searchForm.identifier" placeholder="请输入关键字"></a-input>
+            </a-form-item>
           </a-col>
         </a-row>
 
+        <a-row>
+          <a-col :span="24" style="text-align: right">
+            <a-button type="primary" html-type="submit"  :loading ="listInfo.searchLoading"  @click="doSearchForm">搜索</a-button>
+            <a-button style="margin: 0 8px" @click="()=>formRef.resetFields()">重置</a-button>
+            <a style="font-size: 12px" @click="listInfo.expand = !listInfo.expand">
+              <template v-if="listInfo.expand">
+                <UpOutlined />
+              </template>
+              <template v-else>
+                <DownOutlined />
+              </template>
+              更多
+            </a>
+          </a-col>
+        </a-row>
       </a-form>
     </template>
     <template #operations>
@@ -39,7 +55,7 @@
       </a-row>
     </template>
     <template #content>
-      <a-table :columns="RoleColumns"
+      <a-table :columns="ApisGroupCcolumns"
                :data-source="listInfo.items"
                :rowKey = "record => record.id"
                :pagination="listInfo.pageInfo"
@@ -52,9 +68,8 @@
         <template #bodyCell="{ text, record, index, column}">
 
           <template v-if="column.dataIndex === 'action'">
-            <a  href="javascript:void(0)"  @click="doOpenAuth(record)">设置权限</a>
-            <a-divider type="vertical" />
-            <a  href="javascript:void(0)"  @click="doUpdate(record)">编辑</a>
+           <a  href="javascript:void(0)"  @click="doUpdate(record)">编辑</a>
+<!--            <router-link :to="{name:'apis-update',params:{ id: record.id }}">编辑 </router-link>-->
             <a-divider type="vertical" />
             <a-popconfirm title="确定要删除所选项吗？"  @confirm="doDeleted([record.id])">
               <a  href="javascript:void(0)"  >删除</a>
@@ -66,21 +81,25 @@
       </a-table>
     </template>
   </LayTableInfo>
+
   <a-modal v-model:visible="modalInfo.visible"   >
     <template #title>
-      <template v-if="modalInfo.roleInfo.id">
-        修改角色
+      <template v-if="modalInfo.dataInfo.id">
+        修改分组
       </template>
       <template v-else>
-        新增角色
+        新增分组
       </template>
     </template>
-    <a-form ref="roleForm" :model="modalInfo.roleInfo" :footer="null" @cancel="doCancel" >
-      <a-form-item has-feedback label="名称" name="name">
-        <a-input v-model:value="modalInfo.roleInfo.name" placeholder="请输入角色名称"></a-input>
+    <a-form ref="modalForm" :model="modalInfo.dataInfo" :footer="null" @cancel="doCancel" >
+      <a-form-item has-feedback label="分组名称" name="name">
+        <a-input v-model:value="modalInfo.dataInfo.name" placeholder="请输入分组名称"></a-input>
+      </a-form-item>
+      <a-form-item has-feedback label="分组标识" name="identifier">
+        <a-input v-model:value="modalInfo.dataInfo.identifier" placeholder="请输入分组标识"></a-input>
       </a-form-item>
       <a-form-item :wrapper-col="{ span: 14, offset: 4 }">
-        <a-button type="primary" :loading="modalInfo.editLoading" @click="doEditRole">
+        <a-button type="primary" :loading="modalInfo.editLoading" @click="doEditData">
           保存
         </a-button>
         <a-button style="margin-left: 10px" @click="doCancel">
@@ -90,55 +109,25 @@
     </a-form>
   </a-modal>
 
-  <a-drawer
-      placement="right"
-      width="40%"
-      :title="drawerData.title"
-      :closable="false"
-      :visible="drawerData.visible"
-      :get-container="false"
-      :style="{ position: 'absolute' }"
-      @close="doDrawerClose"
-  >
-    <a-tabs v-model:activeKey="tabsInfo.activeKey" >
-      <a-tab-pane key="1" tab="后端菜单列表">
-        <QyMenusAdminTree  ref="roleMenusRef" @onAfterSubmit="doSaveRoleMenus"></QyMenusAdminTree>
-      </a-tab-pane>
-      <a-tab-pane key="2" tab="Api列表" force-render>
-        <QyApiTreeTree ref="roleApiRef"  @onAfterSubmit="doSaveRoleApis"></QyApiTreeTree>
-      </a-tab-pane>
-    </a-tabs>
-
-
-
-
-  </a-drawer>
 </template>
 
 <script setup lang="ts">
 import LayTableInfo from '@/components/LayTableInfo.vue'
-import QyMenusAdminTree from '@/components/QyMenusAdminTree.vue'
-import QyApiTreeTree from '@/components/QyApiTreeTree.vue'
-import {computed, onMounted, reactive, ref} from "vue";
-import {useRouter} from "vue-router";
 import {DEFAULT_PAGESIZE} from "@/utils/constants";
-import {RoleColumns} from "@/config/tableConfigs/qy_role";
+import {ApisGroupCcolumns} from "@/config/tableConfigs/qy_apis";
+import {onMounted, reactive, ref} from "vue";
+import {useRouter} from "vue-router";
 import {FormInstance, message, notification} from "ant-design-vue";
-import {Add, Delete, List, RoleMenusApisType, RoleType, SaveRoleApis, SaveRoleMenus, Update} from "@/api/role";
+import {GroupDelete, GroupList,GroupAdd,GroupUpdate, ApisGroupType} from "@/api/apis";
 import {PageInfo} from "@/api/common";
-const searchForm = reactive({ name: "",
-});
-const drawerData = reactive({ visible: false,
-  title: "授权",
-  size: "large"
+const searchForm = reactive({
+  name: "",
+  identifier: "",
 });
 const router = useRouter();
 const formRef = ref<FormInstance>();
-const roleForm = ref<FormInstance>();
-const roleMenusRef = ref();
-const roleApiRef = ref();
+const modalForm = ref<FormInstance>();
 type Key = string | number;
-
 const formItemLayout = {
   labelCol: { span: 4 },
   wrapperCol: { span: 14 },
@@ -159,22 +148,17 @@ const listInfo = reactive({
   selectedIds:[],
   loading: false,
   searchLoading: false,
+  expand:false,
 });
 const modalInfo = reactive({
   visible:false,
   editLoading: false,
-  roleInfo:{
+  dataInfo:{
     id:"",
-    name:""
+    name: "",
+    identifier: "",
   }
 })
-
-const authInfo = reactive<RoleMenusApisType>({
-  id:"",
-  menusIDs:[] as string[],
-  apiIDs: [] as string[],
-})
-
 onMounted(() => {
   doSearchForm();
 })
@@ -183,8 +167,8 @@ onMounted(() => {
 function doAdd() {
   modalInfo.visible = true;
 }
-function doUpdate(data:RoleType) {
-  modalInfo.roleInfo = data;
+function doUpdate(data:ApisGroupType) {
+  modalInfo.dataInfo = data;
   modalInfo.visible = true;
 }
 
@@ -199,7 +183,7 @@ function doMenuClick(e:any) {
 }
 
 function doDeleted(ids:string[]){
-  Delete(ids).then(res=>{
+  GroupDelete(ids).then(res=>{
     notification.success({
       message: '成功',
       description: "删除"
@@ -221,7 +205,7 @@ async function doList(pageInfo:PageInfo) {
     ...searchForm,
     ...pageInfo
   }
-  await List(param).then(res => {
+  await GroupList(param).then(res => {
     if(res.pageInfo.current<=0) {
       res.pageInfo.current = 1;
     }
@@ -245,13 +229,15 @@ function doSearchForm() {
 function doSelectChange(selectedRowKeys: Key[]) {
   listInfo.selectedIds = selectedRowKeys;
 }
-function doEditRole() {
+
+
+function doEditData() {
   modalInfo.editLoading = true;
   const param = {
-    ...modalInfo.roleInfo
+    ...modalInfo.dataInfo
   };
   if (param.id.length>0) {
-    Update(param.id,param).then(res=>{
+    GroupUpdate(param.id,param).then(res=>{
       notification.success({
         message: '成功',
         description: "保存成功"
@@ -264,7 +250,7 @@ function doEditRole() {
       modalInfo.editLoading = false;
     });
   } else {
-    Add(param).then(res=>{
+    GroupAdd(param).then(res=>{
       notification.success({
         message: '成功',
         description: "保存成功"
@@ -281,67 +267,10 @@ function doEditRole() {
 
 }
 function doCancel() {
-  roleForm.value.resetFields();
+  modalForm.value.resetFields();
   modalInfo.visible = false;
-  modalInfo.roleInfo.id = "";
-
+  modalInfo.dataInfo.id = "";
 }
-
-function doOpenAuth(data:RoleType) {
-  drawerData.visible = true;
-  drawerData.title = "设置【"+data.name+"】的授权";
-  roleMenusRef.value.treeInfo.checkedKeys = data.menusIDs;
-  if (authInfo.id==data.id&&authInfo.menusIDs&&authInfo.menusIDs.length>0) {
-    roleMenusRef.value.treeInfo.checkedKeys = authInfo.menusIDs;
-  }
-  if (roleApiRef.value) {
-    roleApiRef.value.treeInfo.checkedKeys = data.apiIDs;
-    if (authInfo.id==data.id&&authInfo.apiIDs&&authInfo.apiIDs.length>0) {
-      roleApiRef.value.treeInfo.checkedKeys = authInfo.apiIDs;
-    }
-  }
-
-  authInfo.id = data.id;
-}
-function doDrawerClose() {
-  drawerData.visible = false;
-  tabsInfo.activeKey = "1";
-}
-function doSaveRoleMenus(param:RoleMenusApisType) {
-  authInfo.menusIDs =   param.menusIDs;
-  param.id = authInfo.id;
-  SaveRoleMenus(param).then(res=>{
-    notification.success({
-      message: '成功',
-      description: "保存成功"
-    });
-    doSearchForm();
-  }).catch(err=>{
-
-  }).finally(()=>{
-    roleMenusRef.value.treeInfo.saveBtn = false;
-    drawerData.visible = false;
-  });
-
-}
-function doSaveRoleApis(param:RoleMenusApisType) {
-  authInfo.apiIDs =   param.apiIDs;
-  param.id = authInfo.id;
-  SaveRoleApis(param).then(res=>{
-    notification.success({
-      message: '成功',
-      description: "保存成功"
-    });
-    doSearchForm();
-  }).catch(err=>{
-
-  }).finally(()=>{
-    roleApiRef.value.treeInfo.saveBtn  = false;
-    drawerData.visible = false;
-  });
-}
-
-
 </script>
 
 <style scoped>
