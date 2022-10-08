@@ -29,7 +29,6 @@ let tabsRef=ref(null);
 
 onMounted(() => {
    let allkey:string = "";
-
    if (router.currentRoute.value.name) {
      allkey  = router.currentRoute.value.name.toString();
    }

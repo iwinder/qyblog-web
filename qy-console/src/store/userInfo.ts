@@ -1,12 +1,13 @@
 import { defineStore } from 'pinia'
 import {tabsKeyMap} from "@/config/tabs.config";
 import {UserType} from "@/api/user";
+import {MenusAdminType} from "@/api/menus_admin";
 export const useUserInfo = defineStore('userInfo', {
     state: () => {
         return {
             token: "",
             myInfo:{} as UserType,
-            myRouterList: [],
+            myMenusList: [] as MenusAdminType[],
             mytabsKeyList: [],
         }
     },

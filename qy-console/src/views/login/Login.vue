@@ -54,7 +54,9 @@ import {useUserInfo} from "@/store/userInfo";
 import {Session} from "@/utils/cache";
 import {ACCESS_TOKEN} from "@/utils/constants";
 import {Md5} from "ts-md5";
-const md5 = new Md5();
+import {GetMyMenus} from "@/api/menus_admin";
+import {GeneratorDynamicRouter} from "@/router/generator-routers";
+
 const loginForm = reactive({ username: "",
   password:"",
 });
@@ -66,8 +68,10 @@ const loginState = reactive({ loginBtn: false,
 const router = useRouter();
 const userStore =useUserInfo();
 const doLogin = async () => {
+  const md5 = new Md5();
   loginState.loginBtn = true;
   if (loginForm.password) {
+    console.log(loginForm.password)
     const newPas = md5.appendStr(loginForm.password).end();
     if (newPas) {
       loginForm.password = newPas.toString() ;
@@ -75,18 +79,27 @@ const doLogin = async () => {
   }
   await Login(loginForm).then(res=>{
     const token = "Bearer "+res.token;
+    // const token = res.token;
     userStore.token = token;
     userStore.myInfo.nickname = res.nickname;
     userStore.myInfo.roleNames = res.roleNames
+
+    loginForm.password ="";
+    GetMyMenus().then(res=> {
+      userStore.myMenusList = res.items
+      // console.log("GetMyMenus res",res)
+      GeneratorDynamicRouter(res.items);
+      router.push("/")
+    }).catch(err=>{}).finally(()=>{})
     // Session.set(ACCESS_TOKEN,token);
-    router.push("/")
-    // 延迟 1 秒显示欢迎信息
-    setTimeout(() => {
-      notification.success({
-        message: '欢迎 '+res.nickname,
-        description: `${timeFix()}，欢迎回来`
-      })
-    }, 1000)
+    // router.push("/")
+    // // 延迟 1 秒显示欢迎信息
+    // setTimeout(() => {
+    //   notification.success({
+    //     message: '欢迎 '+res.nickname,
+    //     description: `${timeFix()}，欢迎回来`
+    //   })
+    // }, 1000)
   }).catch(err=>{
   }).finally(()=>{
     loginState.loginBtn = false

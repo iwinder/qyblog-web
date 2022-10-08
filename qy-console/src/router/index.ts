@@ -2,6 +2,8 @@
 import {createRouter, createWebHistory, RouteRecordRaw} from 'vue-router'
 import {constantRouterMap, testRouterMap} from "../config/router.config.js";
 import {useUserInfo} from "@/store/userInfo";
+import {tabsKeyMap} from "@/config/tabs.config";
+import {GeneratorDynamicRouter} from "@/router/generator-routers";
 
 // Vue.use(Router)
 
@@ -15,18 +17,24 @@ const router =  createRouter({
     history: createWebHistory(),
     routes: constantRouterMap
 });
-testRouterMap.forEach((item:any)=>{
-    router.addRoute("", item)
-})
+// testRouterMap.forEach((item:any)=>{
+//     router.addRoute("", item)
+// })
 
 router.beforeEach((to, from, next) => {
     const userStore =useUserInfo();
     let token = userStore.token;
     if (token.trim().length>0) {
         if (to.path=="/noLogin/login") {
-            next(from);
-        } else {
+            // next(from);
             next();
+        } else {
+            if (tabsKeyMap.length==0) {
+                GeneratorDynamicRouter(userStore.myMenusList);
+                next({ ...to, replace: true })
+            }else {
+                next();
+            }
         }
     }else {
         // next();

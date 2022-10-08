@@ -31,6 +31,7 @@ const menusAdminApi = {
     update: '/admin/v1/menusAdmin',
     delete: '/admin/v1/menusAdmin',
     getOne: '/admin/v1/menusAdmin/',
+    getMyMenus: '/admin/v1/menusAdmin-my',
 }
 
 export function List (parameter:MenusAdminPageInfo) {
@@ -55,4 +56,7 @@ export function Delete (ids:string[]) {
 }
 export function GetOne (id:string) {
     return request.get(menusAdminApi.getOne+id)
+}
+export function GetMyMenus () {
+    return request.get(menusAdminApi.getMyMenus)
 }
