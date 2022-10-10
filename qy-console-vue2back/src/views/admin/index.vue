@@ -13,7 +13,7 @@
             <qy-footer></qy-footer>
         </a-layout>
 
-    </a-layout>
+  </a-layout>
 
 </template>
 

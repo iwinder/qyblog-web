@@ -8,6 +8,7 @@ export const useUserInfo = defineStore('userInfo', {
             token: "",
             myInfo:{} as UserType,
             myMenusList: [] as MenusAdminType[],
+            myRouter: [] as any[],
             mytabsKeyList: [],
         }
     },

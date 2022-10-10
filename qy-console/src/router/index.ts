@@ -1,6 +1,6 @@
 
 import {createRouter, createWebHistory, RouteRecordRaw} from 'vue-router'
-import {constantRouterMap, testRouterMap} from "../config/router.config.js";
+import {constantRouterMap, myRouterMap} from "../config/router.config.js";
 import {useUserInfo} from "@/store/userInfo";
 import {tabsKeyMap} from "@/config/tabs.config";
 import {GeneratorDynamicRouter} from "@/router/generator-routers";

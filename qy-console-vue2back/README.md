@@ -31,4 +31,7 @@ npm install axios --save
 npm install node-sass sass-loader --save-dev
 npm isntall mavon-editor --save
 npm install vuex --save
+npm install --save ts-md5
+npm i json-bigint
+npm i  pinia-plugin-persistedstate
 ```

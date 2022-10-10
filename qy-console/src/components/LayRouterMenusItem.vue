@@ -39,7 +39,9 @@
 </template>
 
 <script setup lang="ts">
+
 const props = defineProps(['item']);
+
 </script>
 
 <style scoped>

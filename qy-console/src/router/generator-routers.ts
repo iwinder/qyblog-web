@@ -7,6 +7,8 @@ import {MenusAdminType} from "@/api/menus_admin";
 import {BasicLayout, RouteViewLayout} from "@/layouts";
 import router from "@/router/index";
 import {tabsKeyMap, TabsObj} from "@/config/tabs.config";
+import {useUserInfo} from "@/store/userInfo";
+import {myRouterMap} from "@/config/router.config";
 
 const modules = import.meta.glob('../views/*/*.vue')
 const lauModules = import.meta.glob('../layouts/RouteViewLayout.vue')
@@ -27,13 +29,16 @@ const rootRouter = {
     breadcrumbName:'首页',
     meta: { title: '仪表盘', icon: 'DashboardOutlined'},
     statusFlag: 2,
-    children: []
+    children: [] as any[]
 }
 export function GeneratorDynamicRouter(data:MenusAdminType[]) {
     const menuNav = generator(data);
     rootRouter.children = menuNav;
+    myRouterMap.push(rootRouter)
+
     router.addRoute("", rootRouter);
     generatorTabs(data,[],"",tabsKeyMap);
+    console.log("tabsKeyMap",tabsKeyMap)
 }
 const generator = (routerMap:MenusAdminType[]) => {
   return   routerMap.map(item => {

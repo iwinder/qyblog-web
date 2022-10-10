@@ -28,7 +28,7 @@
 import {  ref,reactive } from 'vue';
 import {useRouter} from "vue-router";
 import {getValue, initTabsMap, tabsKeyMap,  TabsObj} from "../config/tabs.config";
-import {BreadcrumbRoute, testRouterMap} from "../config/router.config";
+import {BreadcrumbRoute, myRouterMap} from "../config/router.config";
 const emit = defineEmits(['onChange'])
 const router = useRouter();
 const  routerNowList: any[] = [];
@@ -72,6 +72,7 @@ const doOpenTab = (key:string,param:any) => {
   } else {
     panes.value.push({title:tab.title,key:akey});
   }
+
   activeKey.value = key;
   doChange(key);
 };
@@ -105,10 +106,11 @@ const doEdit = (targetKey: string | MouseEvent, action: string) => {
 
 // 获取当前面包屑
 const getRouterList = (tab:TabsObj) => {
-  let parent = testRouterMap[0];
+  let parent = myRouterMap[0];
   routerNowList.length=0;
   routerNowList.push({path:parent.name,breadcrumbName:parent.breadcrumbName});
   getRouterChild(parent,tab);
+  console.log("routerNowList",routerNowList)
 }
 // 获取面包屑子集
 const getRouterChild = (obj: any,tab:TabsObj):boolean => {
