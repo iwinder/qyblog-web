@@ -1,6 +1,19 @@
 import {PageInfo} from "@/api/common";
 import request from "@/utils/axios";
 import {RoleType} from "@/api/role";
+import {GetOne} from "@/api/user";
+
+export interface FileType {
+    id:string,
+    originFileName?:string,
+    fname?: string,
+    fsize?: string,
+    extention?:string,
+    mimeType?:string,
+    fhash?:string,
+    fmd5?:string,
+    relativePath?:string,
+}
 
 export interface FileLibType {
     id:string,
@@ -9,9 +22,23 @@ export interface FileLibType {
     identifier?: number,
     statusFlag:number,
 }
-
+export interface FileLibConfigType {
+    id:string,
+    accessKey?:string,
+    secretKey?: string,
+    bucket?: string,
+    prefix?:string,
+    domain?:string,
+    endpoint?:string,
+    typeId?:string,
+}
 export interface FileLibTypePageInfo extends PageInfo{
     name?:string,
+}
+export interface FileTypePageInfo extends PageInfo{
+    searchText?:string,
+    typeId?:string,
+    marker?:string,
 }
 
 const fileLibTypeApi = {
@@ -21,19 +48,23 @@ const fileLibTypeApi = {
     delete: '/admin/v1/fileLibType',
     getOne: '/admin/v1/fileLibType/',
 }
+const fileLibConfigApi = {
+    save: '/admin/v1/fileLibConfig',
+    getOne: '/admin/v1/fileLibConfig/',
+}
 
-export function TypeList (parameter:PageInfo) {
+export function TypeList (parameter:FileLibTypePageInfo) {
     return request.get(fileLibTypeApi.list,{
         params: parameter
     })
 }
 
 
-export function TypeAdd (parameter:RoleType) {
+export function TypeAdd (parameter:FileLibType) {
     return request.post(fileLibTypeApi.add,parameter)
 }
-export function TypeUpdate (id:string,parameter:RoleType) {
-    return request.put(fileLibTypeApi.getOne+id,parameter)
+export function TypeUpdate (parameter:FileLibType) {
+    return request.put(fileLibTypeApi.getOne+parameter.id,parameter)
 }
 export function TypeDelete (ids:string[]) {
     return request.delete(fileLibTypeApi.delete,{
@@ -41,4 +72,11 @@ export function TypeDelete (ids:string[]) {
             ids:ids
         }
     })
+}
+
+export function ConfigSave (parameter:FileLibConfigType) {
+    return request.post(fileLibConfigApi.save,parameter)
+}
+export function ConfigGetOne (id:string) {
+    return request.get(fileLibConfigApi.getOne+id)
 }

@@ -74,41 +74,14 @@
         </a-table>
       </template>
     </LayTableInfo>
-    <a-modal v-model:visible="modalInfo.visible" title="新增媒体库类型">
-      <template #title>
-      </template>
-      <a-form ref="modelForm" :model="modalInfo.dataInfo" :footer="null" @cancel="doCancel">
-        <a-form-item has-feedback label="媒体库名称" name="name"
-                     :rules="[{ required: true, message: 'Please input your 媒体库名称!' }]"
-        >
-          <a-input v-model:value="modalInfo.dataInfo.name" placeholder="请输入媒体库名称"></a-input>
-        </a-form-item>
-        <a-form-item has-feedback label="类型标识" name="identifier"
-                     :rules="[{ required: true, message: 'Please input your 媒体库名称!' }]"
-        >
-          <a-input v-model:value="modalInfo.dataInfo.identifier" placeholder="类型标识"></a-input>
-        </a-form-item>
-        <a-form-item
-            label="启用"
-            name="statusFlag"
-            :rules="[{ required: true, message: 'Please input your email!' }]"
-        >
-          <a-switch v-model:checked="modalInfo.dataInfo.statusFlag" checked-children="是" :checked-value="switchObj.checkedValue" un-checked-children="否" :un-checked-value="switchObj.unCheckedValue"/>
-        </a-form-item>
-        <a-form-item :wrapper-col="{ span: 14, offset: 4 }">
-          <a-button type="primary" :loading="modalInfo.editLoading" @click="doEditData">
-            保存
-          </a-button>
-          <a-button style="margin-left: 10px" @click="doCancel">
-            取消
-          </a-button>
-        </a-form-item>
-      </a-form>
+    <a-modal v-model:visible="modalInfo.visible" title="新增媒体库类型" :footer="null"	>
+      <QyFileLibTypeForm  ref="modalFormRef" @onAfterSubmit="doSaveData" @onAfterCancel="doCancel"></QyFileLibTypeForm>
     </a-modal>
 </template>
 
 <script setup lang="ts">
   import LayTableInfo from '@/components/LayTableInfo.vue'
+  import QyFileLibTypeForm from '@/components/QyFileLibTypeForm.vue'
   import {FileLibTypeColumns} from "@/config/tableConfigs/qy_file_lib_type"
   import {onMounted, reactive, ref} from "vue";
   import {useRouter} from "vue-router";
@@ -122,7 +95,7 @@
   });
   const router = useRouter();
   const formRef = ref<FormInstance>();
-  const modelForm = ref<FormInstance>();
+  const modalFormRef = ref<FormInstance>();
   type Key = string | number;
   const formItemLayout = {
     labelCol: { span: 6 },
@@ -235,15 +208,8 @@
     listInfo.searchLoading = true;
     initData();
   }
-  // function doSelectChange(selectedRowKeys: Key[]) {
-  //   listInfo.selectedIds = selectedRowKeys;
-  // }
-  function doEditData() {
-    modalInfo.editLoading = true;
-    const param = {
-      ...modalInfo.dataInfo
-    };
 
+  function doSaveData(param:FileLibType) {
     TypeAdd(param).then(res=>{
       notification.success({
         message: '成功',
@@ -254,16 +220,13 @@
     }).catch(err=>{
 
     }).finally(()=>{
-      modalInfo.editLoading = false;
+      modalFormRef.value.formState.saveBtn= false;
     });
-
-
-
   }
   function doCancel() {
-    modelForm.value.resetFields();
     modalInfo.visible = false;
-    modalInfo.dataInfo.id = "";
+    modalFormRef.value.doResetFields();
+    modalFormRef.value.dataForm.id = "";
 
   }
 </script>
