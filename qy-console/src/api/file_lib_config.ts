@@ -13,6 +13,8 @@ export interface FileType {
     fhash?:string,
     fmd5?:string,
     relativePath?:string,
+    defUrl?:string,
+    updatedAt?:string,
 }
 
 export interface FileLibType {
@@ -35,6 +37,10 @@ export interface FileLibConfigType {
 export interface FileLibTypePageInfo extends PageInfo{
     name?:string,
 }
+export interface FileLibPageInfo extends PageInfo{
+    searchText?:string,
+    typeId?:string,
+}
 export interface FileTypePageInfo extends PageInfo{
     searchText?:string,
     typeId?:string,
@@ -52,6 +58,17 @@ const fileLibConfigApi = {
     save: '/admin/v1/fileLibConfig',
     getOne: '/admin/v1/fileLibConfig/',
 }
+
+const fileLibApi = {
+    list: '/admin/v1/fileLib/byType/',
+}
+
+export function FileList (parameter:FileLibPageInfo) {
+    return request.get(fileLibApi.list+parameter.typeId,{
+        params: parameter
+    })
+}
+
 
 export function TypeList (parameter:FileLibTypePageInfo) {
     return request.get(fileLibTypeApi.list,{

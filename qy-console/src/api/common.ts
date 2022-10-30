@@ -1,7 +1,7 @@
 import {LoginReqForm} from "@/api/login";
 
 export interface PageInfo {
-    current: number,
+    current?: number,
     pageSize?: number,
     total?: number,
     pages?: number,

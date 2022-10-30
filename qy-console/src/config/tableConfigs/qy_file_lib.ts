@@ -6,6 +6,11 @@ export const FileLibColumns = [
         scopedSlots: { customRender: 'fname' },
     },
     {
+        title: '原文件名',
+        dataIndex: 'originFileName',
+        key: 'originFileName',
+    },
+    {
         title: '文件类型',
         dataIndex: 'mimeType',
         key: 'mimeType',
