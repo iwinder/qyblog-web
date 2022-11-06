@@ -21,11 +21,12 @@ import {ConfigGetOne, ConfigSave, FileLibConfigType, FileLibType, TypeUpdate} fr
 import {FormInstance, notification} from "ant-design-vue";
 import {onMounted, reactive, ref} from "vue";
 import {useRouter} from "vue-router";
+import pinia from '@/store/store'
 import {useParamsStore} from "@/store/params";
 const router = useRouter();
 const typeFormRef = ref<FormInstance>();
 const configFormRef = ref<FormInstance>();
-const state = useParamsStore()
+const state = useParamsStore(pinia)
 const tabsInfo = reactive({
   title:"配置媒体库信息",
   activeKey:"1"

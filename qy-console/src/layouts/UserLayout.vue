@@ -34,15 +34,51 @@
 </template>
 
 <script setup  lang="ts">
-import { reactive } from 'vue'
+import {onMounted, reactive} from 'vue'
 import loginims from '@/assets/vue.svg'
+import {ListBase} from "@/api/site_config";
+import {useSiteInfo} from "@/store/siteInfo";
+const siteStore =  useSiteInfo();
 const siteInfo = reactive({ site_logo: loginims,
   site_name:"青语博客",
   site_description: "测试一下"
 })
+onMounted(() => {
+  console.log("siteStore.siteInfoMap",siteStore.HasSiteInfo())
+  if (!siteStore.HasSiteInfo()) {
+    initListBase();
+  }else {
+    initSiteInfo();
+  }
+})
+
 // export default {
 //   name: "UserLayout"
 // }
+
+function initListBase() {
+  ListBase().then(res=>{
+    siteStore.InitSiteInfoMap(res.items);
+    initSiteInfo();
+  }).catch(err=>{
+    console.log("initListBase err",err)
+  }).finally(()=>{})
+}
+function initSiteInfo() {
+  const logo =  siteStore.GetSiteInfoByKey("site_logo");
+  if (logo.length>0) {
+    siteInfo.site_logo = logo;
+  }
+  const name = siteStore.GetSiteInfoByKey("site_name");
+  if (name.length>0) {
+    siteInfo.site_name = name;
+  }
+  const description = siteStore.GetSiteInfoByKey("site_description");
+  if (description.length>0) {
+    siteInfo.site_description = description;
+  }
+  window.document.title =siteInfo.site_name
+}
 </script>
 
 <style  lang="less" scoped>

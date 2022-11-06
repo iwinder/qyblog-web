@@ -71,7 +71,6 @@ const doLogin = async () => {
   const md5 = new Md5();
   loginState.loginBtn = true;
   if (loginForm.password) {
-    console.log(loginForm.password)
     const newPas = md5.appendStr(loginForm.password).end();
     if (newPas) {
       loginForm.password = newPas.toString() ;
@@ -101,6 +100,7 @@ const doLogin = async () => {
     //   })
     // }, 1000)
   }).catch(err=>{
+    console.log("doLogin err",err);
   }).finally(()=>{
     loginState.loginBtn = false
   });

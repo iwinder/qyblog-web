@@ -19,7 +19,8 @@ import LayContent from "../components/LayContent.vue";
 import LayFooter from "../components/LayFooter.vue";
 import {useRouter} from "vue-router";
 import {initTabsMap, tabsKeyMap} from "../config/tabs.config";
-
+import {useSiteInfo} from "@/store/siteInfo";
+const siteStore =  useSiteInfo();
 const collapsed = ref<boolean>(false);
 const router = useRouter();
 const openKeys = ref<string[]>([]);
@@ -28,6 +29,7 @@ let tabsRef=ref(null);
 
 
 onMounted(() => {
+
    let allkey:string = "";
    if (router.currentRoute.value.name) {
      allkey  = router.currentRoute.value.name.toString();
@@ -39,7 +41,7 @@ onMounted(() => {
    }
   initTabsMap(tabsKeyMap);
   tabsRef.value.doOpenTab(key,  router.currentRoute.value.params)
-
+  window.document.title =siteStore.GetSiteInfoByKey("site_name");
 })
 
 // trigger 切换事件

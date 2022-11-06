@@ -3,7 +3,7 @@ import {notification} from "ant-design-vue";
 import {Session} from "@/utils/cache/index"
 import {ACCESS_TOKEN} from "@/utils/constants";
 import {useUserInfo} from "@/store/userInfo";
-const userStore =useUserInfo();
+
 // 创建 axios 实例
 const request = axios.create({
     // API 请求的默认前缀
@@ -15,6 +15,7 @@ const request = axios.create({
 
 // 异常拦截处理器
 const errorHandler = (error: AxiosError) => {
+    const userStore =useUserInfo();
     if (error.response) {
         const data = error.response.data
         // 从 localstorage 获取 token
@@ -47,6 +48,7 @@ const errorHandler = (error: AxiosError) => {
 
 // request interceptor
 request.interceptors.request.use(config => {
+    const userStore =useUserInfo();
     const token = userStore.token;
     // 如果 token 存在
     // 让每个请求携带自定义 token 请根据实际情况自行修改

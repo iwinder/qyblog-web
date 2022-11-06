@@ -21,7 +21,7 @@ export interface SiteConfigParamType {
 
 const siteConfigApi = {
     admin: '/admin/v1/siteConfig',
-    web: '/web/v1/fileLibType',
+    web: '/web/v1/siteConfig/base',
 }
 
 export function List () {
