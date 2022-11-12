@@ -81,7 +81,8 @@ const doLogin = async () => {
     // const token = res.token;
     userStore.token = token;
     userStore.myInfo.nickname = res.nickname;
-    userStore.myInfo.roleNames = res.roleNames
+    userStore.myInfo.roleNames = res.roleNames;
+    userStore.myInfo.avatar = res.avatar;
 
     loginForm.password ="";
     GetMyMenus().then(res=> {

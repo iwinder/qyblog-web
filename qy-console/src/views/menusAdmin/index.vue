@@ -63,12 +63,11 @@ import {PageInfo} from "@/api/common";
 import {Delete, List} from "@/api/menus_admin";
 import {MenusAdminColumns} from "@/config/tableConfigs/qy_menus_admin";
 import {message, notification} from "ant-design-vue";
-import pinia from '@/store/store'
 import {useParamsStore} from "@/store/params";
 import {DEFAULT_PAGESIZE} from "@/utils/constants";
 type Key = string | number;
 const router = useRouter();
-const state = useParamsStore(pinia)
+const state = useParamsStore()
 const listInfo = reactive({
   pageInfo: {
     current: 1,

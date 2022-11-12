@@ -3,7 +3,8 @@ import {notification} from "ant-design-vue";
 import {Session} from "@/utils/cache/index"
 import {ACCESS_TOKEN} from "@/utils/constants";
 import {useUserInfo} from "@/store/userInfo";
-
+import {useRouter} from "vue-router";
+const router = useRouter();
 // 创建 axios 实例
 const request = axios.create({
     // API 请求的默认前缀
@@ -33,6 +34,7 @@ const errorHandler = (error: AxiosError) => {
             if (token) {
                 userStore.token = "";
             }
+            router.push({name:"login"});
         } else {
             notification.error({
                 message: '请求异常',
