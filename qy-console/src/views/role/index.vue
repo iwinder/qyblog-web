@@ -66,7 +66,7 @@
       </a-table>
     </template>
   </LayTableInfo>
-  <a-modal v-model:visible="modalInfo.visible"   >
+  <a-modal v-model:visible="modalInfo.visible"  :footer="null" >
     <template #title>
       <template v-if="modalInfo.roleInfo.id">
         修改角色

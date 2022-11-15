@@ -113,7 +113,7 @@
     </template>
   </LayTableInfo>
 
-  <a-modal v-model:visible="modalInfo.visible" :title="modalInfo.title"  >
+  <a-modal v-model:visible="modalInfo.visible" :title="modalInfo.title" :footer="null" >
     <a-form ref="passForm" :model="modalInfo.userInfo" :footer="null" @cancel="doCancel" >
       <a-form-item has-feedback label="新密码" name="name">
         <a-input v-model:value="modalInfo.userInfo.password" placeholder="请输入新密码"></a-input>
