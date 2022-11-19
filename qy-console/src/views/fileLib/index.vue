@@ -234,7 +234,9 @@ function doAdd(id:string,name:string) {
   tabsInfo.uploadObj.visible = true;
   tabsInfo.uploadObj.title = "上传文件到【"+name+"】";
 }
-
+function doPreview(data:any) {
+  console.log("doPreview",data);
+}
 function doCancelUpload() {
   tabsInfo.uploadObj.visible = false;
 }

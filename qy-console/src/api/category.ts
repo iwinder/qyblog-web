@@ -8,10 +8,12 @@ export interface CategoryType {
     identifier?: string;
     description?:string;
     parentId?:string;
+    children?:CategoryType[]
 }
 
 export interface CategoryPageInfo extends PageInfo {
     name?: string;
+    parentId?: string;
 }
 const categoryApi = {
     list: '/admin/v1/category',

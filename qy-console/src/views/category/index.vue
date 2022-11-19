@@ -207,7 +207,6 @@ function doDeleted(ids:string[]){
 function initData() {
   doList({
     current: 1,
-    parentId:0,
     pageSize: listInfo.pageInfo.pageSize,
   });
 }
@@ -215,7 +214,8 @@ async function doList(pageInfo:PageInfo) {
   listInfo.loading = true;
   var param = {
     ...searchForm,
-    ...pageInfo
+    ...pageInfo,
+    parentId:0,
   }
   await List(param).then(res => {
     if(res.pageInfo.current<=0) {
@@ -296,9 +296,7 @@ const parentSelect = reactive({
 const initCategoryList = async () => {
   List({
     current:0,
-    type:1,
     parentId:"0",
-    hasChildren: true
   }).then(res=>{
     newDatas = newDatas.concat(res.items)
     parentSelect.options = newDatas;

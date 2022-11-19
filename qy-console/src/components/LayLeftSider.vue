@@ -4,7 +4,7 @@
     @breakpoint="doBreakpoint"
   >
     <div class="logo" >
-      <template v-if="siteInfo.site_url!=''&&siteInfo.site_url.length>0">
+      <template v-if="siteInfo&&siteInfo.site_url!=''&&siteInfo.site_url.length>0">
         <a  :href="siteInfo.site_url" class="viewlinka" target="_blank" >
           <a-image  :src="siteInfo.site_small_logo" :preview="false" fallback="loginims" alt="logo"/>
         </a>
@@ -43,6 +43,7 @@ const props =  defineProps({
   },
 })
 onMounted(() => {
+  console.log("siteInfo",siteInfo)
   siteInfo.site_small_logo = siteStore.GetSiteInfoByKey("site_small_logo");
   siteInfo.site_url = siteStore.GetSiteInfoByKey("site_url");
 })

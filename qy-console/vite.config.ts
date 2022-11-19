@@ -1,10 +1,19 @@
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import { resolve } from 'path';
+import {prismjsPlugin} from "vite-plugin-prismjs";
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [vue()],
+  plugins: [
+      vue(),
+    prismjsPlugin({
+        languages: ['json','java','go','javascript','jq','typescript','sql','bash','yaml'],
+        plugins: ["line-numbers"], //配置显示行号插件
+        theme: "solarizedlight", //主题名称
+        css: true,
+      }),
+  ],
   resolve: {
     // 配置路径别名
     alias: {
@@ -29,5 +38,8 @@ export default defineConfig({
         }
       }
     },
+  },
+  optimizeDeps: {
+    include: ['@kangc/v-md-editor/lib/theme/vuepress.js'],
   },
 })

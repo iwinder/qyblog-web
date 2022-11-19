@@ -93,7 +93,7 @@ function doAdd(pid:string) {
 function initData() {
   doList({
     current: 1,
-    pageSize: 2,
+    pageSize: listInfo.pageInfo.pageSize,
   });
 }
 async function doList(pageInfo:PageInfo) {

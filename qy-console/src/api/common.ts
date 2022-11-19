@@ -6,6 +6,6 @@ export interface PageInfo {
     total?: number,
     pages?: number,
     firstFlag?: boolean,
-    LastFlag?: boolean,
+    lastFlag?: boolean,
 }
 

@@ -61,6 +61,7 @@ const fileLibConfigApi = {
 
 const fileLibApi = {
     list: '/admin/v1/fileLib/byType/',
+    upload: '/admin/v1/file/upload',
 }
 
 export function FileList (parameter:FileLibPageInfo) {
@@ -96,4 +97,8 @@ export function ConfigSave (parameter:FileLibConfigType) {
 }
 export function ConfigGetOne (id:string) {
     return request.get(fileLibConfigApi.getOne+id)
+}
+
+export function Upload(data:FormData) {
+    return request.post(fileLibApi.upload,data)
 }
