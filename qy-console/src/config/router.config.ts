@@ -24,8 +24,10 @@ export const constantRouterMap= [
     },
     {
         path: '/404',
+        name: '404',
         component: () => import( '@/views/exception/404.vue')
-    }
+    },
+
 ]
 
 export const myRouterMap:any[]=  [

@@ -17,6 +17,9 @@
 </script>
 
 <style scoped lang="less">
+.main{
+  margin-top: 8px;
+}
 .table-operations {
   margin: 10px 0;
 }

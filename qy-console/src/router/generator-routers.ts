@@ -12,11 +12,11 @@ import {myRouterMap} from "@/config/router.config";
 
 const modules = import.meta.glob('../views/*/*.vue')
 const lauModules = import.meta.glob('../layouts/RouteViewLayout.vue')
-const notFoundRouter = {
-    path: '*',
-    redirect: '/404',
-    hidden: true
-}
+const notFoundRouter =     {
+        path: '/:pathMatch(.*)*',
+        redirect: '/404',
+        hidden: true
+    }
 
 
 
@@ -37,6 +37,10 @@ export function GeneratorDynamicRouter(data:MenusAdminType[]) {
     myRouterMap.push(rootRouter)
 
     router.addRoute("", rootRouter);
+    router.addRoute("",     {
+        path: '/:pathMatch(.*)*',
+        redirect: '/404',
+    });
     generatorTabs(data,[],"",tabsKeyMap);
     console.log("tabsKeyMap",tabsKeyMap)
 }

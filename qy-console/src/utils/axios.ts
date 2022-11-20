@@ -34,7 +34,7 @@ const errorHandler = (error: AxiosError) => {
             if (token) {
                 userStore.token = "";
             }
-            router.push({name:"login"});
+            router.push({path:"/noLogin/login"});
         } else {
             notification.error({
                 message: '请求异常',

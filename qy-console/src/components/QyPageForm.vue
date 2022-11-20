@@ -129,7 +129,6 @@ import VMdEditor, { xss }  from '@kangc/v-md-editor/lib/codemirror-editor';
 import {Upload} from "@/api/file_lib_config";
 import {UploadFile} from "ant-design-vue/lib/upload/interface";
 const formRef = ref<FormInstance>();
-const state = useParamsStore()
 const dataForm = reactive<ArticleType>({
   id:"",
   title:"",

@@ -122,14 +122,12 @@ import {FormInstance, message, UploadChangeParam, UploadProps} from "ant-design-
 import {GetOne, ArticleType, InitPermaLink} from "@/api/article";
 import {CategoryType, List} from "@/api/category";
 import {List as TagList, TagsType} from "@/api/tags";
-import {useParamsStore} from "@/store/params";
 import QyPostLinkEdit from "@/components/QyPostLinkEdit.vue";
 const emit = defineEmits(['onAfterSubmit','onAfterCancel'])
 import VMdEditor, { xss }  from '@kangc/v-md-editor/lib/codemirror-editor';
 import {Upload} from "@/api/file_lib_config";
 import {UploadFile} from "ant-design-vue/lib/upload/interface";
 const formRef = ref<FormInstance>();
-const state = useParamsStore()
 const dataForm = reactive<ArticleType>({
   id:"",
   title:"",
