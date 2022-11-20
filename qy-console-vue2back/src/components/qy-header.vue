@@ -7,7 +7,7 @@
           :type="collapsed ? 'menu-unfold' : 'menu-fold'"
           @click="callChange"
         /> </a-col>
-  <a-col  :xs="{span:8, offset: 10 }"  :lg="{ span: 3, offset: 5 }" style="    text-align: center;  " >
+  <a-col  :xs="{span:8, offset:2 }"  :lg="{ span: 3, offset: 2 }" style="    text-align: center;  " >
         <a-dropdown class="right-dropdown"  placement="bottomCenter">
             <a class="ant-dropdown-link" @click="e => e.preventDefault()">
                          <a-avatar  icon="user"  :src="user.avatar"/>

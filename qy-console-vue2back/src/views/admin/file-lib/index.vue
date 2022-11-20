@@ -136,7 +136,7 @@
         <a-modal v-model="visiblePreview"  :title="'预览 '+previewObj.fname" :footer="null" @cancel="handlePreviewCancel">
             <a-row style="margin-bottom: 20px;">
                 <a-col class="imageWrapper"> 
-                    <img   :src="previewObj.defImg" class="previewImage"  @error="loadError()"/>
+                    <img   :src="previewObj.defImg" class="previewImage"   />
                  </a-col>
                  <a-descriptions title="" :column="1">
                      <a-descriptions-item label="文件链接" class="wordBreak"> 
@@ -406,9 +406,7 @@ export default Vue.extend({
                 return (size / Math.pow(num, 3)).toFixed(2) + "G"; //G
             } else {
                 return (size / Math.pow(num, 4)).toFixed(2) + "T"; //T
-            }
-               
-            
+            } 
         },
         handleSaveCancel() {
             let _this = this;
