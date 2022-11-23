@@ -1,11 +1,9 @@
 <template>
-$END$
+  category-page-id
 </template>
 
-<script>
-export default {
-name: "_id"
-}
+<script setup lang="ts">
+
 </script>
 
 <style scoped>

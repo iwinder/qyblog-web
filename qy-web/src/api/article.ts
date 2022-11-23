@@ -1,4 +1,5 @@
 import {PageInfo} from "@/api/common";
+import request from "@/utils/axios";
 
 export interface ArticleType {
     id:string;
@@ -34,4 +35,16 @@ export interface TagsType {
 
 export interface ArticlePageInfo extends PageInfo {
     searchText?: string;
+}
+const articleApi = {
+    list: '/admin/v1/article',
+    getOne: '/admin/v1/article/',
+}
+export function List (parameter:ArticlePageInfo) {
+    return request.get(articleApi.list,{
+        params: parameter
+    })
+}
+export function GetOne (name:string) {
+    return request.get(articleApi.getOne+name)
 }

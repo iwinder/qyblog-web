@@ -1,11 +1,8 @@
 <template>
-
+  home-name
 </template>
 
-<script>
-export default {
-  name: "_name"
-}
+<script setup lang="ts">
 </script>
 
 <style scoped>

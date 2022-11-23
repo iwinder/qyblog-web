@@ -1,8 +1,8 @@
 <template>
-
+  tag-page-id
 </template>
 
-<script setup>
+<script setup lang="ts">
  
 </script>
 

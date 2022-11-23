@@ -18,6 +18,12 @@ Done. Now run:
 ```shell
 
 npm i less-loader less --save-dev
+npm install pinia
+# https://prazdevs.github.io/pinia-plugin-persistedstate/guide/
+npm i pinia-plugin-persistedstate
+npm install vue-router@4
+npm i @kangc/v-md-editor@next -S
+npm install axios
 ```
 ## Recommended IDE Setup
 

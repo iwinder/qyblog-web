@@ -1,11 +1,11 @@
 <template>
-$END$
+  <a-layout-content>
+    <router-view />
+  </a-layout-content>
 </template>
 
-<script>
-export default {
-name: "LayContent"
-}
+<script setup lang="ts">
+
 </script>
 
 <style scoped>

@@ -1,10 +1,6 @@
-import axios, {AxiosError} from 'axios'
+
 import {notification} from "ant-design-vue";
-import {Session} from "@/utils/cache/index"
-import {ACCESS_TOKEN} from "@/utils/constants";
-import {useUserInfo} from "@/store/userInfo";
-import {useRouter} from "vue-router";
-const router = useRouter();
+import axios, {AxiosError} from "axios";
 // 创建 axios 实例
 const request = axios.create({
     // API 请求的默认前缀
@@ -16,11 +12,8 @@ const request = axios.create({
 
 // 异常拦截处理器
 const errorHandler = (error: AxiosError) => {
-    const userStore =useUserInfo();
     if (error.response) {
         const data = error.response.data
-        // 从 localstorage 获取 token
-        const token = userStore.token;
         if (error.response.status === 403) {
             notification.error({
                 message: 'Forbidden',
@@ -31,10 +24,6 @@ const errorHandler = (error: AxiosError) => {
                 message: 'Unauthorized',
                 description: 'Authorization verification failed'
             });
-            if (token) {
-                userStore.token = "";
-            }
-            router.push({path:"/noLogin/login"});
         } else {
             notification.error({
                 message: '请求异常',
@@ -50,13 +39,6 @@ const errorHandler = (error: AxiosError) => {
 
 // request interceptor
 request.interceptors.request.use(config => {
-    const userStore =useUserInfo();
-    const token = userStore.token;
-    // 如果 token 存在
-    // 让每个请求携带自定义 token 请根据实际情况自行修改
-    if (token) {
-        config.headers[ACCESS_TOKEN] = token;
-    }
     return config;
 }, errorHandler)
 

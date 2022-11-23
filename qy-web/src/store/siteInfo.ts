@@ -1,16 +1,13 @@
 import { defineStore } from 'pinia'
-import {tabsKeyMap} from "@/config/tabs.config";
-import {UserType} from "@/api/user";
-import {MenusAdminType} from "@/api/menus_admin";
-import {SiteConfigType} from "@/api/site_config";
-export const useSiteInfo = defineStore('adminSiteInfo', {
+import {SiteConfigDto} from "@/api/site_config";
+export const useSiteInfo = defineStore('webSiteInfo', {
     state: () => {
         return {
-            siteInfoMap: [] as SiteConfigType[]
+            siteInfoMap: [] as SiteConfigDto[]
         }
     },
     actions: {
-        InitSiteInfoMap(items:SiteConfigType[]) {
+        InitSiteInfoMap(items:SiteConfigDto[]) {
             this.siteInfoMap =items;
         },
         GetSiteInfoByKey(key:string)  {
@@ -22,7 +19,6 @@ export const useSiteInfo = defineStore('adminSiteInfo', {
             }
         },
         HasSiteInfo() {
-            console.log("d",this.siteInfoMap)
             return this.siteInfoMap&&this.siteInfoMap.length>0;
         }
     },

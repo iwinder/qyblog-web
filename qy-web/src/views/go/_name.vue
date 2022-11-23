@@ -1,8 +1,8 @@
 <template>
-  category
+  go
 </template>
 
-<script setup>
+<script setup lang="ts">
 
 </script>
 
