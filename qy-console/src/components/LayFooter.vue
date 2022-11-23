@@ -4,10 +4,8 @@
   </a-layout-footer>
 </template>
 
-<script>
-export default {
-  name: "LayFooter"
-}
+<script setup lang="ts">
+
 </script>
 
 <style scoped>
