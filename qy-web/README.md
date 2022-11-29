@@ -24,6 +24,7 @@ npm i pinia-plugin-persistedstate
 npm install vue-router@4
 npm i @kangc/v-md-editor@next -S
 npm install axios
+ npm i vue3-lazyload
 ```
 ## Recommended IDE Setup
 

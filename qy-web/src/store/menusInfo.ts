@@ -1,7 +1,6 @@
 import { defineStore } from 'pinia'
-import {SiteConfigDto} from "@/api/site_config";
 import {MenusDto} from "@/api/menus";
-export const useSiteInfo = defineStore('webSiteInfo', {
+export const useMenusInfo = defineStore('webMenusInfo', {
     state: () => {
         return {
             headerMenus: [] as MenusDto[],
@@ -9,6 +8,7 @@ export const useSiteInfo = defineStore('webSiteInfo', {
         }
     },
     actions: {
+
     },
     persist: {
         // 修改存储中使用的键名称，默认为当前 Store的 id

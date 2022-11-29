@@ -1,5 +1,5 @@
 <template>
-  <a-layout-header   :style="{background: '#fff', padding: 0,  width: '100%' ,position: 'fixed',zIndex: 2}">
+  <a-layout-header   :style="{background: '#fff', padding: 0,  width: '100%' ,position: 'fixed',zIndex: 33}">
     <a-row style="margin: 0 20px;">
       <a-col   :xs="{span:2}" :sm="{span:2}"  :md="{ span: 0}">
         <menu-unfold-outlined
@@ -11,11 +11,14 @@
       </a-col>
       <a-col  class="logo-col" :xs="{span:6,offset: 8}"  :sm="{span:6,offset: 7}"  :md="{ span: 3, offset:1}">
         <router-link  class="logo nav-col" :to="{path:'/',query: { }}"  :title="siteInfo.site_name" rel="link noopener"  @click.native="doToIndex"  >
-          <img  :src="siteInfo.site_logo" :alt="siteInfo.site_name"  >
+          <img   :src="siteInfo.site_logo" :alt="siteInfo.site_name"  >
         </router-link >
       </a-col>
       <a-col  :xs="{span:0}"  :sm="{span:0}"  :md="{ span: 13}" justify="center" align="middle">
-        <QyAMenus ref="menusRef" :menusSelectKey="dataInfo.menusSelectKey" menusClass="headerMenusHoriz" listMode="horizontal" :menusList="dataInfo.headerMenus"></QyAMenus>
+        <QyAMenus  ref="menusRef" :menus-select="dataInfo.menusSelectKey"
+                   menusClass="headerMenusHoriz" listMode="horizontal"
+                   :menusList="headerMenus" @onAfterSelect="doAfterSelect"></QyAMenus>
+
       </a-col>
       <a-col  :xs="{span:0,offset:0}"  :sm="{span:0,offset: 0}"  :md="{ span: 2}"  class="search-button">
         <a-button shape="dashed"  :loading="dataInfo.searchLoading"   @click="doOpenSearch">
@@ -63,7 +66,8 @@ import {
 import QyAMenus from "@/components/QyAMenus.vue";
 import {FormInstance} from "ant-design-vue";
 import {useRouter} from "vue-router";
-const emit = defineEmits(['onCollapsed'])
+import {MenusDto} from "@/api/menus";
+const emit = defineEmits(['onCollapsed',"onMenusSelect"])
 let menusRef=ref(null);
 const router = useRouter();
 const selectForm = ref<FormInstance>();
@@ -71,61 +75,39 @@ const props =  defineProps({
   isCollapsed: {
     default:  false
   },
+  searchLoading:{
+    default:false
+  },
+  siteInfo: {
+    default: {
+      site_logo:"",
+      site_name:"",
+    }
+  },
+  headerMenus: {
+    default:[] as MenusDto[]
+  },
+  selectKey: {
+    default:[] as string[]
+  }
 })
 
-const siteInfo = reactive({
-  searchLoading:false,
-  site_logo:"https://windcoder.com/wp-content/uploads/2017/02/logo_vift.png"
-})
+
+
 watch(() =>props.isCollapsed,(a)=>{
-  console.log("isCollapsed a",a);
   dataInfo.collapsed = a;
 } );
+watch(() =>props.selectKey,(a)=>{
+  dataInfo.menusSelectKey = a;
+} );
 const dataInfo = reactive({
-  searchLoading:false,
-  menusSelectKey:[] as string[],
-  visible:false,
-  collapsed:false,
+  searchLoading: false,
+  menusSelectKey: [] as string[],
+  visible: false,
+  collapsed: false,
   formInfo:{
      searchText:"",
   },
-  headerMenus:[{
-    id:"1",
-    name: "语言",
-    url:"/messages",
-    blanked:2,
-    children:[{
-      id:"4",
-      name: "Java笔记",
-      url:"/category/java",
-      blanked:2,
-    },{
-  id:"5",
-      name: "golang笔记",
-      url:"/category/go",
-      blanked:2,
-}]
-  },{
-    id:"2",
-    name: "Web笔记",
-    url:"/category/webnote",
-    blanked:2,
-  },{
-    id:"3",
-    name: "数据库笔记",
-    url:"/category/shujuku",
-    blanked:1,
-  },{
-    id:"6",
-    name: "数据库笔记2",
-    url:"/category/shujuku2",
-    blanked:2,
-  },{
-    id:"7",
-    name: "友情链接",
-    url:"/links-page",
-    blanked:2,
-  }],
 })
 // trigger 切换事件
 const doCallChange = ()=> {
@@ -136,7 +118,12 @@ const doOpenSearch = () => {
   dataInfo.visible = true;
 }
 const doToIndex = () => {
-  menusRef.value.doSelect("/");
+  dataInfo.menusSelectKey = ["/"]
+  // menusRef.value.doSelect("/");
+   emit('onMenusSelect',   ["/"]);
+}
+const doAfterSelect = (data:any) => {
+  emit('onMenusSelect',   data.selectedKeys);
 }
 const doCancel = () => {
   dataInfo.visible = false;
@@ -179,10 +166,16 @@ const doSearch = () => {
 
   display: inline-block;
 }
-.logo img {
+.logo img,  {
   max-width:  100%;
   height: 100%;
   display: inline-block;
+}
+:deep(.ant-skeleton-element){
+  max-width:  100%;
+  .ant-skeleton-image {
+    height: auto;
+  }
 }
 .logo-col {
   text-align: center;

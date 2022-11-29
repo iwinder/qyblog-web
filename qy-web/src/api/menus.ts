@@ -5,12 +5,11 @@ export interface MenusDto {
     name: string;
     url:string;
     blanked:number;
-    parentId:string;
     children:MenusDto[],
 }
 
 const menusApi = {
-    headList: '/web/v1/menus/head',
+    headList: '/web/v1/menus/header',
     footerList: '/web/v1/menus/footer',
 }
 

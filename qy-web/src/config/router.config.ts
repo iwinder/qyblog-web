@@ -10,6 +10,11 @@ export const constantRouterMap= [
                 path: '',
                 name: 'home',
                 component:  () => import('@/views/home/index.vue'),
+                children:[{
+                    path: 'page/:id',
+                    name: 'home-page-id',
+                    component:  () => import('@/views/home/index.vue'),
+                }],
             },
             {
                 path: 'tag/:name',
@@ -18,7 +23,7 @@ export const constantRouterMap= [
                 children:[{
                     path: 'page/:id',
                     name: 'tag-page-id',
-                    component:  () => import('@/views/tag/page/_id.vue'),
+                    component:  () => import('@/views/tag/_name.vue'),
                 }],
             },
             {
@@ -28,7 +33,7 @@ export const constantRouterMap= [
                 children:[{
                     path: 'page/:id',
                     name: 'category-page-id',
-                    component:  () => import('@/views/category/page/_id.vue'),
+                    component:  () => import('@/views/category/_name.vue'),
                 }],
             },
             {

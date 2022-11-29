@@ -3,12 +3,16 @@ import {SiteConfigDto} from "@/api/site_config";
 export const useSiteInfo = defineStore('webSiteInfo', {
     state: () => {
         return {
-            siteInfoMap: [] as SiteConfigDto[]
+            siteInfoMap: [] as SiteConfigDto[],
         }
     },
     actions: {
         InitSiteInfoMap(items:SiteConfigDto[]) {
             this.siteInfoMap =items;
+        },
+        AddSiteInfoMap(items:SiteConfigDto[]) {
+            this.siteInfoMap = this.siteInfoMap.concat(items);
+            console.log(" this.siteInfoMa", this.siteInfoMap)
         },
         GetSiteInfoByKey(key:string)  {
             const len = this.siteInfoMap.length;
@@ -19,7 +23,7 @@ export const useSiteInfo = defineStore('webSiteInfo', {
             }
         },
         HasSiteInfo() {
-            return this.siteInfoMap&&this.siteInfoMap.length>0;
+            return this.siteInfoMap&&this.siteInfoMap.length>0&&this.siteInfoMap[0]!=null;
         }
     },
     persist: {

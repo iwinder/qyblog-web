@@ -1,5 +1,4 @@
-import {Md5} from "ts-md5";
-const md5 = new Md5();
+
 export function timeFix () {
     const time = new Date()
     const hour = time.getHours()
@@ -17,7 +16,29 @@ export function GetRandomColor() {
     return colorList[idx]
 }
 
-export function ChangeStrByMd5(str:string) {
-    const newPas = md5.appendStr(str).end();
-    return newPas;
+export function GetRandomDefImg() {
+    const idx = GetRandomNum(1,32);
+    return '/images/thumb/'+ idx+'.jpg';
+}
+
+/**
+ * 检测图片是否存在
+ * @param url
+ */
+export  function ImageIsExist(url:string) {
+    return new Promise((resolve) => {
+        let img = new Image();
+        img.onload = function () {
+            if (img.complete == true){
+                resolve(true);
+                img.remove();
+            }
+        }
+        img.onerror = function () {
+            //console.log('资源error', img);
+            resolve(false);
+            img.remove();
+        }
+        img.src = url;
+    })
 }

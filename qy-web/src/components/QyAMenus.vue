@@ -11,20 +11,23 @@
 
 <script setup lang="ts">
 import QyMenusItem from "@/components/QyMenusItem.vue"
-import {computed, onMounted, reactive, ref} from "vue";
+import {computed, onMounted, reactive, ref, watch} from "vue";
 const emit = defineEmits(['onAfterSelect'])
-const props = defineProps(['menusList',"listMode","menusClass"]);
+const props = defineProps(['menusList',"listMode","menusClass","menusSelect"]);
 const selectedKeys= ref<string[]>(['dashboard']);
+watch(() =>props.menusSelect,(a)=>{
+  selectedKeys.value = a;
+} );
 onMounted(() => {
 })
 // 菜单选中
-const doSelect = (data:string) => {
-  selectedKeys.value=[data];
-}
+// const doSelect = (data:string) => {
+//   selectedKeys.value=[data];
+// }
 const doSelectKeys = (data:any) => {
   emit('onAfterSelect',data);
 }
-defineExpose({doSelect})
+// defineExpose({doSelect})
 </script>
 
 <style scoped>
