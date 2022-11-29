@@ -35,7 +35,7 @@ const doSave = (obj:ArticleType) => {
   })
 }
 const doBack = () => {
-  router.push("/blog/article");
+  router.push("/blog/page");
 }
 </script>
 
