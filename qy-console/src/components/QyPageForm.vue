@@ -79,12 +79,24 @@
 <!--            >-->
 <!--            </a-tree-select>-->
 <!--          </a-form-item>-->
-          <a-form-item
-              label="发布"
-              name="published"
-          >
-            <a-switch v-model:checked="dataForm.published" checked-children="是"   un-checked-children="否" />
-          </a-form-item>
+          <a-row type="flex" justify="start">
+            <a-col :span="4">
+              <a-form-item
+                  label="发布"
+                  name="published"
+              >
+                <a-switch v-model:checked="dataForm.published" checked-children="是"   un-checked-children="否" />
+              </a-form-item>
+            </a-col>
+            <a-col :span="4">
+              <a-form-item
+                  label="允许评论"
+                  name="commentFlag"
+              >
+                <a-switch v-model:checked="dataForm.commentFlag" checked-children="是"   un-checked-children="否" />
+              </a-form-item>
+            </a-col>
+          </a-row>
 <!--          <a-form-item-->
 <!--              label="规范链接"-->
 <!--              name="canonicalLink"-->
@@ -147,6 +159,7 @@ const dataForm = reactive<ArticleType>({
   publishedAt:"",
   nickName:""  ,
   tagStrings: [],
+  commentFlag:true,
 });
 
 
@@ -161,6 +174,7 @@ const formInfo = reactive({
   imageNum:0,
   previewImage:"",
   previewVisible:false,
+
 });
 const formState = reactive({ saveBtn: false,
 
@@ -217,6 +231,7 @@ const InitData = async (oid:string) => {
     dataForm.contentHtml = data.contentHtml;
     dataForm.tagStrings = data.tagStrings;
     formInfo.oldCategoryId = data.categoryId;
+    formInfo.commentFlag = data.commentFlag;
     if (dataForm.thumbnail) {
       setFileList(dataForm.thumbnail);
     }

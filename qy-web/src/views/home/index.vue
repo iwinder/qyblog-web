@@ -77,9 +77,11 @@ function initData() {
 }
 function doList(pageInfo:PageInfo) {
   dataInfo.loading = true;
+  console.log("dad", dataInfo.loading )
   const param = {
     ...pageInfo,
     searchText:dataInfo.searchText,
+    atype:1,
 
   }
   List(param).then(res=>{

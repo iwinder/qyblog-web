@@ -55,7 +55,7 @@
 </template>
 
 <script setup lang="ts">
-import {onMounted, reactive} from "vue";
+import {onMounted, reactive, watch} from "vue";
 const linksStore =  useLinksInfo();
 import {
   QqOutlined,
@@ -66,6 +66,7 @@ import {
 } from '@ant-design/icons-vue';
 import {useSiteInfo} from "@/store/siteInfo";
 import {useLinksInfo} from "@/store/links";
+import {LinkDto} from "@/api/links";
 const siteStore =  useSiteInfo();
 const siteInfo = reactive({
   site_sider_code:"",
@@ -75,8 +76,19 @@ const siteInfo = reactive({
   site_weibo:"",
   site_weixin_qr:"",
   site_mailme_id:"",
-  siteIndexLink:[]
+  siteIndexLink:[] as LinkDto[],
 })
+
+watch(() => siteStore.siteInfoMap,(data) => {
+  initSiteOtherInfo();
+})
+
+watch(() =>linksStore.indexLinks,(data) => {
+  if (linksStore.indexLinks.length>0&&linksStore.indexLinks[0].id!="-1") {
+    siteInfo.siteIndexLink =   linksStore.indexLinks;
+  }
+})
+
 onMounted(() => {
   initSiteOtherInfo();
   if (linksStore.indexLinks.length>0&&linksStore.indexLinks[0].id!="-1") {

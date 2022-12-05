@@ -7,7 +7,7 @@
     </template>
     <template v-else>
       <a-menu-item :key="item.id">
-        <a v-if="validateUrl(item.url)" :title="item.name" :href="item.url" :target="item.blanked==1? '_blank':'_self'">  {{item.name}}</a>
+        <a v-if="ValidateUrl(item.url)" :title="item.name" :href="item.url" :target="item.blanked==1? '_blank':'_self'">  {{item.name}}</a>
         <router-link  :to="item.url" :title="item.name"  rel="link noopener" :target="item.blanked==1? '_blank':'_self'" v-else > {{item.name}}</router-link >
       </a-menu-item>
     </template>
@@ -16,16 +16,13 @@
 
 <script setup lang="ts">
 import {computed, onMounted, reactive} from "vue";
-
+import {ValidateUrl} from "@/utils/util"
 const props = defineProps(['items']);
 
 onMounted(() => {
 })
 
-const validateUrl = (url:string) => {
-  const reg = /^(http:\/\/|https:\/\/)/;
-  return reg.test(url);
-}
+
 
 </script>
 

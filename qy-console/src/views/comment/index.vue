@@ -68,6 +68,7 @@
                :loading="listInfo.loading"
                :row-selection="{ selectedRowKeys:  listInfo.selectedIds, onChange: doSelectChange }"
                @change="doTableChange"
+               :customRow="doCustomRow"
       >
 
         <template #bodyCell="{ text, record, index, column}">
@@ -78,7 +79,7 @@
                           :src="record.avatar"  v-if="record.memberId !='0'"
                 ></a-avatar>
                 <a-avatar class="comment-avatar"  v-else
-                          :src="'//sdn.geekzu.org/avatar/'+ChangeStrByMd5(record.authorEmail)"
+                          :src="'//sdn.geekzu.org/avatar/'+ChangeStrByMd5(record.email)"
                 ></a-avatar>
                 {{  record.memberName }}
               </strong>
@@ -94,15 +95,18 @@
           <template v-if="column.dataIndex === 'content'">
                 <a-row v-if="record.rootId  !='0'">
                   回复给
-                  <a>{{record.parent.memberName}}</a>
+                  <a>{{record.parentUserName}}</a>
                 </a-row>
                 <a-row> {{record.content}}</a-row>
-                <a-row v-show="showRow[index]==true">
-                  <template>
-                    <a href="javascript:void(0)" @click="doUpdateStatus([record.id],1)" class="text-primary"  v-if="record.statusFlag == 2">批准</a>
-                    <a href="javascript:void(0)" @click="doUpdateStatus([record.id],2)" class="text-warning"  v-else-if="record.statusFlag == 1">驳回</a>
+                <a-row v-show="listInfo.showRow[index]==true">
+                  <span>
+                    <a href="javascript:void(0)" @click="doUpdateStatus([record.id],2)" class="text-warning"  v-if="record.statusFlag == 1">
+                      <a-typography-text type="danger">驳回</a-typography-text>
+                    </a>
+                    <a href="javascript:void(0)" @click="doUpdateStatus([record.id],1)" class="text-primary"  v-else>批准</a>
+
                     <a-divider type="vertical" />
-                  </template>
+                  </span>
                   <a  href="javascript:void(0)"   @click="doOpenRepliesComment(record)" class="text-primary" >回复</a>
                   <a-divider type="vertical" />
                   <a  href="javascript:void(0)"    @click="doOpenEditComment(record)" class="text-primary" >编辑</a>
@@ -110,16 +114,24 @@
                   <a href="javascript:void(0)" @click="doDeleted([record.id])"  class="text-danger" >删除</a>
                 </a-row>
           </template>
+          <template  v-if="column.dataIndex === 'statusFlag'">
+            <a-typography-text v-if="text==1"  >已通过</a-typography-text>
+            <a-typography-text v-else type="danger">待审核</a-typography-text>
+          </template>
           <template v-if="column.dataIndex === 'target'">
             <a  :href="siteInfo.site_url+record.objLink" target="_blank">{{record.objTitle}}</a>
           </template>
+          <template v-if="column.dataIndex === 'createdAt'">
+            <a  :href="siteInfo.site_url+record.objLink" target="_blank">{{record.objTitle}}</a>
+          </template>
+
         </template>
 
       </a-table>
     </template>
   </LayTableInfo>
 
-  <a-modal v-model:visible="modalInfo.visible"  :footer="null" >
+  <a-modal v-model:visible="modalInfo.visible"  :footer="null" @cancel="doCancel">
     <template #title>
       <template v-if="modalInfo.editFlag ">
         编辑
@@ -130,7 +142,8 @@
     </template>
     <a-form ref="commentForm" :model="modalInfo.commentInfo" :footer="null" @cancel="doCancel" >
       <a-form-item has-feedback label="内容" name="content">
-        <a-input v-model:value="modalInfo.commentInfo.content" placeholder="请输入评论内容"></a-input>
+        <a-textarea v-model:value="modalInfo.commentInfo.content"  :auto-size="{ minRows: 2, maxRows: 5 }" placeholder="请输入评论内容" autocomplete="off" />
+
       </a-form-item>
       <a-form-item :wrapper-col="{ span: 14, offset: 4 }">
         <a-button type="primary" :loading="modalInfo.editLoading" @click="doEditComment">
@@ -190,7 +203,8 @@ const listInfo = reactive({
   loading: false,
   searchLoading: false,
   currentMenu: ["0"],
-  currentState:0
+  currentState:0,
+  showRow: [false],
 });
 const modalInfo = reactive({
   visible:false,
@@ -210,7 +224,6 @@ const totalInfo = reactive({
 })
 
 onMounted(() => {
-  doGetTotal();
   doSearchForm();
   siteInfo.site_url = siteStore.GetSiteInfoByKey("site_url");
   if (!siteInfo.site_url.endsWith("/")) {
@@ -227,6 +240,18 @@ function doChangeMenus(type:number) {
 }
 function doMenuClick(e:any) {
   if (e.key=="1") {
+    if( listInfo.selectedIds &&  listInfo.selectedIds.length>0) {
+      doUpdateStatus(listInfo.selectedIds,1);
+    } else {
+      message.warning('请选择要批准的审核项',5);
+    }
+  } else if  (e.key=="2") {
+    if( listInfo.selectedIds &&  listInfo.selectedIds.length>0) {
+      doUpdateStatus(listInfo.selectedIds,2);
+    } else {
+      message.warning('请选择要驳回的审核项',5);
+    }
+  } else if  (e.key=="3") {
     if( listInfo.selectedIds &&  listInfo.selectedIds.length>0) {
       doDeleted(listInfo.selectedIds);
     } else {
@@ -258,13 +283,15 @@ function initData() {
     current: 1,
     pageSize: listInfo.pageInfo.pageSize,
   });
+  doGetTotal();
+  listInfo.selectedIds =[];
 }
 async function doList(pageInfo:PageInfo) {
   listInfo.loading = true;
   var param = {
     ...searchForm,
     ...pageInfo,
-    statusFlag:  listInfo.currentState
+    statusFlag:  listInfo.currentState,
   }
   await List(param).then(res => {
     if(res.pageInfo.current<=0) {
@@ -294,19 +321,22 @@ function doOpenRepliesComment(data:CommentType) {
   modalInfo.editFlag = false;
   modalInfo.visible = true;
   modalInfo.oldInfo = data;
+  modalInfo.commentInfo.parentId = data.id;
+  modalInfo.commentInfo.agentId = data.agentId;
 }
 function doOpenEditComment(data:CommentType) {
   modalInfo.editFlag = true;
   modalInfo.visible = true;
   modalInfo.oldInfo = data;
+  modalInfo.commentInfo.content = data.content;
+  modalInfo.commentInfo.id = data.id;
 }
 function doEditComment() {
   modalInfo.editLoading = true;
   const param = {
     ...modalInfo.commentInfo
   };
-
-  if (modalInfo.editFlag) {
+  if (modalInfo.editFlag) { // 编辑
     param.id = modalInfo.oldInfo.id;
     param.rootId = modalInfo.oldInfo.rootId;
     Update(param.id,param).then(res=>{
@@ -321,9 +351,7 @@ function doEditComment() {
     }).finally(()=>{
       modalInfo.editLoading = false;
     });
-  } else {
-    param.rootId = modalInfo.oldInfo.id;
-    param.agentId = modalInfo.oldInfo.agentId;
+  } else { // 回复
     Add(param).then(res=>{
       notification.success({
         message: '成功',
@@ -343,7 +371,7 @@ function doEditComment() {
 function doCancel() {
   commentForm.value.resetFields();
   modalInfo.visible = false;
-  modalInfo.commentInfo.id = "";
+  modalInfo.commentInfo  = {};
 
 }
 
@@ -357,14 +385,25 @@ function doUpdateStatus(ids:string[],state:number) {
       message: '成功',
       description: "更新成功"
     });
+    initData();
   }).catch(err=>{})
 }
 
 function doDrawerClose() {
-  drawerData.visible = false;
+  // drawerData.visible = false;
   tabsInfo.activeKey = "1";
 }
 
+function doCustomRow(record :any, index:number) {
+  return {
+    onMouseenter: (event:any) => {
+      listInfo.showRow[index] = true;
+    },  // 鼠标移入行
+    onMouseleave: (event:any) => {
+      listInfo.showRow[index] = false;
+    }
+  }
+}
 
 
 

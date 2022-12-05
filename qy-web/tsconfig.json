@@ -15,8 +15,18 @@
     "baseUrl": ".",
     "paths": {
       "@/*": ["src/*"]
-    }
+    },
+    "compilerOptions": {
+      "types": [
+        "pinia-plugin-persist"
+      ]
+    },
+//    "ts-node": {
+//      "compilerOptions": {
+//        "module": "CommonJS"
+//      }
+//    }
   },
-  "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "src/**/*.vue"],
+  "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "src/**/*.vue",   "server-dev.js", "server.js"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }

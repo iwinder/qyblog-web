@@ -7,7 +7,7 @@
     </template>
     <template v-else>
       <a-col  class="single-left" :xs="{span:24}"  :lg=" { span: 24}" >
-      <QyPageInfo :post-data="dataInfo.post"  :site-info="dataInfo.siteInfo" :post-loading="dataInfo.loading" :link-list="dataInfo.allLinks"></QyPageInfo>
+      <QyPageInfo :post-data="dataInfo.post"   :post-loading="dataInfo.loading" :site-info="dataInfo.siteInfo" :link-list="dataInfo.allLinks"></QyPageInfo>
       </a-col>
     </template>
 
@@ -17,14 +17,15 @@
 <script setup lang="ts">
 
 import QyPostInfo from "@/components/QyPostInfo.vue";
-import {onMounted, reactive, watch} from "vue";
+import {onMounted, onUpdated, reactive, watch} from "vue";
 import {ArticleType, GetOne} from "@/api/article";
 import {useRouter} from "vue-router";
 import {GetRandomColor, GetRandomDefImg} from "@/utils/util";
-import * as moment from 'moment';
+import * as moment_ from 'moment';
 import {useSiteInfo} from "@/store/siteInfo";
 import QyPageInfo from "@/components/QyPageInfo.vue";
 import {AllList} from "@/api/links";
+const moment = moment_;
 const router = useRouter();
 const siteStore =  useSiteInfo();
 
@@ -58,12 +59,18 @@ watch(() => router.currentRoute.value,(to, form) => {
 },{ immediate: true });
 
 
-
+watch(() => siteStore.siteInfoMap,(data) => {
+  if (dataInfo.siteInfo.site_name.length==0) {
+    initSiteBaseInfo();
+  }
+})
 
 
 onMounted(() => {
   initSiteBaseInfo();
 })
+
+
 
 function doGetOne(name:string) {
   GetOne(name).then(res=>{

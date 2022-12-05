@@ -1,12 +1,13 @@
 import { defineStore } from 'pinia'
-import {MenusDto} from "@/api/menus";
-import {LinkDto, ShortLinkDto} from "@/api/links";
-export const useLinksInfo = defineStore('webLinksInfo', {
+export const useCommentInfo = defineStore('webComment', {
     state: () => {
         return {
-            allLinks: [] as LinkDto[],
-            indexLinks: [] as LinkDto[],
-            shortLinks:[] as ShortLinkDto[],
+            userInfo: {
+                memberName:"",
+                email:"",
+                url:"",
+                authotImg:"",
+            },
         }
     },
     actions: {

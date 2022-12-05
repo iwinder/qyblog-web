@@ -26,6 +26,7 @@ export interface ArticleType {
     categoryId?:string  ;
     categoryName?:string  ;
     commentAgentId?:string  ;
+    commentFlag?:boolean  ;
     published?:boolean  ;
     viewCount?:number  ;
     likeCount?:number  ;

@@ -1,4 +1,5 @@
-
+import {Md5} from "ts-md5";
+const md5 = new Md5();
 export function timeFix () {
     const time = new Date()
     const hour = time.getHours()
@@ -20,7 +21,15 @@ export function GetRandomDefImg() {
     const idx = GetRandomNum(1,32);
     return '/images/thumb/'+ idx+'.jpg';
 }
+export function ValidateUrl(url:string) {
+    const reg = /^(http:\/\/|https:\/\/)/;
+    return reg.test(url);
+}
 
+export function ChangeStrByMd5(str:string) {
+    const newPas = md5.appendStr(str).end();
+    return newPas;
+}
 /**
  * 检测图片是否存在
  * @param url

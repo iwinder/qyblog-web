@@ -10,13 +10,18 @@ export const CommentColumns = [
         key: 'content',
     },
     {
+        title: '状态',
+        dataIndex: 'statusFlag',
+        key: 'statusFlag',
+    },
+    {
         title: '回复至',
         dataIndex: 'target',
         key: 'target',
     },
     {
         title: '提交于',
-        dataIndex: 'createdDate',
-        key: 'createdDate',
+        dataIndex: 'createdAt',
+        key: 'createdAt',
     },
 ];

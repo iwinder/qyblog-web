@@ -54,9 +54,9 @@
             </a></div>
           </blockquote>
         </a-row>
-        <!--    <a-row class="single-comments" >-->
-        <!--      <qy-comment-list :commentAgentId= "postData.commentAgentId" :site_comment_flag="siteInfo.site_comment_flag" :post_comment_flag="postData.commentAgentFlag"></qy-comment-list>-->
-        <!--    </a-row>-->
+        <a-row class="single-comments" >
+          <QyCommentList :comment-agent-id="postData.commentAgentId" :site-comment-flag="siteInfo.site_comment_flag" :comment-flag="postData.commentFlag"></QyCommentList>
+        </a-row>
 
       </div>
     </a-col>
@@ -82,6 +82,7 @@
 
 <script setup lang="ts">
 import QyPostRightSider from "@/components/QyPostRightSider.vue";
+import QyCommentList from "@/components/QyCommentList.vue";
 import {ArticleType} from "@/api/article";
 import {
   EyeOutlined,
@@ -102,7 +103,7 @@ const props =  defineProps({
     default: {
       site_url:"",
       site_name:"",
-      site_comment_flag:"",
+      site_comment_flag:"0",
     },
   },
 })
@@ -121,15 +122,16 @@ const dataInfo = reactive({
   visible:false,
   previewUrl:"",
   newSiteUrl:"",
+  siteCommentFlag:"0",
 })
 onMounted(() => {
-
 
 })
 onUpdated(()=> {
   if(!dataInfo.titles.length&&postRef.value) {
     doSetTitleMenuls();
   }
+  // dataInfo.siteCommentFlag = props.siteInfo.site_comment_flag;
 })
 const doSetTitleMenuls = () => {
   const anchors = postRef.value.$el.querySelectorAll('h1,h2,h3,h4,h5,h6');

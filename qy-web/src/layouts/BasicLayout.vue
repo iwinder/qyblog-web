@@ -22,7 +22,7 @@ import LayLeftSider from "@/components/LayLeftSider.vue"
 import LayHeader  from "@/components/LayHeader.vue"
 import LayContent from "@/components/LayContent.vue";
 import LayFooter from "@/components/LayFooter.vue";
-import {onMounted, reactive, ref} from "vue";
+import {onBeforeMount, onMounted, reactive, ref} from "vue";
 import {BaseInfo, OhterInfo} from "@/api/site_config";
 import {useSiteInfo} from "@/store/siteInfo";
 import {FooterList, HeadList, MenusDto} from "@/api/menus";
@@ -63,40 +63,46 @@ const dataInfo = reactive({
   footerMenus:[]as MenusDto[],
   selectKeys:[] as string[]
 })
-onMounted(() => {
+
+onBeforeMount(async () => {
+
+
+});
+onMounted(async () => {
+
   if (!siteStore.HasSiteInfo()) {
     siteStore.InitSiteInfoMap([]);
-    doGetBaseInfo();
-    doGetOhterInfo();
+      doGetBaseInfo();
+      doGetOhterInfo();
   } else {
     initSiteInfo();
   }
-  if ( !menusStore.headerMenus|| menusStore.headerMenus.length==0) {
+  if (!menusStore.headerMenus || menusStore.headerMenus.length == 0) {
     doGetHeaderMenus();
   } else {
-    if (menusStore.headerMenus.length==1&&menusStore.headerMenus[0].id=="-1") {
-      dataInfo.hearMenus =[];
+    if (menusStore.headerMenus.length == 1 && menusStore.headerMenus[0].id == "-1") {
+      dataInfo.hearMenus = [];
     } else {
       dataInfo.hearMenus = menusStore.headerMenus;
     }
   }
-  if ( !menusStore.footerMenus|| menusStore.footerMenus.length==0) {
-    doGetFooterMenus();
+  if (!menusStore.footerMenus || menusStore.footerMenus.length == 0) {
+       doGetFooterMenus();
   } else {
-    if (menusStore.footerMenus.length==1&&menusStore.footerMenus[0].id=="-1") {
+    if (menusStore.footerMenus.length == 1 && menusStore.footerMenus[0].id == "-1") {
       dataInfo.footerMenus = [];
     } else {
       dataInfo.footerMenus = menusStore.footerMenus;
     }
   }
-  if ( !linksStore.indexLinks|| linksStore.indexLinks.length==0) {
-    doIndexLinks();
+  if (!linksStore.indexLinks || linksStore.indexLinks.length == 0) {
+      doIndexLinks();
   }
-  if ( !linksStore.allLinks|| linksStore.allLinks.length==0) {
-    doAllLinks();
+  if (!linksStore.allLinks || linksStore.allLinks.length == 0) {
+      doAllLinks();
   }
-  if ( !linksStore.shortLinks|| linksStore.shortLinks.length==0) {
-    doShortLinks();
+  if (!linksStore.shortLinks || linksStore.shortLinks.length == 0) {
+      doShortLinks();
   }
 })
 function doCollapsed(val:boolean) {

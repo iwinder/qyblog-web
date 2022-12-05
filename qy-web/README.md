@@ -25,6 +25,19 @@ npm install vue-router@4
 npm i @kangc/v-md-editor@next -S
 npm install axios
  npm i vue3-lazyload
+npm install ts-md5
+
+npm install  vue-server-renderer --save
+npm i koa --save && npm i @types/koa --save-dev
+npm i koa-connect --save
+npm i koa-send --save
+
+npm run build && npm run serve
+
+npm add unplugin-vue-components -D
+
+ npm install express --save
+ npm install @originjs/vite-plugin-commonjs --save-dev
 ```
 ## Recommended IDE Setup
 

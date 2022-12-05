@@ -65,9 +65,9 @@
 
         </a-row>
       </a-row>
-      <!--    <a-row class="single-comments"  v-if="siteInfo.site_comment_flag =='true' && postData.commentAgentFlag == true">-->
-      <!--      <qy-comment-list :commentAgentId= "postData.commentAgentId"   ></qy-comment-list>-->
-      <!--    </a-row>-->
+      <a-row class="single-comments" >
+        <QyCommentList :comment-agent-id= "postData.commentAgentId" :site-comment-flag="siteInfo.site_comment_flag"  :comment-flag="postData.commentFlag"></QyCommentList>
+      </a-row>
 
     </a-col>
 
@@ -82,6 +82,7 @@ import {
 } from '@ant-design/icons-vue';
 import {ArticleType} from "@/api/article";
 import {onMounted, onUpdated, reactive, ref, watch} from "vue";
+import QyCommentList from "@/components/QyCommentList.vue";
 const postRef =  ref();
 const props =  defineProps({
   postData: {
@@ -99,7 +100,7 @@ const props =  defineProps({
     default: {
       site_url:"",
       site_name:"",
-      site_comment_flag:"",
+      site_comment_flag:"0",
     },
   },
 })
@@ -194,7 +195,11 @@ const doChagePreviewUrl = (val:string) =>{
   }
 }
 
-
+.single-comments {
+  background: #fff;
+  margin-top: 30px;
+  padding: 20px;
+}
 
 .ant-card-bordered {
   width: 100%;

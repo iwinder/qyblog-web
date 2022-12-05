@@ -10,6 +10,7 @@ const commentApi = {
     getOne: '/admin/v1/comment/',
     updateState: '/admin/v1/comment/state',
     total: '/admin/v1/comment/total',
+    comment: '/admin/v1/comment/comment',
 }
 
 export interface CommentType {
@@ -24,6 +25,7 @@ export interface CommentType {
     email?:string,
     url?:string,
     rootId?:string,
+    ParentId?:string,
     content?:string,
     meta?:string,
     parentUserName?:string,
@@ -54,6 +56,9 @@ export function Add (parameter:CommentType) {
 }
 export function Update (id:string,parameter:CommentType) {
     return request.put(commentApi.getOne+id,parameter)
+}
+export function Comment (parameter:CommentType) {
+    return request.put(commentApi.comment,parameter)
 }
 export function UpdateState (parameter:UpdateCommentStateType) {
     return request.post(commentApi.updateState,parameter)

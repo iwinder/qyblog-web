@@ -2,7 +2,7 @@
   <a-layout-footer style="text-align: center">
     <a-row class="footer-nav"  type="flex" justify="center" align="middle" >
       <a-row  class="footer-menus" v-if="footerMenus" justify="center" align="middle">
-        <QyAMenus  menusClass="footerMenus" listMode="horizontal" :menusList="footerMenus"></QyAMenus>
+        <QyAMenus  menus-class="footerMenus" list-mode="horizontal" :menus-list="footerMenus"></QyAMenus>
       </a-row>
         <a-row  class="footer-copy" justify="center" align="middle">
           <a-col  > ©
@@ -27,11 +27,11 @@
 
 <script setup lang="ts">
 import QyAMenus from "@/components/QyAMenus.vue"
-import * as moment from 'moment';
+import * as moment_ from 'moment';
 import {computed, onMounted, reactive, ref} from "vue";
 import {SiteInfoDto} from "@/api/site_config";
 import {MenusDto} from "@/api/menus";
-
+const moment = moment_;
 const props =  defineProps({
   siteInfo: {
     default: {

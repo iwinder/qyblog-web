@@ -1,5 +1,8 @@
 <template>
-  <a-list item-layout="vertical" size="large" :pagination="dataInfo.pagination" :data-source="listData">
+  <a-skeleton :loading="dataLoading" active avatar v-if="dataLoading&&listData.length==0">
+
+  </a-skeleton>
+  <a-list v-else item-layout="vertical" size="large" :pagination="dataInfo.pagination" :data-source="listData">
     <template #renderItem="{ item , index}">
       <a-list-item key="item.title">
 
@@ -84,17 +87,18 @@ import {
   MessageOutlined,
 } from '@ant-design/icons-vue';
 import {computed, onMounted, reactive, watch} from "vue";
-import * as moment from 'moment';
+import * as moment_ from 'moment';
+
 import {PageInfo} from "@/api/common";
+const moment = moment_;
 const emit = defineEmits(['onAfterPageChange'])
 const props =  defineProps({
   listData: {
     type: Array,
-    default:  [] as ArticleType [],
+    default:  [{},{}] as ArticleType [],
   },
   dataLoading: {
-    type: Boolean,
-    default:false,
+    default:true,
   },
   actions: {
     type: Array,
@@ -111,6 +115,7 @@ const props =  defineProps({
 
 onMounted(() => {
   console.log("listData",props.listData)
+  console.log("dataLoading",props.dataLoading)
 })
 const dataInfo = reactive({
   pagination:{

@@ -16,6 +16,7 @@ export interface ArticleType {
     categoryName?:string  ;
     categoryIdentifier:string  ;
     commentAgentId?:string  ;
+    commentFlag?:boolean  ;
     published?:boolean  ;
     viewCount?:number  ;
     commentCount:number;
@@ -31,7 +32,6 @@ export interface ArticleType {
     tags?:TagsType[];
     category?:CategoryType,
     defImg?:string,
-    commentAgentFlag?:boolean,
 }
 export interface TagsType {
     name: string;
@@ -43,8 +43,9 @@ export interface CategoryType {
 }
 export interface ArticlePageInfo extends PageInfo {
     searchText?: string;
-    categoryName?: string
-    tagName?: string
+    categoryName?: string;
+    tagName?: string;
+    atype?:number   ;
 }
 const articleApi = {
     list: '/web/v1/article',
