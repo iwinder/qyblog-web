@@ -20,7 +20,7 @@ const contentImags: Directive = {
                             data.item(i).src = DEF_IMG_ERR;
                         }
                     } catch (error) {
-                        console.log('资源22error', error);
+                        console.log('contentImags资源加载error', error);
                     }
                 }
                 data.item(i).onclick = function () {

@@ -190,7 +190,7 @@ const doSave = (param:CommentDto) => {
   })
 }
 const doFinishFailed = (errorInfo: any) => {
-  console.log('Failed:', errorInfo);
+  console.log('doFinishFailed Failed:', errorInfo);
 }
 const ResetForm = () => {
   dataInfo.commentForm.content = "";

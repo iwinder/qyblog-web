@@ -21,7 +21,7 @@ const realImg: Directive = {
                     el.onerror = null;
                 }
             } catch (error) {
-                console.log('资源22error', error);
+                console.log('realImg error', error);
             }
         }
     },

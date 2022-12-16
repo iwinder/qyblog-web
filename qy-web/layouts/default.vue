@@ -333,7 +333,7 @@ function initSiteBaseInfo() {
   const homeUndisp = siteStore.GetSiteInfoByKey("site_head_script_code");
   if (homeUndisp&&homeUndisp.length>0) {
     dataInfo.siteInfo.site_head_script_code = homeUndisp;
-    console.log("site_head_script_code",  dataInfo.siteInfo.site_head_script_code)
+
   }
   const homeCode = siteStore.GetSiteInfoByKey("site_head_code");
   if (homeCode&&homeCode.length>0) {
