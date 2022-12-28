@@ -215,9 +215,9 @@ async function doList(pageInfo:PageInfo) {
   var param = {
     ...searchForm,
     ...pageInfo,
-    parentId:0,
+    parentId:"0",
   }
-  await List(param).then(res => {
+  await List(param).then((res:any)=>{
     if(res.pageInfo.current<=0) {
       res.pageInfo.current = 1;
     }
@@ -278,7 +278,7 @@ function doEditData() {
 function doCancel() {
   dataForm.value.resetFields();
   drawerData.visible = false;
-  doResetFields();
+  doResetFields("0");
 }
 
 
@@ -297,7 +297,7 @@ const initCategoryList = async () => {
   List({
     current:0,
     parentId:"0",
-  }).then(res=>{
+  }).then((res:any)=>{
     newDatas = newDatas.concat(res.items)
     parentSelect.options = newDatas;
   }).catch(err=>{})

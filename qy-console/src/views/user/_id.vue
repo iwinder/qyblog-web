@@ -23,8 +23,7 @@ onMounted(() => {
   formRef.value.InitData(id);
 })
 const doSave = (user:UserType) => {
-  const nid =  BigInt(user.id as string);
-  Update(nid,user).then(res=>{
+  Update(user.id,user).then(res=>{
     notification.success({
       message: '成功',
       description: "保存成功"

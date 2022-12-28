@@ -53,16 +53,21 @@ const generator = (routerMap:MenusAdminType[]) => {
             statusFlag: item.statusFlag,
             meta: { title: item.name, icon: item.icon,type:item.type },
         }
-        currentRouter.component = lauModules['../layouts/RouteViewLayout.vue'];
+
+        // @ts-ignore
+      currentRouter.component = lauModules['../layouts/RouteViewLayout.vue'];
         if (item.component&&item.component.length>0) {
+            // @ts-ignore
             currentRouter.component = modules[`..${item.component}`];
            // currentRouter.component = (() => import(`@/${item.component}`));
         }
         if (item.redirect&&item.redirect.length>0) {
+            // @ts-ignore
             currentRouter.redirect = item.redirect
         }
         if (item.children && item.children.length > 0) {
             // Recursion
+            // @ts-ignore
             currentRouter.children = generator(item.children)
         }
         return currentRouter
@@ -90,6 +95,7 @@ const generatorTabs = (routerMap:MenusAdminType[],parents:string[],pkey:string,r
           nowTemp.push(item.identifier as string)
           generatorTabs(item.children,nowTemp,item.identifier as string,rest)
       }
+      // @ts-ignore
       rest.push(currentRouter)
     })
 }

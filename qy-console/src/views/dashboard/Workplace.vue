@@ -95,7 +95,7 @@ function doEmailToNotSend() {
 }
 
 function doGetTotal() {
-  Total().then(res=>{
+  Total().then((res:any)=>{
     totalInfo.total = res.total;
     totalInfo.nowTotal = res.nowTotal;
     totalInfo.pendingTotal = res.pendingTotal;

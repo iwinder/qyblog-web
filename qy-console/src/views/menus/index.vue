@@ -211,7 +211,7 @@ async function doList(pageInfo:PageInfo) {
     ...searchForm,
     ...pageInfo
   }
-  await AgentList(param).then(res => {
+  await AgentList(param).then((res:any)=>{
     if(res.pageInfo.current<=0) {
       res.pageInfo.current = 1;
     }

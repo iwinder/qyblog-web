@@ -63,10 +63,11 @@
             >
 
               <template #option="{ value , name }">
-                <span role="img" :aria-label="value"><component :is="qantIcons[value]" /></span>
+                <span role="img" :aria-label="value"><component :is="value" /></span>
                 &nbsp;&nbsp;{{ name }}
               </template>
-              <template #suffixIcon><component :is="qantIcons[iconSelect.selected]" /></template>
+
+              <template #suffixIcon><component :is="iconSelect.selected" /></template>
             </a-select>
           </a-form-item>
           <a-form-item
@@ -150,7 +151,7 @@ const  newData:MenusAdminType = {
   name:"根目录",
   children:[]
 };
-const iconSelect = reactive({ selected: "",
+const iconSelect = reactive({ selected: "AccountBookOutlined",
   options:constantIconList
 
 });
@@ -189,7 +190,7 @@ const initMenusList = async () => {
     type:1,
     parentId:"0",
     hasChildren: true
-  }).then(res=>{
+  }).then((res:any)=>{
     newData.children = newData.children.concat(res.items)
     parentSelect.options = [newData];
   }).catch(err=>{})

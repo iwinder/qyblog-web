@@ -257,7 +257,7 @@ async function doList(pageInfo:PageInfo) {
     ...pageInfo,
     targetId:listInfo.targetId,
   }
-  await List(param).then(res => {
+  await List(param).then((res:any)=>{
     if(res.pageInfo.current<=0) {
       res.pageInfo.current = 1;
     }
@@ -276,7 +276,7 @@ async function doTree() {
     current: 0,
     targetId:listInfo.targetId,
   }
-  await List(param).then(res => {
+  await List(param).then((res:any)=>{
     if(res.pageInfo.current<=0) {
       res.pageInfo.current = 1;
     }

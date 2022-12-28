@@ -207,7 +207,7 @@ async function doGetTabs() {
     current: 0,
     statusFlag: 1,
   }
-  await TypeList(param).then(res => {
+  await TypeList(param).then((res:any)=>{
     tabsInfo.items =  res.items;
     initData();
   }).catch(err => { console.error("List error",err);
@@ -293,7 +293,7 @@ async function doList(pageInfo:FileTypePageInfo) {
     ...tabsInfo.searchForm,
     ...pageInfo
   }
-  await FileList(param).then(res => {
+  await FileList(param).then((res:any) => {
     if(res.pageInfo.current<=0) {
       res.pageInfo.current = 1;
     }

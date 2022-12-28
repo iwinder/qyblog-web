@@ -95,7 +95,7 @@
   });
   const router = useRouter();
   const formRef = ref<FormInstance>();
-  const modalFormRef = ref<FormInstance>();
+  const modalFormRef = ref();
   type Key = string | number;
   const formItemLayout = {
     labelCol: { span: 6 },
@@ -187,7 +187,7 @@
       ...searchForm,
       ...pageInfo
     }
-    await TypeList(param).then(res => {
+    await TypeList(param).then((res:any)=>{
       if(res.pageInfo.current<=0) {
         res.pageInfo.current = 1;
       }
@@ -227,7 +227,6 @@
     modalInfo.visible = false;
     modalFormRef.value.doResetFields();
     modalFormRef.value.dataForm.id = "";
-
   }
 </script>
 

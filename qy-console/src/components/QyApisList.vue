@@ -193,7 +193,7 @@ async function doList(pageInfo:PageInfo) {
     ...searchForm,
     ...pageInfo
   }
-  await List(param).then(res => {
+  await List(param).then((res:any)=>{
     if(res.pageInfo.current<=0) {
       res.pageInfo.current = 1;
     }
@@ -220,7 +220,7 @@ function doSelectChange(selectedRowKeys: Key[]) {
 const initSelectList = async () => {
   GroupList({
     current:0
-  }).then(res=>{
+  }).then((res:any)=>{
     listInfo.apiGroupOptions = res.items;
     listInfo.apiGroupOptions.unshift({"id":"0","name":" "})
     // dataSelect.options.unshift({id:"",name:" ",identifier:""})

@@ -5,7 +5,7 @@ export const useLinksInfo = defineStore('webLinksInfo', {
         return {
             allLinks: [] as LinkDto[],
             indexLinks: [] as LinkDto[],
-            shortLinks:[] as ShortLinkDto[],
+            shortLinks:  {},
         }
     },
     actions: {

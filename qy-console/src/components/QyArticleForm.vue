@@ -135,11 +135,11 @@ import {GetOne, ArticleType, InitPermaLink} from "@/api/article";
 import {CategoryType, List} from "@/api/category";
 import {List as TagList, TagsType} from "@/api/tags";
 import QyPostLinkEdit from "@/components/QyPostLinkEdit.vue";
-const emit = defineEmits(['onAfterSubmit','onAfterCancel'])
 import VMdEditor, { xss }  from '@kangc/v-md-editor/lib/codemirror-editor';
 import {Upload} from "@/api/file_lib_config";
-import {UploadFile} from "ant-design-vue/lib/upload/interface";
+import {UploadFile} from "ant-design-vue";
 const formRef = ref<FormInstance>();
+const emit = defineEmits(['onAfterSubmit','onAfterCancel'])
 const dataForm = reactive<ArticleType>({
   id:"",
   title:"",
@@ -206,12 +206,12 @@ const initCategoryList = async () => {
   List({
     current:0,
     parentId:"0",
-  }).then(res=>{
+  }).then((res:any)=>{
     formInfo.options = res.items;
   }).catch(err=>{})
 }
 const InitData = async (oid:string) => {
-  GetOne(oid).then(res=>{
+  GetOne(oid).then((res:any)=>{
     const  data = res.data;
     dataForm.id = data.id;
     dataForm.title = data.title;
@@ -229,7 +229,7 @@ const InitData = async (oid:string) => {
     dataForm.contentHtml = data.contentHtml;
     dataForm.tagStrings = data.tagStrings;
     formInfo.oldCategoryId = data.categoryId;
-    formInfo.commentFlag = data.commentFlag;
+    dataForm.commentFlag = data.commentFlag;
     if (dataForm.thumbnail) {
       setFileList(dataForm.thumbnail);
     }
@@ -247,7 +247,7 @@ const doTagsSearch = (val: string) => {
   TagList({
     current:0,
     name:val,
-  }).then(res=>{
+  }).then((res:any)=>{
     formInfo.tagsOptions = res.items;
   }).catch(err=>{})
 }
@@ -259,7 +259,7 @@ const doTagsChange = (value:string[], option:TagsType[]) => {
 
 const doInitPermaLink = () => {
   if (dataForm.title&&dataForm.title.length>0&&(!dataForm.permaLink||dataForm.permaLink.length==0)){
-    InitPermaLink(dataForm.title).then(res=>{
+    InitPermaLink(dataForm.title).then((res:any)=>{
       dataForm.permaLink = res.permaLink;
     }).catch(err=>{})
   }
@@ -317,7 +317,7 @@ const doCategorySelect = (value:string, node:CategoryType, extra:any) => {
 const doUploadImage = (event:any, insertImage:any, files:any) => {
   var formdata = new FormData();
   formdata.append('file', files[0]);
-  Upload(formdata).then(res=>{
+  Upload(formdata).then((res:any)=>{
     insertImage({
       url:res.DefUrl,
       desc: res.OriginFileName,

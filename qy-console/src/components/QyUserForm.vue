@@ -119,7 +119,7 @@ const doSave = () => {
 const initRoleList = async () => {
   List({
     current:0
-  }).then(res=>{
+  }).then((res:any)=>{
     roleSelect.roleOptions = res.items;
     roleSelect.roleOptions.unshift({"id":"","name":" "})
   }).catch(err=>{})

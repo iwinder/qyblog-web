@@ -18,7 +18,7 @@ const request = axios.create({
 const errorHandler = (error: AxiosError) => {
     const userStore =useUserInfo();
     if (error.response) {
-        const data = error.response.data
+        const data = error.response.data as any;
         // 从 localstorage 获取 token
         const token = userStore.token;
         if (error.response.status === 403) {
@@ -51,7 +51,7 @@ const errorHandler = (error: AxiosError) => {
 }
 
 // request interceptor
-request.interceptors.request.use(config => {
+request.interceptors.request.use((config:any) => {
     const userStore =useUserInfo();
     const token = userStore.token;
     // 如果 token 存在

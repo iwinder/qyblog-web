@@ -18,11 +18,11 @@ export interface FileType {
 }
 
 export interface FileLibType {
-    id:string,
-    name:string,
+    id?:string,
+    name?:string,
     type?: string,
     identifier?: number,
-    statusFlag:number,
+    statusFlag?:number,
 }
 export interface FileLibConfigType {
     id:string,

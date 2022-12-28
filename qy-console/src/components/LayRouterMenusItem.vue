@@ -4,7 +4,7 @@
       <template v-if="item.statusFlag==1">
         <a-sub-menu :key="item.name">
           <template #icon>
-            <component :is="qantIcons[item.meta.icon]" />
+            <component :is="item.meta.icon" />
           </template>
           <template #title>{{item.meta.title}}</template>
           <template v-for="child in item.children" :key="child.name">
@@ -21,7 +21,7 @@
     <template v-else>
       <template v-if="item.statusFlag==1">
         <a-menu-item :key="item.name"  >
-              <component :is="qantIcons[item.meta.icon]" />
+              <component :is="item.meta.icon" />
             <span>{{item.meta.title}}</span>
         </a-menu-item>
       </template>
@@ -31,7 +31,7 @@
   <template v-else>
     <template v-if="item.statusFlag==1">
     <a-menu-item :key="item.name" >
-        <component :is="qantIcons[item.meta.icon]" />
+        <component :is="item.meta.icon" />
         <span>{{item.meta.title}}</span>
     </a-menu-item>
     </template>

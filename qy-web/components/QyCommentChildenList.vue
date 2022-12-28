@@ -8,7 +8,18 @@
   >
     <template #renderItem="{ item,index }">
       <a-list-item>
-        <a-comment :author="item.memberName" :avatar="item.avatar">
+        <a-comment  :avatar="item.avatar">
+          <template #author>
+            <template v-if="item.memberId=='1'">
+
+                {{item.memberName}}
+                <SketchOutlined :style="{ color: 'hotpink' }"/>
+
+            </template>
+            <template v-else>
+              {{item.memberName}}
+            </template>
+          </template>
           <template #actions>
             <span >
               <a-row v-if="siteCommentFlag=='1'&&commentFlag">
@@ -38,6 +49,9 @@
 </template>
 
 <script setup lang="ts">
+import {
+  SketchOutlined
+} from '@ant-design/icons-vue';
 import {onMounted, reactive, watch} from "vue";
 import QyRepliesForm from "@/components/QyRepliesForm.vue";
 import {PageInfo} from "@/api/common";
@@ -77,7 +91,7 @@ const dataInfo = reactive({
   repliesFormChildShow: [false],
   pagination:{
     size:"small",
-    pageSize: 3,
+    pageSize: 5,
     total:0,
     current:1,
     onChange: async (page: number) => {

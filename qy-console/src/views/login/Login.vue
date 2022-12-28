@@ -10,12 +10,12 @@
     </a-form-item>
 
     <a-form-item>
-      <a-input v-model:value="loginForm.password" type="password" placeholder="密码">
+      <a-input-password v-model:value="loginForm.password"   placeholder="密码">
 <!--        <a-icon slot="prefix" type="lock" style="color:rgba(0,0,0,.25)" />-->'
         <template #prefix>
           <LockOutlined class="site-form-item-icon" />
         </template>
-      </a-input>
+      </a-input-password>
     </a-form-item>
 
     <a-form-item>
@@ -76,7 +76,8 @@ const doLogin = async () => {
       loginForm.password = newPas.toString() ;
     }
   }
-  await Login(loginForm).then(res=>{
+  console.log("doLogin", loginForm.password)
+  await Login(loginForm).then((res:any)=>{
     const token = "Bearer "+res.token;
     // const token = res.token;
     userStore.token = token;
@@ -85,7 +86,7 @@ const doLogin = async () => {
     userStore.myInfo.avatar = res.avatar;
 
     loginForm.password ="";
-    GetMyMenus().then(res=> {
+    GetMyMenus().then((res:any)=>{
       userStore.myMenusList = res.items
       // console.log("GetMyMenus res",res)
       GeneratorDynamicRouter(res.items);

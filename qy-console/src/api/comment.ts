@@ -25,7 +25,7 @@ export interface CommentType {
     email?:string,
     url?:string,
     rootId?:string,
-    ParentId?:string,
+    parentId?:string,
     content?:string,
     meta?:string,
     parentUserName?:string,

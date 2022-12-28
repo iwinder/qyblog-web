@@ -94,7 +94,9 @@ useHead({
     { property: 'og:keywords', content: dataInfo.siteInfo.site_key },
     { property: 'og:description', content:  dataInfo.siteInfo.site_description },
   ],
-  script: [ { children: dataInfo.siteInfo.site_head_script_code } ],
+  script: [ { children: dataInfo.siteInfo.site_head_script_code },
+    { async: "async", src: 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3599707051787259', crossorigin: "anonymous" }
+  ],
   style: [ { children: dataInfo.siteInfo.site_head_code } ],
   link: [ { rel: "canonical", href: dataInfo.siteInfo.site_url } ]
 })
@@ -168,7 +170,7 @@ function doLinksAllMain() {
   if (!linksStore.allLinks || linksStore.allLinks.length == 0) {
       doAllLinks();
   }
-  if (!linksStore.shortLinks || linksStore.shortLinks.length == 0) {
+  if (!linksStore.shortLinks || !linksStore.shortLinks["-1"]) {
       doShortLinks();
   }
 }
@@ -259,15 +261,21 @@ async function doShortLinks() {
   if (shortLinksErr.value != null) {
     throwErr(shortLinksErr);
   } else {
+
     if (shortLinks.value.items.length > 0) {
-      linksStore.shortLinks = shortLinks.value.items;
+      for (let i in shortLinks.value.items) {
+        linksStore.shortLinks[shortLinks.value.items[i].identifier]=shortLinks.value.items[i].url;
+      }
+
+      // linksStore.shortLinks = shortLinks.value.items;
     } else {
-      linksStore.shortLinks = [{
-        id: "-1",
-        name: "",
-        url: "",
-        description: "",
-      }];
+      linksStore.shortLinks["-1"]="/";
+      // linksStore.shortLinks = [{
+      //   id: "-1",
+      //   name: "",
+      //   url: "",
+      //   description: "",
+      // }];
     }
   }
 

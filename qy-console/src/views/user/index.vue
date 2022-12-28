@@ -128,6 +128,9 @@
       </a-form-item>
     </a-form>
   </a-modal>
+
+
+  
 </template>
 
 <script setup lang="ts">
@@ -197,7 +200,7 @@ async function doList(pageInfo:PageInfo) {
     ...searchForm,
     ...pageInfo
   }
-  await List(param).then(res => {
+  await List(param).then((res:any)=>{
     if(res.pageInfo.current<=0) {
       res.pageInfo.current = 1;
     }
@@ -248,7 +251,10 @@ function doOpenChangePassword(user:UserType) {
   modalInfo.userInfo.id = user.id;
   modalInfo.visible = true;
 }
-
+function doCancel() {
+  modalInfo.visible = false;
+  modalInfo.userInfo.password = "";
+}
 function doChangePassword() {
   modalInfo.editLoading = true;
   passForm.value.validate().then((res:any) => {

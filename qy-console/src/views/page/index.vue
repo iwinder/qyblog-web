@@ -91,18 +91,19 @@
 
 <script setup lang="ts">
 import LayTableInfo from '@/components/LayTableInfo.vue'
-import {onMounted, reactive} from "vue";
+import {onMounted, reactive, ref} from "vue";
 import {useRouter} from "vue-router";
 import {PageInfo} from "@/api/common";
 import {ArticleType, Delete, List} from "@/api/article";
 import {PageColumns} from "@/config/tableConfigs/qy_article";
-import {message, notification} from "ant-design-vue";
+import {FormInstance, message, notification} from "ant-design-vue";
 import {useParamsStore} from "@/store/params";
 import {DEFAULT_PAGESIZE,DEF_IMG_ERR} from "@/utils/constants";
 import {GetRandomColor} from "@/utils/util";
 type Key = string | number;
 const router = useRouter();
 const state = useParamsStore()
+const formRef = ref<FormInstance>();
 const listInfo = reactive({
   pageInfo: {
     current: 1,
@@ -147,7 +148,7 @@ async function doList(pageInfo:PageInfo) {
     ...searchForm,
     atype:2,
   }
-  await List(param).then(res => {
+  await List(param).then((res:any)=>{
     if(res.pageInfo.current<=0) {
       res.pageInfo.current = 1;
     }

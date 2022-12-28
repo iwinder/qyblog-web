@@ -11,7 +11,18 @@
   >
     <template #renderItem="{ item,index }" >
       <a-list-item>
-        <a-comment :author="item.memberName" :avatar="item.avatar">
+        <a-comment  :avatar="item.avatar">
+          <template #author>
+            <template v-if="item.memberId=='1'">
+
+              {{item.memberName}}
+              <SketchOutlined :style="{ color: 'hotpink' }"/>
+
+            </template>
+            <template v-else>
+              {{item.memberName}}
+            </template>
+          </template>
           <template #actions>
             <span >
               <a-row v-if="siteCommentFlag=='1'&&commentFlag">
@@ -83,7 +94,7 @@ const dataInfo = reactive({
       // dataInfo.pagination.current = page;
       await ListData(page);
     },
-    pageSize: 3,
+    pageSize: 6,
     total:0,
     current:1,
   },

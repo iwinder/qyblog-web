@@ -94,7 +94,7 @@ const doRouteChange = (path:string) => {
   if (path=="") {
     path = "dashboard";
   }
-  doOpenTab(path);
+  doOpenTab(path,{});
 }
 // 标签页编辑事件-如删除事件
 const doEdit = (targetKey: string | MouseEvent, action: string) => {

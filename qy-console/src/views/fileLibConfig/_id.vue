@@ -23,8 +23,8 @@ import {onMounted, reactive, ref} from "vue";
 import {useRouter} from "vue-router";
 import {useParamsStore} from "@/store/params";
 const router = useRouter();
-const typeFormRef = ref<FormInstance>();
-const configFormRef = ref<FormInstance>();
+const typeFormRef = ref();
+const configFormRef = ref();
 const state = useParamsStore()
 const tabsInfo = reactive({
   title:"配置媒体库信息",

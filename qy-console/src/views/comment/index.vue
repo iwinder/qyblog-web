@@ -271,7 +271,7 @@ function doDeleted(ids:string[]){
 }
 
 function doGetTotal() {
-  Total().then(res=>{
+  Total().then((res:any)=>{
     totalInfo.total = res.total;
     totalInfo.nowTotal = res.nowTotal;
     totalInfo.pendingTotal = res.pendingTotal;
@@ -293,7 +293,7 @@ async function doList(pageInfo:PageInfo) {
     ...pageInfo,
     statusFlag:  listInfo.currentState,
   }
-  await List(param).then(res => {
+  await List(param).then((res:any) => {
     if(res.pageInfo.current<=0) {
       res.pageInfo.current = 1;
     }
@@ -337,7 +337,7 @@ function doEditComment() {
     ...modalInfo.commentInfo
   };
   if (modalInfo.editFlag) { // 编辑
-    param.id = modalInfo.oldInfo.id;
+    param.id = modalInfo.oldInfo.id as string;
     param.rootId = modalInfo.oldInfo.rootId;
     Update(param.id,param).then(res=>{
       notification.success({
@@ -369,7 +369,9 @@ function doEditComment() {
 
 }
 function doCancel() {
-  commentForm.value.resetFields();
+  if(commentForm.value){
+    commentForm.value.resetFields();
+  }
   modalInfo.visible = false;
   modalInfo.commentInfo  = {};
 

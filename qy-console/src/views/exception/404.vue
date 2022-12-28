@@ -2,10 +2,8 @@
 404页面
 </template>
 
-<script>
-export default {
-  name: "404"
-}
+<script setup lang="ts">
+
 </script>
 
 <style scoped>

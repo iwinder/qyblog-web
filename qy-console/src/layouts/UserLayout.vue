@@ -57,7 +57,7 @@ onMounted(() => {
 // }
 
 function initListBase() {
-  ListBase().then(res=>{
+  ListBase().then((res:any)=>{
     siteStore.InitSiteInfoMap(res.items);
     initSiteInfo();
   }).catch(err=>{

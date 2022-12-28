@@ -14,8 +14,11 @@ import {GeneratorDynamicRouter} from "@/router/generator-routers";
 //         routes: constantRouterMap
 //     })
 
+
+
 const router =  createRouter({
-    history: createWebHistory(),
+    history: createWebHistory("/qycms/"),
+    // @ts-ignore
     routes: constantRouterMap
 });
 // testRouterMap.forEach((item:any)=>{
@@ -43,7 +46,7 @@ router.beforeEach((to, from, next) => {
         if (to.path.indexOf("/noLogin")>=0) {
             next();
         }else {
-            next({path:"/noLogin/login"});
+            next({name:"login"});
         }
     }
 })

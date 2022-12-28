@@ -126,6 +126,7 @@ const dataInfo = reactive({
         emit('onAfterPageChange',  page);
       }
     },
+    showSizeChanger:false,
     pageSize: computed(() => props.pageData.pageSize),
     total: computed(() => props.pageData.total),
     current: computed(() =>props.pageData.current),

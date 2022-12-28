@@ -52,5 +52,6 @@ for (const key in antIconsList) {
 const pinia = createPinia();
 pinia.use(piniaPluginPersistedstate)
 // 添加到全局
+//
 app.config.globalProperties.qantIcons = antIcons;
 app.use(Antd).use(router).use(pinia).use(VMdEditor).mount('#app')

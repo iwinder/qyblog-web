@@ -40,7 +40,11 @@ onMounted(() => {
      key = allkey.substring(0,idx);
    }
   initTabsMap(tabsKeyMap);
+
+  // @ts-ignore
   tabsRef.value.doOpenTab(key,  router.currentRoute.value.params)
+
+  // @ts-ignore
   window.document.title =siteStore.GetSiteInfoByKey("site_name");
 })
 

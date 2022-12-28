@@ -103,7 +103,7 @@ async function doList(pageInfo:PageInfo) {
     parentId:"0",
     hasChildren: true
   }
-  await List(param).then(res => {
+  await List(param).then((res:any)=>{
     if(res.pageInfo.current<=0) {
       res.pageInfo.current = 1;
     }

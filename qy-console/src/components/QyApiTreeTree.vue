@@ -50,7 +50,7 @@ const formItemLayout = {
   wrapperCol: { span: 14 },
 };
 const initMenusList = async () => {
-  GetTree().then(res=>{
+  GetTree().then((res:any)=>{
     treeInfo.items = res.items;
   }).catch(err=>{})
 }

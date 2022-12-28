@@ -52,7 +52,7 @@ const initMenusList = async () => {
     // type:1,
     parentId:"0",
     hasChildren: true
-  }).then(res=>{
+  }).then((res:any)=>{
     treeInfo.items = res.items;
   }).catch(err=>{})
 }

@@ -90,7 +90,7 @@ function initOptions() {
 async function doList() {
   initOptions();
   tabsInfo.loading = true;
-  await List().then(res => {
+  await List().then((res:any)=>{
      res.items.forEach((e:SiteConfigType)=>{
        if(e.ftype == 1) {
          tabsInfo.options1.push(e);
@@ -114,7 +114,7 @@ async function doGetFileTypes() {
     current: 0,
     statusFlag: 1,
   }
-  await TypeList(param).then(res => {
+  await TypeList(param).then((res:any)=>{
     tabsInfo.typeList = res.items;
   }).catch(err => {
     console.error("List error", err);

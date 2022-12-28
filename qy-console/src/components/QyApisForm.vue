@@ -98,7 +98,7 @@ const doSave = () => {
 const initSelectList = async () => {
   GroupList({
     current:0
-  }).then(res=>{
+  }).then((res:any)=>{
     dataSelect.options = res.items;
     // dataSelect.options.unshift({id:"",name:" ",identifier:""})
   }).catch(err=>{})
