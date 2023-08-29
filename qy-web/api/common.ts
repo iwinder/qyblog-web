@@ -1,6 +1,6 @@
 
 
-export interface PageInfo {
+export interface PageDto {
     current: number,
     pageSize: number,
     total?: number,
@@ -9,3 +9,11 @@ export interface PageInfo {
     lastFlag?: boolean,
 }
 
+export interface PageStrDto {
+    current: string,
+    pageSize: string,
+    total: string,
+    pages: string,
+    firstFlag?: boolean,
+    lastFlag?: boolean,
+}

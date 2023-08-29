@@ -16,7 +16,7 @@
 
 <script setup lang="ts">
 import {computed, onMounted, reactive} from "vue";
-import {ValidateUrl} from "@/utils/util"
+import {ValidateUrl} from "~/utils/util"
 const props = defineProps({
   items: {
     default:[]

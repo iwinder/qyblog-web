@@ -1,8 +1,8 @@
 // import directives
 import { App } from "vue";
 import realImg from "./qyRealImg";
-import contentImags from "@/plugins/directives/qyContentImgs";
-import realBackgroundImg from "@/plugins/directives/qyBackRealImg";
+import contentImags from "@/utils/directives/qyContentImgs";
+import realBackgroundImg from "@/utils/directives/qyBackRealImg";
 
 const directivesList: any = {
     // Custom directives

@@ -81,20 +81,20 @@
 </template>
 
 <script setup lang="ts">
-import {ArticleType} from "@/api/article";
+import {ArticleDto} from "~/api/article";
 import {
   EyeOutlined,
   MessageOutlined,
 } from '@ant-design/icons-vue';
-import {computed, onMounted, reactive, watch} from "vue";
+import {computed, reactive} from "vue";
 import   dayjs from 'dayjs'
 
-import {PageInfo} from "@/api/common";
+import {PageDto} from "~/api/common";
 const emit = defineEmits(['onAfterPageChange'])
 const props =  defineProps({
   listData: {
     type: Array,
-    default:  [{},{}] as ArticleType [],
+    default:  [{},{}] as ArticleDto [],
   },
   dataLoading: {
     default:true,
@@ -102,8 +102,8 @@ const props =  defineProps({
   pageData:{
     default: {
       pageSize: 3,
-      total:0,
       current:1,
+      total:0,
     }
   },
   actions: {
@@ -132,7 +132,7 @@ const dataInfo = reactive({
     current: computed(() =>props.pageData.current),
   },
 })
-const doChangePage = (page:PageInfo) => {
+const doChangePage = (page:PageDto) => {
   dataInfo.pagination.pageSize = page.pageSize;
   dataInfo.pagination.total = page.total as number;
   dataInfo.pagination.current = page.current;

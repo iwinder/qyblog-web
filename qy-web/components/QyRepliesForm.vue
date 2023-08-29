@@ -4,15 +4,14 @@
     <a-row class="commentClose"  v-if="parentId==null||parentId.length==0||parentId=='0'">  <h2>参与评论</h2> </a-row>
     <a-comment>
       <template #avatar  v-if="!dataInfo.isInitForm">
-        <a-avatar :src="DEF_AVATER_PIX+dataInfo.commentForm.authotImg" :alt="dataInfo.commentForm.memberName" />
+        <a-avatar :src="DEF_AVATER_PIX+dataInfo.commentForm.authotImg" alt="W" style="background-color: #f56a00;color: #fff;"/>
       </template>
       <template #content>
         <a-form
-            ref="commentForm" :model="dataInfo.commentForm"
+            ref="commentFormRef" :model="dataInfo.commentForm"
             :label-col="{ span: 0 }"
             :wrapper-col="{ span: 24 }"
             :rules="rules"
-            autocomplete="off"
             @finish="doSubmit"
             @finishFailed="doFinishFailed">
           <a-row  v-if="dataInfo.isInitForm" :gutter="[24,2]">
@@ -59,7 +58,7 @@
                   :wrapperCol="{span: 24}"
                   name="content"
                   has-feedback >
-                <a-textarea v-model:value="dataInfo.commentForm.content"  :auto-size="{ minRows: 2, maxRows: 5 }" :placeholder="dataInfo.placeholderText" autocomplete="off" />
+                <a-textarea v-model:value="dataInfo.commentForm.content"  :auto-size="{ minRows: 2, maxRows: 5 }" :placeholder="dataInfo.placeholderText" />
               </a-form-item>
             </a-col>
             <a-col   :xs="{span:24}"  :lg="{ span: 24}">
@@ -82,15 +81,17 @@
 
 <script setup lang="ts">
 
-import {onBeforeMount, onMounted, reactive, watch} from "vue";
-import {useCommentInfo} from "@/stores/comment";
+import {onBeforeMount,   reactive } from "vue";
+import {useCommentInfo} from "~/stores/comment";
 import type { Rule } from 'ant-design-vue/es/form';
-import {ChangeStrByMd5} from "@/utils/util";
-import {Add, CommentDto} from "@/api/comment";
-import {notification} from "ant-design-vue";
-import {DEF_AVATER_PIX} from "@/utils/constants"
+import {ChangeStrByMd5} from "~/utils/util";
+import {CommentDto, GetCommentAddUrl} from "~/api/comment";
+import { notification} from "ant-design-vue";
+import {DEF_AVATER_PIX} from "~/utils/constants"
+import {useFetch} from "nuxt/app";
 const commentStore = useCommentInfo()
 const emit = defineEmits(['onSaveAfter'])
+
 const props =  defineProps({
   parentId: {
     default: "",
@@ -142,7 +143,9 @@ const rules:  Record<string, Rule[]> = {
       {required: true,whitespace: true, message: "邮箱不可为空",  trigger:"change"},
     {pattern:new RegExp(/^([a-zA-Z\d])(\w|\-)+@[a-zA-Z\d]+\.[a-zA-Z]{2,6}$/ig), message: "邮箱格式错误"}
   ],
-  content: [{ required: true, message: '内容不可为空!', trigger: 'change' }],
+  content: [{ required: true, whitespace: true,message: '内容不可为空!', trigger: 'change' },
+    { min: 10, whitespace: true,message: '内容最少为10个文字!', trigger: 'change' }
+  ],
 }
 
 
@@ -161,16 +164,39 @@ const doOpneEditLink = () => {
   dataInfo.isInitForm = true;
 }
 const doSubmit = (values: any) => {
-  dataInfo.commentForm.authotImg = ChangeStrByMd5( dataInfo.commentForm.email);
+  dataInfo.commentForm.authotImg = ChangeStrByMd5(dataInfo.commentForm.email) as string;
+  dataInfo.submitting = true;
   doSave(dataInfo.commentForm)
+
 }
-const doSave = (param:CommentDto) => {
+const doSave = async (param:CommentDto) => {
   param.agentId = props.agentId;
   param.parentId = props.parentId;
   if (!param.parentId||param.parentId.length==0) {
     param.parentId = "0";
   }
-  Add(param).then(res=>{
+  const parms = {
+    agentId: props.agentId,
+    memberName:param.memberName,
+    email:param.email,
+    url:param.url,
+    parentId:props.parentId,
+    content:param.content,
+    avatar:param.avatar,
+    createdAt:param.createdAt,
+    parentUserName:param.parentUserName,
+  };
+  const { data: res, pending,refresh, error } = await useFetch(GetCommentAddUrl(), {body:parms,method:"POST"});
+  if (error.value != null) {
+    if (process.client) {
+      notification.error({
+        message: '评论提交失败',
+        description: error.value.message
+      });
+    } else {
+      console.error("评论提交失败:", error.value);
+    }
+  } else {
     notification.success({
       message: '评论提交成功',
       description: "若未及时展示，可能需要等待管理员审核。"
@@ -180,21 +206,20 @@ const doSave = (param:CommentDto) => {
       commentStore.userInfo.email =   dataInfo.commentForm.email;
       commentStore.userInfo.url =   dataInfo.commentForm.url;
       commentStore.userInfo.memberName =   dataInfo.commentForm.memberName;
-
     }
-    dataInfo.commentForm.content = "";
+
     dataInfo.isInitForm = false;
     emit('onSaveAfter',props.replyIdx);
-  }).catch(err=>{}).finally(()=>{
+    dataInfo.submitting = false;
+    dataInfo.commentForm.content = "";
+  }
 
-  })
 }
 const doFinishFailed = (errorInfo: any) => {
   console.log('doFinishFailed Failed:', errorInfo);
 }
 const ResetForm = () => {
   dataInfo.commentForm.content = "";
-
 }
 defineExpose({ResetForm})
 </script>

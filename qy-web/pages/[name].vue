@@ -1,5 +1,5 @@
 <template>
-  <a-row class="content">
+  <a-row class="content" v-if="dataInfo.showFlag">
     <template  v-if=" dataInfo.post.atype==1">
       <a-col  class="single-left" :xs="{span:24}"  :lg=" { span: 24}" >
         <QyPostInfo :post-data="dataInfo.post" :post-loading="dataInfo.loading" :site-info="dataInfo.siteInfo"> </QyPostInfo>
@@ -10,33 +10,37 @@
         <QyPageInfo :post-data="dataInfo.post"   :post-loading="dataInfo.loading" :site-info="dataInfo.siteInfo" :link-list="dataInfo.allLinks"></QyPageInfo>
       </a-col>
     </template>
-
   </a-row>
 </template>
 
 <script setup lang="ts">
 
-import QyPostInfo from "@/components/QyPostInfo.vue";
-import {onMounted, onUpdated, reactive, ref, watch} from "vue";
-import {ArticleType, GetArticleListUrl, GetArticleOneUrl, GetArticleTagUrl, GetOne} from "@/api/article";
+import QyPostInfo from "~/components/QyPostInfo.vue";
+import {reactive, ref, watch} from "vue";
+import {
+  ArticleDataDto,
+  ArticleDto,
+  GetArticleOneUrl,
+} from "~/api/article";
 import {useRouter} from "vue-router";
-import {GetCanonical, GetRandomColor, GetRandomDefImg} from "@/utils/util";
-import {useSiteInfo} from "@/stores/siteInfo";
-import QyPageInfo from "@/components/QyPageInfo.vue";
-import {AllList, GetAllListUrl} from "@/api/links";
+import {GetCanonical, GetRandomColor, GetRandomDefImg} from "~/utils/util";
+import {useSiteInfo} from "~/stores/siteInfo";
+import QyPageInfo from "~/components/QyPageInfo.vue";
+import {GetAllListUrl, LinkDto, LinkListDto} from "~/api/links";
 import dayjs from "dayjs";
-import {useFetch} from "#app";
-import {notification} from "ant-design-vue";
+import {useFetch, useHead} from "nuxt/app";
+
+
 const router = useRouter();
 const siteStore =  useSiteInfo();
-
 const dataInfo = reactive({
   post:{
 
-  } as ArticleType,
+  } as ArticleDto,
   link:"",
-  allLinks:[],
-  loading:false,
+  allLinks:[] as LinkDto[],
+  loading:true,
+  showFlag:false,
   name:"",
   siteInfo: {
     site_url:"",
@@ -47,12 +51,12 @@ const dataInfo = reactive({
 
 
 watch(() => router.currentRoute.value,(to, form) => {
+  dataInfo.showFlag = false;
+  dataInfo.loading = true;
   dataInfo.link ="";
   if (to.name=="home-name") {
     const  name = to.params.name as  string;
-    dataInfo.loading = true;
     dataInfo.link = name;
-    // doGetOne(dataInfo.link);
     if (name.indexOf("links")==0) {
       doGetAllList();
     }
@@ -68,20 +72,20 @@ dataInfo.name = (nowSearchText.value as string);
 
 const { data: listData, pending,refresh, error } = await useFetch(GetArticleOneUrl(dataInfo.name));
 if (error.value != null) {
-  if (error.value.status==404) {
+  if (error.value.statusCode==404) {
     router.push("/404")
   } else {
-    if (process.client) {
-      notification.error({
-        message: '请求异常',
-        description: error.value.message
-      });
+    if (process.server) {
+      console.error("文章详情 baseErr.value:", error.value);
     } else {
-      console.error("baseErr.value:", error.value);
+      router.push("/500")
     }
   }
 } else {
-  dataInfo.post = listData.value.data;
+  dataInfo.showFlag = true;
+  dataInfo.loading = false;
+  const  articleDto = listData.value as ArticleDataDto;
+  dataInfo.post = articleDto.data;
   dataInfo.post.defImg = GetRandomDefImg();
   if (!dataInfo.post.thumbnail||dataInfo.post.thumbnail.length==0) {
     dataInfo.post.thumbnail = dataInfo.post.defImg;
@@ -119,18 +123,13 @@ if (dataInfo.name.indexOf("links")==0) {
 async function doGetAllList() {
   const {data: listData, pending, refresh, error} = await useFetch(GetAllListUrl());
   if (error.value != null) {
-    if (process.client) {
-      notification.error({
-        message: '请求异常',
-        description: error.value.message
-      });
-    } else {
-      console.error("baseErr.value:", error.value);
+    if (process.server) {
+      console.error("外链列表请求异常 baseErr.value:", error.value);
     }
   } else {
-    dataInfo.allLinks = listData.value.items;
+    const  linkList = listData.value as LinkListDto
+    dataInfo.allLinks = linkList.items;
   }
-
 }
 function initSiteBaseInfo() {
 
@@ -148,8 +147,6 @@ function initSiteBaseInfo() {
   if (comment&&comment.length>0) {
     dataInfo.siteInfo.site_comment_flag = comment;
   }
-
-
 }
 </script>
 

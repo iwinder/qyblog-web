@@ -8,7 +8,10 @@
   >
     <template #renderItem="{ item,index }">
       <a-list-item>
-        <a-comment  :avatar="item.avatar">
+        <a-comment  >
+          <template #avatar>
+            <a-avatar :src="item.avatar" alt="W" style="background-color: #f56a00;color: #fff;"/>
+          </template>
           <template #author>
             <template v-if="item.memberId=='1'">
 
@@ -49,20 +52,16 @@
 </template>
 
 <script setup lang="ts">
-import {
-  SketchOutlined
-} from '@ant-design/icons-vue';
+import {SketchOutlined} from '@ant-design/icons-vue';
 import {onMounted, reactive, watch} from "vue";
-import QyRepliesForm from "@/components/QyRepliesForm.vue";
-import {PageInfo} from "@/api/common";
-import {CommentDto, GetCommentListUrl, List} from "@/api/comment";
-import {DEFAULT_PAGESIZE} from "@/utils/constants";
-import {ValidateUrl} from "@/utils/util"
-import {DEF_AVATER_PIX} from "@/utils/constants"
-// import * as moment from "moment/moment";
+import QyRepliesForm from "~/components/QyRepliesForm.vue";
+import {PageDto} from "~/api/common";
+import {CommentDto, CommentListDto, GetCommentListUrl} from "~/api/comment";
+import {DEFAULT_PAGESIZE} from "~/utils/constants";
+import {ValidateUrl} from "~/utils/util"
+import {DEF_AVATER_PIX} from "~/utils/constants"
 import   dayjs from 'dayjs'
-import {useFetch} from "#app";
-import {notification} from "ant-design-vue";
+import {useFetch} from "nuxt/app";
 const emit = defineEmits(['onShowAfter'])
 const props =  defineProps({
   commentAgentId: {
@@ -122,34 +121,30 @@ watch(() =>props.showRid,(a)=>{
 const {data: alistData, pending, refresh, error} = await useFetch(GetCommentListUrl(), {
   params: {
     current: 1,
-    pageSize: DEFAULT_PAGESIZE,
+    pageSize: dataInfo.pagination.pageSize,
     agentId: props.commentAgentId,
     rootId: props.rootId
   }
 });
 if (error.value != null) {
-  if (process.client) {
-    notification.error({
-      message: '评论获取请求异常',
-      description: error.value.message
-    });
-  } else {
-    console.error("baseErr.value:", error.value);
+  if (process.server) {
+    console.error("评论列表请求异常 baseErr.value:", error.value);
   }
 } else {
+  const alist = alistData.value as CommentListDto;
   if (dataInfo.pagination.current == 1) {
-    dataInfo.count = alistData.value.count;
+    dataInfo.count = alist.count;
   }
-  dataInfo.items = alistData.value.items;
+  dataInfo.items = alist.items;
   dataInfo.items.forEach(e => {
-    if (!ValidateUrl(e.avatar)) {
+    if (!ValidateUrl(e.avatar as string)) {
       e.avatar = DEF_AVATER_PIX + e.avatar
     }
     e.createdAt = dayjs(e.createdAt).format('YYYY-MM-DD hh:mm:ss');
   });
-  dataInfo.pagination.current = parseInt(alistData.value.pageInfo.current);
-  dataInfo.pagination.pageSize = parseInt(alistData.value.pageInfo.pageSize);
-  dataInfo.pagination.total = parseInt(alistData.value.pageInfo.total);
+  dataInfo.pagination.current = parseInt(alist.pageInfo.current);
+  dataInfo.pagination.pageSize = parseInt(alist.pageInfo.pageSize);
+  dataInfo.pagination.total = parseInt(alist.pageInfo.total);
 }
 
 
@@ -159,7 +154,7 @@ async function ListData(num: number) {
     pageSize: DEFAULT_PAGESIZE,
   })
 }
-const doList = async (pageInfo: PageInfo) => {
+const doList = async (pageInfo: PageDto) => {
   const param = {
     ...pageInfo,
     agentId: props.commentAgentId,
@@ -169,28 +164,24 @@ const doList = async (pageInfo: PageInfo) => {
     params: param
   });
   if (error.value != null) {
-    if (process.client) {
-      notification.error({
-        message: '评论获取请求异常',
-        description: error.value.message
-      });
-    } else {
-      console.error("baseErr.value:", error.value);
+    if (process.server) {
+      console.error("评论列表请求异常 baseErr.value:", error.value);
     }
   } else {
+    const alist = listDatas.value as CommentListDto;
     if (param.current == 1) {
-      dataInfo.count = listDatas.value.count;
+      dataInfo.count = alist.count;
     }
-    dataInfo.items = listDatas.value.items;
+    dataInfo.items = alist.items;
     dataInfo.items.forEach(e => {
-      if (!ValidateUrl(e.avatar)) {
+      if (!ValidateUrl(e.avatar as string)) {
         e.avatar = DEF_AVATER_PIX + e.avatar
       }
       e.createdAt = dayjs(e.createdAt).format('YYYY-MM-DD hh:mm:ss');
     });
-    dataInfo.pagination.current = parseInt(listDatas.value.pageInfo.current);
-    dataInfo.pagination.pageSize = parseInt(listDatas.value.pageInfo.pageSize);
-    dataInfo.pagination.total = parseInt(listDatas.value.pageInfo.total);
+    dataInfo.pagination.current = parseInt(alist.pageInfo.current);
+    dataInfo.pagination.pageSize = parseInt(alist.pageInfo.pageSize);
+    dataInfo.pagination.total = parseInt(alist.pageInfo.total);
   }
 
   // List(param).then(res=>{

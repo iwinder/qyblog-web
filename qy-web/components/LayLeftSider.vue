@@ -18,9 +18,9 @@
 </template>
 
 <script setup lang="ts">
-import QyAMenus from "@/components/QyAMenus.vue";
-import {computed, reactive, ref, watch} from "vue";
-import {MenusDto} from "@/api/menus";
+import QyAMenus from "~/components/QyAMenus.vue";
+import {reactive, ref, watch} from "vue";
+import {MenusDto} from "~/api/menus";
 const emit = defineEmits(['onCollapsed',"onMenusSelect"])
 const props =  defineProps({
   isCollapsed: {

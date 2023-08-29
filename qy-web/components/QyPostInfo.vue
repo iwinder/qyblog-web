@@ -81,21 +81,21 @@
 </template>
 
 <script setup lang="ts">
-import QyPostRightSider from "@/components/QyPostRightSider.vue";
-import QyCommentList from "@/components/QyCommentList.vue";
-import {ArticleType} from "@/api/article";
+import QyPostRightSider from "~/components/QyPostRightSider.vue";
+import QyCommentList from "~/components/QyCommentList.vue";
+import {ArticleDto} from "~/api/article";
 import {
   EyeOutlined,
   MessageOutlined,
 } from '@ant-design/icons-vue';
-import {onMounted, onUpdated, reactive, ref, watch} from "vue";
+import {reactive, ref, watch} from "vue";
 const postRef =  ref();
 const props =  defineProps({
   postData: {
     default: {
       commentAgentId: "0",
       commentFlag:false,
-    } as ArticleType,
+    } as ArticleDto,
   },
   postLoading:{
     default: true

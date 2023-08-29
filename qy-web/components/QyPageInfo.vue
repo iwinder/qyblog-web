@@ -80,15 +80,15 @@ import {
   EyeOutlined,
   MessageOutlined,
 } from '@ant-design/icons-vue';
-import {ArticleType} from "@/api/article";
-import {onMounted, onUpdated, reactive, ref, watch} from "vue";
-import QyCommentList from "@/components/QyCommentList.vue";
+import {ArticleDto} from "~/api/article";
+import { reactive, ref} from "vue";
+import QyCommentList from "~/components/QyCommentList.vue";
 const postRef =  ref();
 const props =  defineProps({
   postData: {
     default: {
 
-    } as ArticleType,
+    } as ArticleDto,
   },
   linkList: {
     default:[]
@@ -111,15 +111,10 @@ const dataInfo = reactive({
   leftLg: {
     span: 0
   },
-  rightLg: { span: 24},
+  rightLg: { span: 24,offset:0},
 })
 
 
-// watch(() => postRef.value,(data) => {
-//   if(!dataInfo.titles.length&&postRef.value) {
-//     doSetTitleMenuls();
-//   }
-// })
 
 
 const doSetTitleMenuls = () => {

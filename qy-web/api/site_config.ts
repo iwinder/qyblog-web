@@ -1,9 +1,11 @@
-import request from "~/api/axios";
-import {API_BASE} from "~/utils/constants";
+import {API_PRE} from "~/utils/constants";
 
 export interface SiteConfigDto {
     configKey:string,
     configValue: string,
+}
+export interface SiteConfigListDto {
+    items:SiteConfigDto[];
 }
 export interface SiteInfoDto {
     site_name?: string,
@@ -31,26 +33,15 @@ export interface SiteInfoDto {
     site_alipay_pay_qr?: string,
 }
 
-
+const siteName = API_PRE+"siteConfig";
 const siteApi = {
-    base: '/web/v1/siteConfig/base',
-    other: '/web/v1/siteConfig/other',
+    base: siteName + "/base",
+    other: siteName + "/other",
 }
-// const runtimeConfig = useRuntimeConfig();
-
-
-export function BaseInfo () {
-    return request.get(siteApi.base)
-}
-
-export function OhterInfo () {
-    return request.get(siteApi.other)
-}
-
 
 export function GetBaseUrl () {
-    return  API_BASE+siteApi.base
+    return siteApi.base
 }
 export function GetOhterUrl () {
-    return  API_BASE+siteApi.other
+    return  siteApi.other
 }

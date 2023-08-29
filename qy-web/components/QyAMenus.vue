@@ -10,10 +10,9 @@
 </template>
 
 <script setup lang="ts">
-import QyMenusItem from "@/components/QyMenusItem.vue"
-import {computed, onMounted, reactive, ref, watch} from "vue";
+import QyMenusItem from "~/components/QyMenusItem.vue"
+import { onMounted, ref, watch} from "vue";
 const emit = defineEmits(['onAfterSelect'])
-// const props = defineProps(['menusList',"listMode","menusClass","menusSelect"]);
 const props = defineProps({
   menusList:{
     default:[]
@@ -35,13 +34,9 @@ watch(() =>props.menusSelect,(a)=>{
 onMounted(() => {
 })
 // 菜单选中
-// const doSelect = (data:string) => {
-//   selectedKeys.value=[data];
-// }
 const doSelectKeys = (data:any) => {
   emit('onAfterSelect',data);
 }
-// defineExpose({doSelect})
 </script>
 
 <style scoped>

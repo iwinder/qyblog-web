@@ -1,12 +1,16 @@
-import {defineNodeMiddleware, readBody, getCookie, getMethod, getQuery, H3Event} from 'h3'
+import {readBody, getMethod, getQuery} from 'h3'
 
+
+ 
 const runtimeConfig = useRuntimeConfig();
+
 export default eventHandler(async (e:any) => {
 
-    const API_BASE = runtimeConfig.API_BASE;
-    const BACKEND_URL = runtimeConfig.BACKEND_URL;
-    if (e.req.url.startsWith(API_BASE)) {
-        const url = BACKEND_URL + e.req.url;
+    const API_BASE = runtimeConfig.public.API_BASE as string;
+    const BACKEND_URL = runtimeConfig.public.BACKEND_URL as string;
+    const BASEURL = process.server?BACKEND_URL:API_BASE;
+    if (e.req.url.startsWith(API_BASE)) { 
+        const url = e.req.url; 
         const method = getMethod(e);
         const query = getQuery(e);
         const headers = e.req.headers;
@@ -15,12 +19,13 @@ export default eventHandler(async (e:any) => {
         if ('GET' !== method.toUpperCase()) {
             body = await readBody(e)
         }
-
+        // @ts-ignore
         return $fetch(url, {
+            baseURL: BASEURL,
             method,
             params: query,
             headers,
             body
-        })
+        });
     }
 })

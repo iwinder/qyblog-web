@@ -64,9 +64,9 @@ import {
   WeiboCircleOutlined,
   MailOutlined,
 } from '@ant-design/icons-vue';
-import {useSiteInfo} from "@/stores/siteInfo";
-import {useLinksInfo} from "@/stores/links";
-import {LinkDto} from "@/api/links";
+import {useSiteInfo} from "~/stores/siteInfo";
+import {useLinksInfo} from "~/stores/links";
+import {LinkDto} from "~/api/links";
 const siteStore =  useSiteInfo();
 const siteInfo = reactive({
   site_sider_code:"",

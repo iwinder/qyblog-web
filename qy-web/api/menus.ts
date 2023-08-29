@@ -1,5 +1,4 @@
-import request from "~/api/axios";
-import {API_BASE} from "~/utils/constants";
+import {API_PRE} from "~/utils/constants";
 
 export interface MenusDto {
     id:string,
@@ -8,24 +7,19 @@ export interface MenusDto {
     blanked:number;
     children:MenusDto[],
 }
+export interface MenusListDto {
+    items:MenusDto[];
+}
 
+const menusName = API_PRE+"menus";
 const menusApi = {
-    headList: '/web/v1/menus/header',
-    footerList: '/web/v1/menus/footer',
+    headList: menusName + "/header",
+    footerList: menusName + "/footer",
 }
-
-export function HeadList () {
-    return request.get(menusApi.headList);
-}
-
-export function FooterList () {
-    return request.get(menusApi.footerList);
-}
-
 
 export function GetHeadListUrl () {
-    return  API_BASE+menusApi.headList;
+    return menusApi.headList;
 }
 export function GetFooterListUrl () {
-    return  API_BASE+menusApi.footerList;
+    return menusApi.footerList;
 }

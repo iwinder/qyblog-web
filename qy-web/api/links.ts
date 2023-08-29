@@ -1,42 +1,38 @@
-import request from "~/api/axios";
-import {API_BASE} from "~/utils/constants";
-
+import {API_PRE} from "~/utils/constants";
 export interface LinkDto {
     id:string,
     name: string;
     url:string;
     description:string,
 }
+export interface LinkListDto {
+    items: LinkDto[],
+}
 export interface ShortLinkDto {
     url:string;
     identifier:string,
 }
 
+export interface ShortLinkListDto {
+    items:ShortLinkDto[];
+}
+
+
+const linkName = API_PRE+"link";
 
 const linkApi = {
-    allList: '/web/v1/link/all',
-    indexList: '/web/v1/link/index',
-    shortList: '/web/v1/link/short',
-}
-
-export function AllList () {
-    return request.get(linkApi.allList)
-}
-
-export function IndexList () {
-    return request.get(linkApi.indexList)
-}
-export function ShortList () {
-    return request.get(linkApi.shortList)
+    allList: linkName + "/all",
+    indexList: linkName + "/index",
+    shortList: linkName + "/short",
 }
 
 
 export function GetAllListUrl () {
-    return  API_BASE+linkApi.allList;
+    return  linkApi.allList;
 }
 export function GetIndexListUrl () {
-    return  API_BASE+linkApi.indexList;
+    return linkApi.indexList;
 }
 export function GetShortListtUrl () {
-    return  API_BASE+linkApi.shortList;
+    return linkApi.shortList;
 }

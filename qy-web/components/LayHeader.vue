@@ -63,10 +63,10 @@ import {
   MenuFoldOutlined,
   SearchOutlined,
 } from '@ant-design/icons-vue';
-import QyAMenus from "@/components/QyAMenus.vue";
+import QyAMenus from "~/components/QyAMenus.vue";
 import {FormInstance} from "ant-design-vue";
 import {useRouter} from "vue-router";
-import {MenusDto} from "@/api/menus";
+import {MenusDto} from "~/api/menus";
 const emit = defineEmits(['onCollapsed',"onMenusSelect"])
 let menusRef=ref(null);
 const router = useRouter();

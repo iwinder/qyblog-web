@@ -9,7 +9,9 @@ import {useLinksInfo} from "~/stores/links";
 const linksStore =  useLinksInfo();
 const router = useRouter();
 const nowSearchText=  await  ref(router.currentRoute.value.params.name);
-let url = linksStore.shortLinks[nowSearchText.value];
+const key = nowSearchText.value as string
+// let url = linksStore.shortLinks.get(key);
+let url = linksStore.shortLinks[key];
 if(!url||url.length==0) {
   url = "/"
   navigateTo(url);

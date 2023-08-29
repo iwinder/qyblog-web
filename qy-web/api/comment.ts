@@ -1,12 +1,7 @@
-import request from "~/api/axios";
-import {ArticlePageInfo} from "@/api/article";
-import {PageInfo} from "@/api/common";
-import {API_BASE} from "~/utils/constants";
+import {PageDto, PageStrDto} from "~/api/common";
+import {API_PRE} from "~/utils/constants";
 
-const commentApi = {
-    list: '/web/v1/comment',
-    add: '/web/v1/comment',
-}
+
 export interface CommentDto {
     id?:string,
     agentId?:string,
@@ -19,25 +14,24 @@ export interface CommentDto {
     createdAt?:string,
     parentUserName?:string,
 }
-export interface CommentPageInfo extends PageInfo {
+export interface CommentPageDto extends PageDto {
     agentId?: string;
     rootId?: string;
 }
-
-export function List (parameter:CommentPageInfo) {
-    return request.get(commentApi.list,{
-        params: parameter
-    })
+export interface CommentListDto {
+    pageInfo: PageStrDto,
+    items:CommentDto[],
+    count:number
 }
-
-export function Add (parameter:CommentDto) {
-    return request.post(commentApi.add,parameter)
+const commentName = API_PRE+"comment";
+const commentApi = {
+    list: commentName,
 }
 
 
 export function GetCommentListUrl () {
-    return  API_BASE+commentApi.list;
+    return commentApi.list;
 }
 export function GetCommentAddUrl () {
-    return  API_BASE+commentApi.add;
+    return commentApi.list;
 }

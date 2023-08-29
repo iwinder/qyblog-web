@@ -4,6 +4,11 @@
   "compilerOptions": {
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
+    "skipLibCheck": true,
+    "strictNullChecks": false, // 不允许把null、undefined赋值给其他类型的变量
+    "noImplicitAny": false,       // 不允许隐式的 any 类型
+    "strictFunctionTypes": false,
+    "strictPropertyInitialization": false
   },
   "types": [
     // ...

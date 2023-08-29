@@ -26,10 +26,9 @@
 </template>
 
 <script setup lang="ts">
-import QyAMenus from "@/components/QyAMenus.vue"
-// import * as moment_ from 'moment';
+import QyAMenus from "~/components/QyAMenus.vue"
 import   dayjs from 'dayjs'
-import {MenusDto} from "@/api/menus";
+import {MenusDto} from "~/api/menus";
 const props =  defineProps({
   siteInfo: {
     default: {

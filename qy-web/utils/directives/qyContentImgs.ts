@@ -1,6 +1,6 @@
 import {Directive, DirectiveBinding} from "vue";
 import {GetRandomDefImg, ImageIsExist} from "@/utils/util";
-import realBackgroundImg from "@/plugins/directives/qyRealImg";
+import realBackgroundImg from "@/utils/directives/qyRealImg";
 import {DEF_IMG_ERR} from "@/utils/constants";
 
 interface ElType extends HTMLElement {

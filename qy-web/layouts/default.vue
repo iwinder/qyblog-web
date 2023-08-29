@@ -9,6 +9,7 @@
                    @onCollapsed="doCollapsed" @onMenusSelect="doHeaderSelect"></LayHeader>
         <a-layout-content>
           <slot />
+
         </a-layout-content>
 
 
@@ -22,27 +23,26 @@
 </template>
 
 <script setup lang="ts">
-import LayLeftSider from "@/components/LayLeftSider.vue"
-import LayHeader  from "@/components/LayHeader.vue"
-import LayContent from "@/components/LayContent.vue";
-import LayFooter from "@/components/LayFooter.vue";
-import {onBeforeMount, onMounted, reactive, ref} from "vue";
-import {BaseInfo, GetBaseUrl, GetOhterUrl, OhterInfo} from "@/api/site_config";
-import {useSiteInfo} from "@/stores/siteInfo";
-import {FooterList, GetFooterListUrl, GetHeadListUrl, HeadList, MenusDto} from "@/api/menus";
-import {useMenusInfo} from "@/stores/menusInfo";
-import {AllList, GetAllListUrl, GetIndexListUrl, GetShortListtUrl, IndexList, ShortList} from "@/api/links";
-import {useLinksInfo} from "@/stores/links";
-import {notification} from "ant-design-vue";
-import Errors from "undici/types/errors";
-import {FetchError} from "ofetch";
-import {useFetch} from "#app";
-import defHeadConfig from "assets/config/defHead";
+import LayLeftSider from "~/components/LayLeftSider.vue"
+import LayHeader  from "~/components/LayHeader.vue"
+import LayFooter from "~/components/LayFooter.vue";
+import {reactive} from "vue";
+import {GetBaseUrl, GetOhterUrl, SiteConfigDto, SiteConfigListDto} from "~/api/site_config";
+import {useSiteInfo} from "~/stores/siteInfo";
+import {GetFooterListUrl, GetHeadListUrl, MenusDto, MenusListDto} from "~/api/menus";
+import {useMenusInfo} from "~/stores/menusInfo";
+import {
+  GetAllListUrl,
+  GetIndexListUrl,
+  GetShortListtUrl, LinkListDto,
+  ShortLinkListDto,
+} from "~/api/links";
+import {useLinksInfo} from "~/stores/links";
+import {useFetch, useHead} from "nuxt/app";
+import defHeadConfig from "~/assets/config/defHead";
 const siteStore =  useSiteInfo();
 const menusStore =  useMenusInfo();
 const linksStore =  useLinksInfo();
-// const baseSite = reactive({})
-// const otherSite = reactive({})
 const dataInfo = reactive({
   collapsed: false,
   siteInfo: {
@@ -95,11 +95,12 @@ useHead({
     { property: 'og:description', content:  dataInfo.siteInfo.site_description },
   ],
   script: [ { children: dataInfo.siteInfo.site_head_script_code },
-    { async: "async", src: 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3599707051787259', crossorigin: "anonymous" }
+    { async: true, src: 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3599707051787259', crossorigin: "anonymous" },//@
   ],
   style: [ { children: dataInfo.siteInfo.site_head_code } ],
   link: [ { rel: "canonical", href: dataInfo.siteInfo.site_url } ]
 })
+
 
 
 function doCollapsed(val:boolean) {
@@ -110,9 +111,6 @@ function doHeaderSelect(data:string[]) {
   dataInfo.selectKeys = data;
 }
 
-// async function doInit() {
-//
-// }
 
 async function doGetSiteInfoAllMain() {
   siteStore.InitSiteInfoMap([]);
@@ -124,16 +122,18 @@ async function doGetSiteInfoAllMain() {
     ]);
     // base
     if (baseErr.value!=null) {
-      throwErr(otherErr);
+      throwErr(baseErr);
     } else {
-      siteStore.AddSiteInfoMap(baseSite.value.items);
+      const baseConfigList = baseSite.value as SiteConfigListDto;
+      siteStore.AddSiteInfoMap(baseConfigList.items);
       initSiteBaseInfo();
     }
     // other
     if (otherErr.value!=null) {
       throwErr(otherErr);
     } else {
-      siteStore.AddSiteInfoMap(otherSite.value.items);
+      const otherConfigList = otherSite.value as SiteConfigListDto;
+      siteStore.AddSiteInfoMap(otherConfigList.items);
       initSiteOtherInfo();
     }
   } else {
@@ -170,8 +170,9 @@ function doLinksAllMain() {
   if (!linksStore.allLinks || linksStore.allLinks.length == 0) {
       doAllLinks();
   }
+
   if (!linksStore.shortLinks || !linksStore.shortLinks["-1"]) {
-      doShortLinks();
+    doShortLinks();
   }
 }
 
@@ -182,9 +183,10 @@ async function doGetHeaderMenus() {
   if (headerMenusErr.value!=null) {
     throwErr(headerMenusErr);
   } else {
-    if (headerMenus.value.items.length>0) {
-      menusStore.headerMenus = headerMenus.value.items;
-      dataInfo.hearMenus = headerMenus.value.items;
+    const headerList = headerMenus.value as MenusListDto;
+    if (headerList.items.length>0) {
+      menusStore.headerMenus = headerList.items;
+      dataInfo.hearMenus = headerList.items;
     } else {
       menusStore.headerMenus =[{
         id:"-1",
@@ -202,9 +204,10 @@ async function doGetFooterMenus() {
   if (footerMenusErr.value!=null) {
     throwErr(footerMenusErr);
   } else {
-    if (footerMenus.value.items.length>0) {
-      menusStore.footerMenus = footerMenus.value.items;
-      dataInfo.footerMenus = footerMenus.value.items;
+    const footerList = footerMenus.value as MenusListDto;
+    if (footerList.items.length>0) {
+      menusStore.footerMenus = footerList.items;
+      dataInfo.footerMenus = footerList.items;
     } else {
       menusStore.footerMenus =[{
         id:"-1",
@@ -224,8 +227,9 @@ async function doIndexLinks() {
   if (indexLinksErr.value!=null) {
     throwErr(indexLinksErr);
   } else {
-    if (indexLinks.value.items.length>0) {
-      linksStore.indexLinks = indexLinks.value.items;
+    const indexList = indexLinks.value as LinkListDto;
+    if (indexList.items.length>0) {
+      linksStore.indexLinks = indexList.items;
     } else {
       linksStore.indexLinks = [{
         id: "-1",
@@ -241,8 +245,9 @@ async function doAllLinks() {
   if (allLinksErr.value != null) {
     throwErr(allLinksErr);
   } else {
-    if (allLinks.value.items.length > 0) {
-      linksStore.allLinks = allLinks.value.items;
+    const allList = allLinks.value as LinkListDto;
+    if (allList.items.length > 0) {
+      linksStore.allLinks = allList.items;
     } else {
       linksStore.allLinks = [{
         id: "-1",
@@ -255,27 +260,17 @@ async function doAllLinks() {
 }
 
 async function doShortLinks() {
-
-
   const {data: shortLinks, error: shortLinksErr} = await useFetch(GetShortListtUrl());
   if (shortLinksErr.value != null) {
     throwErr(shortLinksErr);
   } else {
-
-    if (shortLinks.value.items.length > 0) {
-      for (let i in shortLinks.value.items) {
-        linksStore.shortLinks[shortLinks.value.items[i].identifier]=shortLinks.value.items[i].url;
+    const linkList = shortLinks.value as ShortLinkListDto;
+    if (linkList.items.length > 0) {
+      for (let i in linkList.items) {
+        linksStore.shortLinks[linkList.items[i].identifier]=linkList.items[i].url;
       }
-
-      // linksStore.shortLinks = shortLinks.value.items;
     } else {
       linksStore.shortLinks["-1"]="/";
-      // linksStore.shortLinks = [{
-      //   id: "-1",
-      //   name: "",
-      //   url: "",
-      //   description: "",
-      // }];
     }
   }
 
@@ -283,12 +278,7 @@ async function doShortLinks() {
 
 // 统一的异常信息
 function throwErr(data:any) {
-  if (process.client) {
-    notification.error({
-      message: '请求异常',
-      description: data.value.message
-    });
-  } else {
+  if (process.server) {
     console.error("baseErr.value:",data.value);
   }
 }
@@ -395,6 +385,10 @@ function initSiteOtherInfo() {
 function initSiteInfo() {
   initSiteBaseInfo();
   initSiteOtherInfo();
+}
+
+function someErrorLogger(err) {
+  console.log('got an error', err);
 }
 </script>
 

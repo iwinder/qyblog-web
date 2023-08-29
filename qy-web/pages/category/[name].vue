@@ -1,5 +1,5 @@
 <template>
-  <a-row class="content">
+  <a-row class="content" v-if="dataInfo.showFlag">
     <a-col :xs="{span:24}"    :lg="{ span: 16}"  class="content-left">
       <a-typography-title :level="4">分类 「 <span class="titleKey">{{dataInfo.category.name}}</span> 」  的结果</a-typography-title >
       <QyPostList class="postList"  :page-data="dataInfo.pageInfo"   :list-data="dataInfo.items" :data-loading="dataInfo.loading"   @onAfterPageChange="doChagePage"></QyPostList>
@@ -13,39 +13,34 @@
 </template>
 
 <script setup lang="ts">
-import QyPostList from "@/components/QyPostList.vue"
-import QyPostRightSider from "@/components/QyPostRightSider.vue"
+import QyPostList from "~/components/QyPostList.vue"
+import QyPostRightSider from "~/components/QyPostRightSider.vue"
 import {useRouter} from "vue-router";
-import {onMounted, reactive, ref, watch} from "vue";
+import {reactive, ref} from "vue";
 import {
-  ArticleType,
-  CategoryType,
+  ArticleDto, ArticleListDto, CategoryDataDto,
+  CategoryDto,
   GetArticleCategoryUrl,
   GetArticleListUrl,
-  GetArticleTagUrl,
-  GetCategory,
-  List
-} from "@/api/article";
-import {PageInfo} from "@/api/common";
-import {DEFAULT_PAGESIZE} from "@/utils/constants";
-import {GetCanonical, GetRandomColor, GetRandomDefImg} from "@/utils/util";
-import {notification} from "ant-design-vue";
-import {queue} from "rxjs";
+} from "~/api/article";
+import {PageDto} from "~/api/common";
+import {DEFAULT_PAGESIZE} from "~/utils/constants";
+import {GetCanonical, GetRandomColor, GetRandomDefImg} from "~/utils/util";
 import {useSiteInfo} from "~/stores/siteInfo";
-const postRef =  ref();
+import {useFetch, useHead} from "nuxt/app";
 const router = useRouter();
 const siteStore =  useSiteInfo();
 const dataInfo = reactive({
   searchText:"",
-  pageSize: DEFAULT_PAGESIZE,
   isSearchFlag:false,
-  loading: false,
-  current:1,
+  loading: true,
+  showFlag: false,
   category:{
     name: "",
     identifier: "",
-  } as CategoryType,
-  items:[] as ArticleType[],
+  } as CategoryDto,
+  pageInfo:{ current:1, pageSize: DEFAULT_PAGESIZE,total:0,pages:0} as PageDto,
+  items:[] as ArticleDto[],
   siteInfo: {
     site_url:"",
     site_name:"",
@@ -62,24 +57,7 @@ const nowSearchText=  await  ref(router.currentRoute.value.params.name);
 dataInfo.category.identifier = (nowSearchText.value as string);
 
 
-
-const {data: cData,   error:cerror} = await useFetch(GetArticleCategoryUrl(dataInfo.category.identifier));
-if (cerror.value != null) {
-  if (cerror.value.status==404) {
-    router.push("/404")
-  } else {
-    if (process.client) {
-      notification.error({
-        message: '请求异常',
-        description: cerror.value.message
-      });
-    } else {
-      console.error("baseErr.value:", cerror.value);
-    }
-  }
-} else {
-  dataInfo.category = cData.value.data;
-}
+await doGetCategory(dataInfo.category.identifier);
 
 initSiteBaseInfo();
 useHead({
@@ -91,23 +69,19 @@ useHead({
 })
 
 const { data: listData, pending,refresh, error } = await useFetch(GetArticleListUrl(), {params:{
-    current: dataInfo.current,
-    pageSize: dataInfo.pageSize,
+    current: dataInfo.pageInfo.current,
+    pageSize: dataInfo.pageInfo.pageSize,
     categoryName: dataInfo.category.identifier,
     atype:1,
   }});
 if (error.value != null) {
-  if (process.client) {
-    notification.error({
-      message: '请求异常',
-      description: error.value.message
-    });
-  } else {
-    console.error("baseErr.value:", error.value);
+  if (process.server) {
+    console.error("文章列表请求异常 baseErr.value:", error.value);
   }
 } else {
   dataInfo.loading = false;
-  dataInfo.items = listData.value.items;
+  const  articleListDtos = listData.value as ArticleListDto;
+  dataInfo.items = articleListDtos.items;
   dataInfo.items.forEach(e => {
     const tags = e.tags;
     if (tags) {
@@ -120,37 +94,35 @@ if (error.value != null) {
       e.thumbnail = GetRandomDefImg();
     }
   });
-  dataInfo.pageInfo = listData.value.pageInfo;
-  if (dataInfo.pageInfo) {
-    dataInfo.pageInfo.current = parseInt(dataInfo.pageInfo.current);
-    dataInfo.pageInfo.pageSize = parseInt(dataInfo.pageInfo.pageSize);
-    dataInfo.pageInfo.total = parseInt(dataInfo.pageInfo.total);
-    dataInfo.pageInfo.pages = parseInt(dataInfo.pageInfo.pages);
+  if (articleListDtos.pageInfo) {
+    dataInfo.pageInfo.current = parseInt(articleListDtos.pageInfo.current);
+    dataInfo.pageInfo.pageSize = parseInt(articleListDtos.pageInfo.pageSize);
+    dataInfo.pageInfo.total = parseInt(articleListDtos.pageInfo.total);
+    dataInfo.pageInfo.pages = parseInt(articleListDtos.pageInfo.pages);
   }
 }
 
 
 async function doGetCategory(name: string) {
+  dataInfo.showFlag = false;
   const {data: listData, pending, refresh, error} = await useFetch(GetArticleCategoryUrl(name));
   if (error.value != null) {
-    if (error.value.status==404) {
-      await  throw404();
+    if (error.value.statusCode==404) {
+      router.push("/404")
     } else {
-      await  throw500(error.value.message);
+      if (process.server) {
+        console.error("分类详情请求异常 baseErr.value:", error.value);
+      } else {
+        router.push("/500")
+      }
     }
-    return "err";
   } else {
-    dataInfo.category = listData.value.data;
-    return "success";
+    const categoryData = listData.value as CategoryDataDto;
+    dataInfo.category = categoryData.data;
+    dataInfo.showFlag = true;
   }
+}
 
-}
-async function throw404() {
-  throw createError({ statusCode: 404, statusMessage: 'Page Not Found' })
-}
-async function throw500(errMsg:string) {
-  throw createError({ statusCode: 500, statusMessage: errMsg })
-}
 function doChagePage(num:number) {
   let url = "/category/"+dataInfo.category.identifier+"/";
   if (num>1) {
