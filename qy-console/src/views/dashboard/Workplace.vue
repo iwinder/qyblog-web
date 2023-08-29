@@ -15,7 +15,7 @@
            当前留言审核统计
           </template>
           <template #extra>
-            <router-link :to="{name:'comment-list'}">More</router-link>
+          <router-link :to="{name:'comment-list'}">More</router-link>   <!-- TODO:需要添加权限校验，由于动态路由，存在因无权权限导致登录失败。 -->
           </template>
           <p>待审核：<a-badge :count="totalInfo.pendingTotal" /></p>
           <p>已审核： <a-badge :count="totalInfo.nowTotal" :number-style="{ backgroundColor: '#52c41a' }" show-zero/></p>
