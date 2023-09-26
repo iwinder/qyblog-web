@@ -54,6 +54,9 @@
             </a></div>
           </blockquote>
         </a-row>
+        <a-row class="single-resources" v-if="postData.resources.length>0">
+          <QyPostResources :resources-data="postData.resources"></QyPostResources>
+        </a-row>
         <a-row class="single-comments" >
           <QyCommentList :comment-agent-id="postData.commentAgentId" :site-comment-flag="siteInfo.site_comment_flag" :comment-flag="postData.commentFlag"></QyCommentList>
         </a-row>
@@ -89,6 +92,7 @@ import {
   MessageOutlined,
 } from '@ant-design/icons-vue';
 import {reactive, ref, watch} from "vue";
+import QyPostResources from "~/components/QyPostResources.vue";
 const postRef =  ref();
 const props =  defineProps({
   postData: {
@@ -187,7 +191,7 @@ const doChagePreviewUrl = (val:string) =>{
 <style scoped lang="less">
 .single-right {
   .menusAffix{
-    height: 400px;
+    max-height: 400px;
     :deep(.ant-card-body) {
       overflow-y: scroll;
       max-height: 80%;

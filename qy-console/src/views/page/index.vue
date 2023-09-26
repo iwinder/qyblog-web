@@ -163,7 +163,7 @@ async function doList(pageInfo:PageInfo) {
         }
       }
     });
-    console.log(" listInfo.items", listInfo.items)
+
 
   }).catch(err => { console.error("List error",err);
   }).finally(() => {

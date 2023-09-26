@@ -1,4 +1,5 @@
 <template>
+  <a-config-provider :locale="dataInfo.locale">
     <a-layout id="components-layout-custom-trigger"  >
       <LayLeftSider :isCollapsed="dataInfo.collapsed"  :header-menus="dataInfo.hearMenus"
                     :select-key="dataInfo.selectKeys" :site-info="dataInfo.siteInfo"
@@ -20,6 +21,7 @@
         <strong style="color: rgba(64, 64, 64, 0.6)">   </strong>
       </div>
     </a-layout>
+  </a-config-provider>
 </template>
 
 <script setup lang="ts">
@@ -31,6 +33,8 @@ import {GetBaseUrl, GetOhterUrl, SiteConfigDto, SiteConfigListDto} from "~/api/s
 import {useSiteInfo} from "~/stores/siteInfo";
 import {GetFooterListUrl, GetHeadListUrl, MenusDto, MenusListDto} from "~/api/menus";
 import {useMenusInfo} from "~/stores/menusInfo";
+import enUS from 'ant-design-vue/es/locale/en_US';
+import zhCN from 'ant-design-vue/es/locale/zh_CN';
 import {
   GetAllListUrl,
   GetIndexListUrl,
@@ -75,7 +79,8 @@ const dataInfo = reactive({
   otherSite:[],
   hearMenus:[] as MenusDto[],
   footerMenus:[]as MenusDto[],
-  selectKeys:[] as string[]
+  selectKeys:[] as string[],
+  locale:zhCN,
 })
 
 

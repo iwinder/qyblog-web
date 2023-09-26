@@ -263,8 +263,6 @@ function doEditData() {
       modalInfo.editLoading = false;
     });
   }
-  console.log(param);
-
 }
 function doCancel() {
   modalForm.value.resetFields();

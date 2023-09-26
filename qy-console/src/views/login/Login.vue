@@ -76,7 +76,6 @@ const doLogin = async () => {
       loginForm.password = newPas.toString() ;
     }
   }
-  console.log("doLogin", loginForm.password)
   await Login(loginForm).then((res:any)=>{
     const token = "Bearer "+res.token;
     // const token = res.token;

@@ -253,7 +253,6 @@ const doTagsSearch = (val: string) => {
   }).catch(err=>{})
 }
 const doTagsChange = (value:string[], option:TagsType[]) => {
-  console.log("doTagsChange value",value,"option",option);
   dataForm.tagStrings = value;
 }
 
@@ -274,7 +273,6 @@ const doPreviewCancel = () => {
   formInfo.previewVisible = false;
 }
 const doThumbnailUploadChange = (info: UploadChangeParam) => {
-  console.log("info",info)
   if (info.file.status === 'uploading') {
     formInfo.loading = true;
     return;

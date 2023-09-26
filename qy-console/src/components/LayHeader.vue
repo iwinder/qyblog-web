@@ -58,7 +58,6 @@ const myInfos = reactive<UserType>({
 })
 const collapsed = ref(props.isCollapsed);
 onMounted(() => {
-  console.log("ddd",userStore.myInfo)
   myInfos.id = userStore.myInfo.id;
   myInfos.nickname = userStore.myInfo.nickname;
   myInfos.avatar = userStore.myInfo.avatar;
@@ -72,7 +71,6 @@ const doCallChange = ()=> {
 }
 
 const onDropdownClick: MenuProps['onClick'] = ({ key }) => {
-  console.log(`Click on item ${key}`);
   if (key == "logout") {
     userStore.token = "";
     router.push({name:"login"});

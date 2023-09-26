@@ -28,7 +28,6 @@ const router =  createRouter({
 router.beforeEach((to, from, next) => {
     const userStore =useUserInfo();
     let token = userStore.token;
-    console.log("ddd beforeEach")
     if (token.trim().length>0) {
         if (to.path=="/noLogin/login") {
             // next(from);

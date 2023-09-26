@@ -43,7 +43,6 @@ const props =  defineProps({
   },
 })
 onMounted(() => {
-  console.log("siteInfo",siteInfo)
   siteInfo.site_small_logo = siteStore.GetSiteInfoByKey("site_small_logo");
   siteInfo.site_url = siteStore.GetSiteInfoByKey("site_url");
 })

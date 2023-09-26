@@ -34,8 +34,6 @@ const errorHandler = (error: AxiosError) => {
             if (token) {
                 userStore.token = "";
             }
-            console.log("haha",error)
-            console.log("haha router",router)
             router.push({name:"login"});
         } else {
             notification.error({

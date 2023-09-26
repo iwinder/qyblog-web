@@ -21,7 +21,6 @@ onMounted(() => {
 })
 
 const doSave = (obj:ArticleType) => {
-  console.log("doSave obj",obj)
   Add(obj).then(res=>{
     notification.success({
       message: '成功',

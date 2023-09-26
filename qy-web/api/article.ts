@@ -32,6 +32,7 @@ export interface ArticleDto {
     tags?:TagDto[];
     category?:CategoryDto,
     defImg?:string,
+    resources?:ArticleResourceDto[],
 }
 export interface ArticleDataDto {
     data: ArticleDto
@@ -56,7 +57,11 @@ export interface ArticleListDto {
     pageInfo: PageStrDto,
     items:ArticleDto[],
 }
-
+export interface ArticleResourceDto {
+    name: string;
+    url: string;
+    password: string;
+}
 
 const articleName = API_PRE+"article";
 const categoryName = API_PRE+"category";

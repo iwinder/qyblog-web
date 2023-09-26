@@ -22,7 +22,6 @@ export const useSiteInfo = defineStore('adminSiteInfo', {
             }
         },
         HasSiteInfo() {
-            console.log("d",this.siteInfoMap)
             return this.siteInfoMap&&this.siteInfoMap.length>0;
         }
     },

@@ -303,7 +303,6 @@ function doEditData() {
   const param = {
     ...drawerData.dataInfo
   };
-  console.log("doEditData param",param)
   if (param.id  && param.id.length>0) {
     Update(param).then(res=>{
       notification.success({

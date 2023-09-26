@@ -34,6 +34,7 @@ const rootRouter = {
 export function GeneratorDynamicRouter(data:MenusAdminType[]) {
     const menuNav = generator(data);
     rootRouter.children = menuNav;
+    myRouterMap.length = 0;
     myRouterMap.push(rootRouter)
 
     router.addRoute("", rootRouter);
@@ -42,7 +43,6 @@ export function GeneratorDynamicRouter(data:MenusAdminType[]) {
         redirect: '/404',
     });
     generatorTabs(data,[],"",tabsKeyMap);
-    console.log("tabsKeyMap",tabsKeyMap)
 }
 const generator = (routerMap:MenusAdminType[]) => {
   return   routerMap.map(item => {

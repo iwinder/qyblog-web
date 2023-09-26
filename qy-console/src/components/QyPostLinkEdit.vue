@@ -53,7 +53,6 @@ onMounted(() => {
 
 
 function doOpneEditLink(val:string) {
-  console.log("doOpneEditLink",val);
   linkInfo.editLinkShow = true;
   linkInfo.newLink = val;
 }

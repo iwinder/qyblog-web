@@ -22,8 +22,8 @@
       <a-form :model="searchForm"    ref="formRef" v-bind="formItemLayout">
         <a-row :gutter="24">
           <a-col :span="8">
-            <a-form-item  label="关键字"  name="username">
-              <a-input v-model:value="searchForm.name" placeholder="请输入关键字"></a-input>
+            <a-form-item  label="关键字"  name="searchText">
+              <a-input v-model:value="searchForm.searchText" placeholder="请输入关键字"></a-input>
             </a-form-item>
           </a-col>
           <a-col :span="8" style="text-align: right">
@@ -173,7 +173,7 @@ const siteStore =  useSiteInfo();
 const siteInfo = reactive({
   site_url:"",
 })
-const searchForm = reactive({ name: "",
+const searchForm = reactive({ searchText: "",
 });
 
 const router = useRouter();
@@ -365,7 +365,6 @@ function doEditComment() {
       modalInfo.editLoading = false;
     });
   }
-  console.log(param);
 
 }
 function doCancel() {

@@ -44,7 +44,6 @@ const siteInfo = reactive({ site_logo: loginims,
   site_description: "测试一下"
 })
 onMounted(() => {
-  console.log("siteStore.siteInfoMap",siteStore.HasSiteInfo())
   if (!siteStore.HasSiteInfo()) {
     initListBase();
   }else {

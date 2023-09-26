@@ -38,9 +38,16 @@ export interface ArticleType {
     tagStrings?: string[];
     tagColors?: string[];
     tags?:TagsType[];
+    resources?: ArticleResourceType[] ,
+    resourcesStr?:string,
 }
 
-
+export interface ArticleResourceType {
+    id:string;
+    name:string;
+    url:string;
+    password:string;
+}
 export interface ArticlePageInfo extends PageInfo {
     searchText?: string;
     atype?: number;

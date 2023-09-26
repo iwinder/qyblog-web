@@ -110,7 +110,6 @@ const getRouterList = (tab:TabsObj) => {
   routerNowList.length=0;
   routerNowList.push({path:parent.name,breadcrumbName:parent.breadcrumbName});
   getRouterChild(parent,tab);
-  console.log("routerNowList",routerNowList)
 }
 // 获取面包屑子集
 const getRouterChild = (obj: any,tab:TabsObj):boolean => {

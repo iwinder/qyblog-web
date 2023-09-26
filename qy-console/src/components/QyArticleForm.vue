@@ -24,11 +24,40 @@
                          @upload-image="doUploadImage"
                          height="400px"></v-md-editor>
           </a-form-item>
+            <a-form-item
+
+                name="afiles"
+            >
+              <template #label>
+                <a-tooltip>
+                  相关文件  <question-circle-outlined style="color: red" />
+                  <template #title>
+                    <p>用途：为用户提供相关资源点地址，如百度网盘分享链接等。</p>
+                    <p>格式：展示名称|链接地址|密码(如果有)</p>
+                    <ul>
+                    <li>有密码的示例：一个文件|https://xxx.com/xxxue|00xx</li>
+                    <li>无密码的示例：一个文件|https://xxx.com/xxxue</li>
+                    </ul>
+                    <p>使用方式：根据格式所示，一行一个相关资源</p>
+                  </template>
+                </a-tooltip>
+              </template>
+            <a-textarea :rows="4" placeholder="一行一个相关资源，多个资源使用换行隔开" v-model:value="dataForm.resourcesStr">
+
+            </a-textarea>
+          </a-form-item>
           <a-form-item
               label="封面"
               name="thumbnail"
           >
-            <a-input v-model:value="dataForm.thumbnail"   name="thumbnail" placeholder="添加标题"/>
+            <a-input v-model:value="dataForm.thumbnail"   name="thumbnail" placeholder="添加标题">
+              <template #suffix>
+                <a-tooltip title="Extra information">
+                  <info-circle-outlined style="color: rgba(0, 0, 0, 0.45)" />
+                </a-tooltip>
+              </template>
+
+            </a-input>
           </a-form-item>
           <a-form-item
               label=""
@@ -130,14 +159,15 @@
 <script setup lang="ts">
 
 import {computed, onMounted, reactive, ref} from "vue";
-import {FormInstance, message, UploadChangeParam, UploadProps} from "ant-design-vue";
-import {GetOne, ArticleType, InitPermaLink} from "@/api/article";
+import {FormInstance, message, notification, UploadChangeParam, UploadProps} from "ant-design-vue";
+import {GetOne, ArticleType, InitPermaLink, ArticleResourceType} from "@/api/article";
 import {CategoryType, List} from "@/api/category";
 import {List as TagList, TagsType} from "@/api/tags";
 import QyPostLinkEdit from "@/components/QyPostLinkEdit.vue";
 import VMdEditor, { xss }  from '@kangc/v-md-editor/lib/codemirror-editor';
 import {Upload} from "@/api/file_lib_config";
 import {UploadFile} from "ant-design-vue";
+import {ApisType} from "@/api/apis";
 const formRef = ref<FormInstance>();
 const emit = defineEmits(['onAfterSubmit','onAfterCancel'])
 const dataForm = reactive<ArticleType>({
@@ -159,6 +189,8 @@ const dataForm = reactive<ArticleType>({
   nickName:""  ,
   tagStrings: [],
   commentFlag:true,
+  resources: [] ,
+  resourcesStr:"",
 });
 
 
@@ -197,6 +229,40 @@ const doSave = () => {
       dataForm.categoryName = formInfo.options[0].name;
     }
   }
+  if (dataForm.resourcesStr.trim().length>0) {
+    let filesStr =  dataForm.resourcesStr.split("\n");
+    const oldLen = dataForm.resources.length;
+    const newLen = filesStr.length;
+    let newFiles:ArticleResourceType[] = [];
+    for (let i=0;i<newLen;i++) {
+      let item = filesStr[i];
+      let fileStr = item.split("|");
+      if (fileStr.length<2) {
+        notification.error({
+          message: '失败',
+          description: "【相关文件】存在格式异常！"
+        });
+        formState.saveBtn = false;
+        return false;
+      }
+      let aid = i<oldLen?dataForm.resources[i].id:"0";
+      let file:ArticleResourceType =  {
+        id: aid,
+        name: fileStr[0],
+        url:fileStr[1],
+        password:""
+      };
+      if (fileStr.length==3) {
+        file.password = fileStr[2];
+      }
+      newFiles.push(file);
+    }
+    dataForm.resources =newFiles;
+  } else {
+    if (dataForm.resources.length>0) {
+      dataForm.resources = [];
+    }
+  }
   const param = {
     ...dataForm
   };
@@ -230,6 +296,19 @@ const InitData = async (oid:string) => {
     dataForm.tagStrings = data.tagStrings;
     formInfo.oldCategoryId = data.categoryId;
     dataForm.commentFlag = data.commentFlag;
+    dataForm.resources = data.resources;
+    let fileStrs = "";
+    const flen = dataForm.resources.length-1;
+    dataForm.resources.forEach((item:ArticleResourceType, i:number)=> {
+      fileStrs += item.name + "|" + item.url;
+      if (item.password.trim().length>0) {
+        fileStrs += "|" + item.password;
+      }
+      if (i<flen) {
+        fileStrs +="\n";
+      }
+    });
+    dataForm.resourcesStr = fileStrs;
     if (dataForm.thumbnail) {
       setFileList(dataForm.thumbnail);
     }
@@ -252,7 +331,6 @@ const doTagsSearch = (val: string) => {
   }).catch(err=>{})
 }
 const doTagsChange = (value:string[], option:TagsType[]) => {
-  console.log("doTagsChange value",value,"option",option);
   dataForm.tagStrings = value;
 }
 
@@ -273,7 +351,6 @@ const doPreviewCancel = () => {
   formInfo.previewVisible = false;
 }
 const doThumbnailUploadChange = (info: UploadChangeParam) => {
-  console.log("info",info)
   if (info.file.status === 'uploading') {
     formInfo.loading = true;
     return;
@@ -308,7 +385,6 @@ const doThumbnailBeforeUpload = (file: UploadProps['fileList'][number]) => {
 };
 
 const doCategorySelect = (value:string, node:CategoryType, extra:any) => {
-  console.log("doCategorySelect value",value,node,extra);
   if (node) {
     dataForm.categoryName = node.name;
   }
